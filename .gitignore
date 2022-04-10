@@ -1,2 +1,5 @@
+# Ignore the build classes files 
 *.class
-*.txt
+
+# Ignore the Netbeans' build target directory
+Sisu/target/*
