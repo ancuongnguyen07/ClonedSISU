@@ -41,3 +41,4 @@ For the GUI, the program will have a `MainWindow` that shows at the start. Withi
 2. **View a Homepage:** that shows basic information based on the logged in user, i.e., credits, finished and on-going courses for a student; or courses and student information for a teacher.
 3. **Courses:** edit and configure the courses. Could be changing the courses in a `DegreeProgram`, or something else.
 4. **Settings:** change the settings of the program. Maybe change the password and view finished courses?
+5. **Help:** viewing the documentation of the program. Will be provided with interface and methods.
