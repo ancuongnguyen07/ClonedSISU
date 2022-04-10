@@ -35,10 +35,9 @@ And the program will also have these utility classes:
 
 ## GUI
 
-For the GUI, the program will have a `MainWindow` that shows at the start. Within this window, the user can:
+For the GUI, the program will have a `Login` screen that shows at the start. Within this window, the user can **Login:** and identified them as student, or teacher. Upon successfully logged in, the user will be directed to a `MainWindow` that has:
 
-1. **Login:** and identified them as student, or teacher.
-2. **View a Homepage:** that shows basic information based on the logged in user, i.e., credits, finished and on-going courses for a student; or courses and student information for a teacher.
-3. **Courses:** edit and configure the courses. Could be changing the courses in a `DegreeProgram`, or something else.
-4. **Settings:** change the settings of the program. Maybe change the password and view finished courses?
-5. **Help:** viewing the documentation of the program. Will be provided with interface and methods.
+1. **Homepage:** that shows basic information based on the logged in user, i.e., credits, finished and on-going courses for a student; or courses and student information for a teacher.
+2. **Courses:** edit and configure the courses. Could be changing the courses in a `DegreeProgram`, or something else.
+3. **Settings:** change the settings of the program. Maybe change the password and view finished courses?
+4. **Help:** viewing the documentation of the program. Will be provided with interface and methods.

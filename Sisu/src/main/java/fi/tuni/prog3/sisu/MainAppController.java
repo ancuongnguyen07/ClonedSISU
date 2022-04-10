@@ -5,5 +5,8 @@ import javafx.fxml.FXML;
 
 public class MainAppController {
 
-   
+  @FXML
+  private void SwitchToLogin() throws IOException {
+      App.setRoot("Login");
+  }
 }
