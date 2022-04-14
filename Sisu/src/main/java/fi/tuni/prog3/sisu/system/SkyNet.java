@@ -26,6 +26,7 @@ public class SkyNet {
     private HashMap<String, Teacher> teachers;
     
     private HashMap<String, AbstractModule> modules;
+    private User activeUser;
     
     /**
      * Construct an initially empty SkyNet object and then
@@ -49,6 +50,10 @@ public class SkyNet {
 
     public HashMap<String, AbstractModule> getModules() {
         return modules;
+    }
+
+    public User getActiveUser() {
+        return activeUser;
     }
     
     
@@ -124,6 +129,10 @@ public class SkyNet {
         
         String hashedPassword = u.getPassword();
         String salt = u.getSalt();
-        return hashPassword(password, salt).equals(hashedPassword);
+        if (hashPassword(password, salt).equals(hashedPassword)) {
+            this.activeUser = u;
+            return true;
+        }
+        return false;
     }
 }

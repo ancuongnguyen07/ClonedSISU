@@ -28,9 +28,8 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
-    public static void SetController(String controllerName) {
-        
+    public static void UpdateMainApp() {
+        mainAppController.updateActiveUser();
     }
 
     static void setRoot(String fxml, String controllerName) throws IOException {

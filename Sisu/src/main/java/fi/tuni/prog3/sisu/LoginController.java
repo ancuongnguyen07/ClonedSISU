@@ -17,7 +17,6 @@ public class LoginController {
         this.sn = sn;
     }
     
-
     @FXML TextField userNameField;
     @FXML PasswordField passwordField;
     @FXML Label alertBox;
@@ -30,6 +29,7 @@ public class LoginController {
         // User validation
         if (sn.validatePassword(username, password)) {
             App.setRoot("MainApp.fxml", "main");
+            App.UpdateMainApp();
         } else {
             alertBox.setText("Wrong username/password!");
         }
