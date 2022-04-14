@@ -1,0 +1,99 @@
+/* Color palette: 
+ #6761a8
+ #009ddc
+ #009b72
+ #f26430
+ #2a2d34
+ #fff
+ #F4F4F4
+*/
+.anchor-pane {
+  -fx-background-color: #f4f4f4;
+}
+/* Primary button styling */
+.button-primary {
+  -fx-padding: 0 0 0 0;
+  -fx-background-color: #e6e6f6;
+  -fx-background-radius: 0;
+  -fx-border-color: #4346b8;
+  -fx-border-width: 0 0 2px 0;
+}
+.button-primary .text {
+  -fx-fill: #4346b8;
+}
+.button-primary:hover {
+  -fx-background-color: #4346b8;
+  /* -fx-border-color: #686bc9;
+  -fx-border-width: 2px 2px 2px 2px; */
+}
+.button-primary:hover .text {
+  -fx-fill: #fff;
+}
+.button-primary:pressed {
+  -fx-background-color: #686bc9;
+}
+
+.button-secondary {
+  -fx-padding: 0 0 0 0;
+  -fx-background-color: #f4f5fe;
+  -fx-background-radius: 0;
+}
+.button-secondary .text {
+  -fx-fill: #6761a8;
+}
+
+/* Forgot password button */
+.forgot-password .text {
+  -fx-fill: #000000;
+}
+.forgot-password:hover .text {
+  -fx-fill: #ff92a4;
+}
+
+/* Text fields */
+.text-field {
+  -fx-background-color: -fx-text-box-border, -fx-background;
+  -fx-background-insets: 0, 0 0 1 0;
+  -fx-background-radius: 0;
+}
+.text-field:focused {
+  -fx-background-color: -fx-focus-color, -fx-background;
+}
+
+/* Tab pane */
+.tab-pane *.tab-header-area {
+  -fx-background-insets: 0, 0 0 10;
+  -fx-padding: 0 0 0 0;
+}
+.tab {
+  -fx-pref-width: 200;
+  -fx-pref-height: 50;
+  -fx-background-color: #afbbe3;
+}
+.tab-label {
+  -fx-padding: 0 0 0 10px;
+}
+
+.tab .text {
+  -fx-fill: #6761a8;
+  -fx-font-size: 14;
+  -fx-font-weight: bold;
+}
+
+.tab:selected {
+  -fx-background-color: #f4f4f4;
+  -fx-border-color: #6761a8;
+  -fx-border-width: 0 0 7px 0;
+}
+
+.tab-header-background {
+  -fx-background-color: #afbbe3;
+}
+
+.tab-pane:focused
+  > .tab-header-area
+  > .headers-region
+  > .tab:selected
+  .focus-indicator {
+  -fx-border-color: transparent;
+}
