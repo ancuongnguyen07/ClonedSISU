@@ -11,7 +11,12 @@ import java.io.IOException;
 import fi.tuni.prog3.sisu.system.*;
 
 public class LoginController {
-    SkyNet sn = new SkyNet("src/main/resources/jsons/users.json");
+    private SkyNet sn;
+
+    public LoginController(SkyNet sn) {
+        this.sn = sn;
+    }
+    
 
     @FXML TextField userNameField;
     @FXML PasswordField passwordField;
@@ -24,7 +29,7 @@ public class LoginController {
 
         // User validation
         if (sn.validatePassword(username, password)) {
-            App.setRoot("MainApp");
+            App.setRoot("MainApp.fxml", "main");
         } else {
             alertBox.setText("Wrong username/password!");
         }
