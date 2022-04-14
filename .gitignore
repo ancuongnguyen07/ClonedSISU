@@ -3,3 +3,4 @@
 
 # Ignore the Netbeans' build target directory
 Sisu/target/*
+/Sisu/nbproject/

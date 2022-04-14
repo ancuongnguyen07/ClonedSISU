@@ -12,4 +12,8 @@ import java.util.HashMap;
  */
 public class Teacher extends User{
     private HashMap<String, AbstractModule> courses;
+    
+    public Teacher(String username, String fullName, String salt, String password){
+        super(username, fullName, salt, password);
+    }
 }

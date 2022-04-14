@@ -21,6 +21,8 @@ public class App extends Application {
         scene = new Scene(loadFXML("Login"), 1000, 600);
         stage.setScene(scene);
         stage.show();
+        
+        SkyNet sn = new SkyNet("src/main/resources/jsons/users.json");
     }
 
     static void setRoot(String fxml) throws IOException {
