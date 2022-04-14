@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Manage all information fo the sytem
+ * Manage all information for the sytem
  * @author Cuong Nguyen
  */
 public class SkyNet {

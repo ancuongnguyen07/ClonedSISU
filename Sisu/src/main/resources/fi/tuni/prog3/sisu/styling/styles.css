@@ -83,7 +83,7 @@
 .tab:selected {
   -fx-background-color: #f4f4f4;
   -fx-border-color: #6761a8;
-  -fx-border-width: 0 0 5px 0;
+  -fx-border-width: 0 0 7px 0;
 }
 
 .tab-header-background {
