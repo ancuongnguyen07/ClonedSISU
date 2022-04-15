@@ -108,7 +108,7 @@ public class SkyNet {
             else if(Character.isUpperCase(ch)){
                 capitalFlag = true;
             }
-            else if(!Character.isDigit(ch) && Character.isAlphabetic(i)){
+            else if(!Character.isDigit(ch) && !Character.isAlphabetic(i)){
                 // check special symbol
                 specialFlag = true;
             }
