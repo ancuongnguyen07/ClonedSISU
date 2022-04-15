@@ -21,8 +21,6 @@ public class MainAppController {
   // Settings FXML IDs
   @FXML TextField fullNameSettings;
   @FXML TextField currentUserNameSettings;
-  @FXML PasswordField currentPasswordSettings;
-  @FXML CheckBox showPasswordToggleSettings;
   @FXML TextField newUserNameSettings;
   @FXML PasswordField newPasswordSettings;
   @FXML TextField confirmNewPasswordSettings;
@@ -40,19 +38,23 @@ public class MainAppController {
     // Get current active user
     this.activeUser = sn.getActiveUser();
 
+    // Get role and full name of the active user
+    String fullName = activeUser.getFullName();
+    String role = activeUser.getRole();
+    String displayString = fullName + " - " + role;
+    // displayString = WordUtils.capitalize(displayString);
+
     // Update in homepage
-    activeUserStatus.setText(activeUser.getFullName());
-    activeUserHome.setText(activeUser.getFullName());
+    activeUserStatus.setText(displayString);
+    activeUserHome.setText(displayString);
 
     // Update in settings
     fullNameSettings.setText(activeUser.getFullName());
     currentUserNameSettings.setText(activeUser.getUsername());
-    currentPasswordSettings.setText(activeUser.getPassword());
 
     // Disable editability in some settings field
     fullNameSettings.setEditable(false);
     currentUserNameSettings.setEditable(false);
-    currentPasswordSettings.setEditable(false);
   }
 
   @FXML
@@ -63,24 +65,58 @@ public class MainAppController {
     System.out.println("Active user: " + sn.getActiveUser());
   }
 
+  /**
+   * Log out 
+   * @throws IOException
+   */
   @FXML
   private void SwitchToLogin() throws IOException {
       App.setRoot("Login.fxml", "login");
   }
 
+  /**
+   * Update user info, including username and password
+   */
   @FXML
   private void SaveNewUserInfo() {
     String newUserName = newUserNameSettings.getText();
     String newPwd = newPasswordSettings.getText();
     String confirmPwd = confirmNewPasswordSettings.getText();
 
-    if (!newPwd.equals("") && newPwd.equals(confirmPwd)) {
+    if (newUserName.equals("")) {
+      userUpdatedNoti.setText("Please enter a new username!");
+      return;
+    }
+    if (newPwd.equals("")) {
+      userUpdatedNoti.setText("Please enter a new password!");
+      return;
+    }
+    if (confirmPwd.equals("")) {
+      userUpdatedNoti.setText("Please confirm your new password!");
+      return;
+    }
+    if (newPwd.equals(confirmPwd)) {
       this.activeUser.setUsername(newUserName);
       this.activeUser.setPassword(newPwd);
       sn.saveUsers("src/main/resources/jsons/users.json");
       userUpdatedNoti.setText("Update user credentials successfully!");
+
+      newUserNameSettings.setText("");
+      newPasswordSettings.setText("");
+      confirmNewPasswordSettings.setText("");
     } else {
       userUpdatedNoti.setText("Passwords do not match!");
     }
+  }
+
+  /**
+   * Cancel update user info
+   */
+  @FXML 
+  private void cancelChangeUserInfo() {
+    newUserNameSettings.setText("");
+    newPasswordSettings.setText("");
+    confirmNewPasswordSettings.setText("");
+    userUpdatedNoti.setText("");
   }
 }
