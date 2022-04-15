@@ -50,6 +50,10 @@ public class User {
         this.password = password;
     }
     
+    public String getRole(){
+        return this.getClass().getSimpleName().toLowerCase();
+    }
+    
     /**
      * 
      * @param o object to be compared
