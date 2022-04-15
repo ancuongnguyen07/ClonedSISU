@@ -1,8 +1,15 @@
 package fi.tuni.prog3.sisu;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import fi.tuni.prog3.sisu.system.APIReader;
+import fi.tuni.prog3.sisu.system.DegreeProgram;
 import fi.tuni.prog3.sisu.system.SkyNet;
+import fi.tuni.prog3.sisu.system.StudyModule;
 import fi.tuni.prog3.sisu.system.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,6 +21,7 @@ import javafx.scene.control.TextField;
 public class MainAppController {
   private SkyNet sn;
   private User activeUser;
+  private APIReader api;
 
   @FXML Label activeUserStatus;
   @FXML Label activeUserHome;
@@ -34,6 +42,42 @@ public class MainAppController {
    */
   public MainAppController(SkyNet sn) {
     this.sn = sn;
+    this.api = new APIReader();
+  }
+
+  private void APICall() {
+    ArrayList<DegreeProgram> degrees = api.getDegrees();
+    //----------call API degree list -------------------------------------
+    JsonArray degreeArray = api.callAllDegrees();
+    // Take the first degree from the list
+    JsonObject degreeOverview = degreeArray.get(0).getAsJsonObject();
+    // create the API to call that specific degree
+    String currentDegreeAPI = api.getDegreeDetailAPI() + degreeOverview.get("id").getAsString();
+
+    // -------------- and added to degrees array -----------------
+    
+
+    //System.out.println(degrees.size());
+    //---------------Call API 1 degree detail --------------------------------
+    JsonObject degreeDetail = api.connectAPI(currentDegreeAPI, "id");
+    // Make the degree class and add it to the degrees list up in the beginning of this file.
+    DegreeProgram degree = api.JsonToDegreeProgram(degreeDetail);
+    degrees.add(degree);
+    JsonArray degreeRules = api.takeRules(degreeDetail.get("rule").getAsJsonObject());
+    for (int i=0; i<degreeRules.size(); i++){
+        degree.addStudyModule(degreeRules.get(i).getAsJsonObject());
+    }
+
+    // ---------------- take submodules/courses from degree detail----------------
+
+    // call out 1 module (usually suppose to be only 1) ----------------------------
+    JsonObject studyModuleOverview = degreeRules.get(0).getAsJsonObject();
+    String currentStudyModuleAPI = api.getStudyModuleAPI() + studyModuleOverview.get("moduleGroupId").getAsString() + api.getIdentifierTUNI();
+    // contain: submodule or course
+    JsonObject studyModuleDetail = api.connectAPI(currentStudyModuleAPI, "groupId");
+    StudyModule firStudyModule = api.JsonToStudyModule(studyModuleDetail);
+    // create that StudyModule structure
+    api.studyModuleRecursive(studyModuleDetail, firStudyModule);
   }
 
   /**
