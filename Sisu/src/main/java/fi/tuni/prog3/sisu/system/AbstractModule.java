@@ -8,23 +8,19 @@ import java.util.HashMap;
 
 /**
  *
- * @author Cuong Nguyen
+ * @author Cuong Nguyen && An Nguyen
  */
 public class AbstractModule {
     private String name;
     private String id;
     private String groupID;
-    private int minCredit;
-    private int maxCredit;
-    private HashMap<String, AbstractModule> subModules;
+    private String API;
 
-    public AbstractModule(String name, String id, String groupID, int minCredit, int maxCredit) {
+    public AbstractModule(String name, String id, String groupID, String API) {
         this.name = name;
         this.id = id;
         this.groupID = groupID;
-        this.minCredit = minCredit;
-        this.maxCredit = maxCredit;
-        this.subModules = new HashMap<>();
+        this.API = API;
     }
 
     public String getName() {
@@ -37,21 +33,5 @@ public class AbstractModule {
 
     public String getGroupID() {
         return groupID;
-    }
-
-    public int getMinCredit() {
-        return minCredit;
-    }
-
-    public int getMaxCredit() {
-        return maxCredit;
-    }
-
-    public HashMap<String, AbstractModule> getSubModules() {
-        return subModules;
-    }
-    
-    public void addSubModule(String id, AbstractModule submodule){
-        this.subModules.put(id, submodule);
     }
 }
