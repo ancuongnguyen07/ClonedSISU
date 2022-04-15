@@ -38,6 +38,12 @@
   -fx-background-color: #f4f5fe;
   -fx-background-radius: 0;
 }
+.button-secondary:hover {
+  -fx-background-color: #686bc9;
+}
+.button-secondary:hover .text {
+  -fx-fill: #fff;
+}
 .button-secondary .text {
   -fx-fill: #6761a8;
 }
@@ -83,7 +89,7 @@
 .tab:selected {
   -fx-background-color: #f4f4f4;
   -fx-border-color: #6761a8;
-  -fx-border-width: 0 0 5px 0;
+  -fx-border-width: 0 0 7px 0;
 }
 
 .tab-header-background {

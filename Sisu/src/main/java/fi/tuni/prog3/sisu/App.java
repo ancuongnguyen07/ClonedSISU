@@ -14,21 +14,35 @@ import fi.tuni.prog3.sisu.system.*;
 public class App extends Application {
 
     private static Scene scene;
+    private static LoginController loginController;
+    private static MainAppController mainAppController;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("Login"), 1000, 600);
+        SkyNet sn = new SkyNet("src/main/resources/jsons/users.json");
+        App.loginController = new LoginController(sn);
+        App.mainAppController = new MainAppController(sn);
+
+        scene = new Scene(loadFXML("Login.fxml", "login"), 1000, 600);
         stage.setScene(scene);
         stage.show();
     }
-
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+    public static void UpdateMainApp() {
+        mainAppController.updateActiveUser();
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+    static void setRoot(String fxml, String controllerName) throws IOException {
+        scene.setRoot(loadFXML(fxml, controllerName));
+    }
+
+    private static Parent loadFXML(String fxml, String controllerName) throws IOException {
+        FXMLLoader loader = new FXMLLoader(App.class.getResource(fxml));
+        if (controllerName.equals("login")) {
+            loader.setController(loginController);
+        } else if (controllerName.equals("main")) {
+            loader.setController(mainAppController);
+        }
+        return loader.load();
     }
 
     public static void main(String[] args) {

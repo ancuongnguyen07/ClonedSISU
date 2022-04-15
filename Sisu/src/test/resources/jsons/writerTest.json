@@ -1,0 +1,16 @@
+[
+  {
+    "username": "jadon",
+    "fullname": "jadon stuart",
+    "salt": "123",
+    "hashedPassword": "456",
+    "role": "student"
+  },
+  {
+    "username": "lacetia",
+    "fullname": "lacetia peptit",
+    "salt": "abc",
+    "hashedPassword": "xyz",
+    "role": "teacher"
+  }
+]

@@ -1,0 +1,16 @@
+[
+    {
+        "username": "khoa",
+        "fullname": "khoa nguyen",
+        "salt": "k/Rcd6ELpCLtH4RAWrXhqQ==",
+        "hashedPassword": "omhH9RT77dsEZI9Wpi9dUw==",
+        "role": "teacher"
+    },
+    {
+        "username": "an",
+        "fullname": "an nguyen",
+        "salt": "ufxZLnxh27y8lkYXfBJfXw==",
+        "hashedPassword": "GUx4lpRvPI0rYWwLqB77Pg==",
+        "role": "student"
+    }
+]

@@ -10,4 +10,8 @@ package fi.tuni.prog3.sisu.system;
  */
 public class Student extends User{
     private StudyPlan plan;
+    
+    public Student(String username, String fullName, String salt, String password){
+        super(username, fullName, salt, password);
+    }
 }
