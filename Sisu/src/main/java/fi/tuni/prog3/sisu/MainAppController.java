@@ -28,12 +28,18 @@ public class MainAppController {
   @FXML Button cancelBtnSettings;
   @FXML Label userUpdatedNoti;
 
+  /**
+   * Simple constructor for MainAppController class.
+   * @param sn reference to the SkyNet object that is used for this login instance
+   */
   public MainAppController(SkyNet sn) {
     this.sn = sn;
-
-    
   }
-  
+
+  /**
+   *  Update the active user that just logged into the program. Will change some GUI displayed elements
+   * accordingly to the active user's information.
+   */  
   public void updateActiveUser() {
     // Get current active user
     this.activeUser = sn.getActiveUser();

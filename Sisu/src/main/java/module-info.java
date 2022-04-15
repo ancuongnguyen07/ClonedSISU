@@ -6,5 +6,5 @@ module fi.tuni.prog3.sisu {
 
     opens fi.tuni.prog3.sisu to javafx.fxml;
     exports fi.tuni.prog3.sisu;
-    requires com.google.gson;
+    // requires com.google.gson;
 }
