@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Tab?>
@@ -76,7 +74,7 @@
                                                       <Font name="System Bold" size="18.0" />
                                                    </font>
                                                 </Label>
-                                                <GridPane alignment="CENTER" layoutX="37.0" layoutY="81.0" prefHeight="311.0" prefWidth="531.0">
+                                                <GridPane alignment="CENTER" layoutX="37.0" layoutY="81.0" prefHeight="277.0" prefWidth="531.0">
                                                   <columnConstraints>
                                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -90,8 +88,6 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                   </rowConstraints>
                                                    <children>
                                                       <Label text="Full Name" textFill="#6761a8">
@@ -99,51 +95,42 @@
                                                             <Font size="14.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label text="Current Username" textFill="#6761a8" GridPane.rowIndex="2">
+                                                      <Label text="Current Username" textFill="#6761a8" GridPane.rowIndex="1">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label text="Current Password" textFill="#6761a8" GridPane.rowIndex="3">
+                                                      <Label text="New Username" textFill="#6761a8" GridPane.rowIndex="4">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label text="New Username" textFill="#6761a8" GridPane.rowIndex="5">
+                                                      <Label text="New Password" textFill="#6761a8" GridPane.rowIndex="5">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label text="New Password" textFill="#6761a8" GridPane.rowIndex="6">
-                                                         <font>
-                                                            <Font size="14.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <TextField fx:id="newUserNameSettings" promptText="New Username" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                                      <PasswordField fx:id="newPasswordSettings" promptText="New Password" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                                      <Button fx:id="saveBtnSettings" mnemonicParsing="false" onAction="#SaveNewUserInfo" prefHeight="25.0" prefWidth="282.0" styleClass="button-primary" text="Save" GridPane.rowIndex="9" />
-                                                      <Button fx:id="cancelBtnSettings" mnemonicParsing="false" prefHeight="25.0" prefWidth="284.0" styleClass="button-secondary" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                                                      <TextField fx:id="newUserNameSettings" promptText="New Username" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                                      <PasswordField fx:id="newPasswordSettings" promptText="New Password" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                                      <Button fx:id="saveBtnSettings" mnemonicParsing="false" onAction="#SaveNewUserInfo" prefHeight="25.0" prefWidth="282.0" styleClass="button-primary" text="Save" GridPane.rowIndex="7" />
+                                                      <Button fx:id="cancelBtnSettings" mnemonicParsing="false" onAction="#cancelChangeUserInfo" prefHeight="25.0" prefWidth="284.0" styleClass="button-secondary" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                                                       <TextField fx:id="fullNameSettings" text="Full Name" GridPane.columnIndex="1" />
-                                                      <TextField fx:id="currentUserNameSettings" text="Current Username" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                                                         <children>
-                                                            <PasswordField fx:id="currentPasswordSettings" prefHeight="25.0" prefWidth="153.0" text="password" />
-                                                            <CheckBox fx:id="showPasswordToggleSettings" mnemonicParsing="false" prefHeight="17.0" prefWidth="117.0" text="Show Password">
-                                                               <HBox.margin>
-                                                                  <Insets left="10.0" />
-                                                               </HBox.margin>
-                                                            </CheckBox>
-                                                         </children>
-                                                      </HBox>
-                                                      <Label text="Confirm New Password" textFill="#6761a8" GridPane.rowIndex="7">
+                                                      <TextField fx:id="currentUserNameSettings" text="Current Username" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                      <Label text="Confirm New Password" textFill="#6761a8" GridPane.rowIndex="6">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
                                                       </Label>
-                                                      <PasswordField fx:id="confirmNewPasswordSettings" promptText="Confirm New Password" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                                      <PasswordField fx:id="confirmNewPasswordSettings" promptText="Confirm New Password" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                                      <Label text="Change username/password" textFill="#6761a8" GridPane.rowIndex="3">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font>
+                                                      </Label>
                                                    </children>
                                                 </GridPane>
-                                                <Label fx:id="userUpdatedNoti" alignment="CENTER" layoutX="68.0" layoutY="399.0" prefHeight="17.0" prefWidth="452.0" textFill="RED">
+                                                <Label fx:id="userUpdatedNoti" alignment="CENTER" layoutX="77.0" layoutY="368.0" prefHeight="17.0" prefWidth="452.0" textFill="RED">
                                                    <font>
                                                       <Font name="System Bold" size="14.0" />
                                                    </font>
