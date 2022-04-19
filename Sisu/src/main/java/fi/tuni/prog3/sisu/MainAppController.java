@@ -29,11 +29,19 @@ public class MainAppController {
   // Settings FXML IDs
   @FXML TextField fullNameSettings;
   @FXML TextField currentUserNameSettings;
+
+  // IDs to change username/password
   @FXML TextField newUserNameSettings;
+  @FXML PasswordField confirmNewUsernameSettings;
+
   @FXML PasswordField newPasswordSettings;
-  @FXML TextField confirmNewPasswordSettings;
-  @FXML Button saveBtnSettings;
-  @FXML Button cancelBtnSettings;
+  @FXML PasswordField confirmNewPasswordSettings;
+
+  @FXML Button saveUsernameBtn;
+  @FXML Button cancelUsernameBtn;
+  @FXML Button savePasswordBtn;
+  @FXML Button cancelPasswordBtn;
+
   @FXML Label userUpdatedNoti;
 
   /**
@@ -45,6 +53,109 @@ public class MainAppController {
     this.api = new APIReader();
   }
 
+  // --------------------------- UPDATE GUI BASED ON ACTIVE USER ---------------------------
+  public void updateActiveUser() {
+    // Get current active user
+    this.activeUser = sn.getActiveUser();
+
+    // Get role and full name of the active user
+    String fullName = activeUser.getFullName();
+    String role = activeUser.getRole();
+    String displayString = fullName + " - " + role;
+    // displayString = WordUtils.capitalize(displayString);
+
+    // Update in homepage
+    activeUserStatus.setText(displayString);
+    activeUserHome.setText(displayString);
+
+    // Update in settings
+    fullNameSettings.setText(activeUser.getFullName());
+    currentUserNameSettings.setText(activeUser.getUsername());
+
+    // Disable editability in some settings field
+    fullNameSettings.setEditable(false);
+    currentUserNameSettings.setEditable(false);
+  }
+
+  @FXML
+  private void SwitchToLogin() {
+      try {
+        App.setRoot("Login.fxml", "login");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+  }
+
+  // --------------------------- UPDATE USER CREDENTIALS IN SETTINGS ---------------------------
+  @FXML
+  private void SaveNewUsername() {
+    String newUserName = newUserNameSettings.getText();
+    String confirmPwd = confirmNewUsernameSettings.getText();
+
+    if (newUserName.equals("")) {
+      userUpdatedNoti.setText("Please enter a new username!");
+      return;
+    }
+    if (confirmPwd.equals("")) {
+      userUpdatedNoti.setText("Please confirm change by entering your password!");
+      return;
+    }
+    if (sn.validatePassword(activeUser.getUsername(), confirmPwd)) {
+      this.activeUser.setUsername(newUserName);
+      sn.saveUsers("src/main/resources/jsons/users.json");
+      userUpdatedNoti.setText("Update new username successfully!");
+
+      newUserNameSettings.setText("");
+      confirmNewUsernameSettings.setText("");
+    } else {
+      userUpdatedNoti.setText("Password do not match! Please try again");
+      newUserNameSettings.setText("");
+    }
+  }
+
+  @FXML 
+  private void SaveNewPassword() {
+    String newPwd = newPasswordSettings.getText();
+    String confirmNewPwd = confirmNewPasswordSettings.getText();
+
+    if (newPwd.equals("")) {
+      userUpdatedNoti.setText("Please enter a new password!");
+      return;
+    }
+    if (confirmNewPwd.equals("")) {
+      userUpdatedNoti.setText("Please confirm your new password!");
+      return;
+    }
+    if (newPwd.equals(confirmNewPwd)) {
+      // save the hashed password instead of the original password
+      this.activeUser.setPassword(sn.hashPassword(newPwd, this.activeUser.getSalt()));
+      sn.saveUsers("src/main/resources/jsons/users.json");
+      userUpdatedNoti.setText("Update new password successfully!");
+
+      newPasswordSettings.setText("");
+      confirmNewPasswordSettings.setText("");
+    } else {
+      userUpdatedNoti.setText("Password do not match! Please try again");
+      confirmNewPasswordSettings.setText("");
+      newPasswordSettings.setText("");
+    }
+  }
+
+  @FXML 
+  private void cancelUsernameChange() {
+    newUserNameSettings.setText("");
+    userUpdatedNoti.setText("");
+    confirmNewUsernameSettings.setText("");
+  }
+
+  @FXML
+  private void cancelPasswordChange() {
+    newPasswordSettings.setText("");
+    confirmNewPasswordSettings.setText("");
+    userUpdatedNoti.setText("");
+  }
+
+  // --------------------------- API CALLS FOR DISPLAYING THE MODULE CONTENTS ---------------------------
   private void APICall() {
     ArrayList<DegreeProgram> degrees = api.getDegrees();
     //----------call API degree list -------------------------------------
@@ -78,96 +189,5 @@ public class MainAppController {
     StudyModule firStudyModule = api.JsonToStudyModule(studyModuleDetail);
     // create that StudyModule structure
     api.studyModuleRecursive(studyModuleDetail, firStudyModule);
-  }
-
-  /**
-   *  Update the active user that just logged into the program. Will change some GUI displayed elements
-   * accordingly to the active user's information.
-   */  
-  public void updateActiveUser() {
-    // Get current active user
-    this.activeUser = sn.getActiveUser();
-
-    // Get role and full name of the active user
-    String fullName = activeUser.getFullName();
-    String role = activeUser.getRole();
-    String displayString = fullName + " - " + role;
-    // displayString = WordUtils.capitalize(displayString);
-
-    // Update in homepage
-    activeUserStatus.setText(displayString);
-    activeUserHome.setText(displayString);
-
-    // Update in settings
-    fullNameSettings.setText(activeUser.getFullName());
-    currentUserNameSettings.setText(activeUser.getUsername());
-
-    // Disable editability in some settings field
-    fullNameSettings.setEditable(false);
-    currentUserNameSettings.setEditable(false);
-  }
-
-  @FXML
-  private void GetInfo() {
-    System.out.println("Get students: " + sn.getStudents());
-    System.out.println("Get teachers: " + sn.getTeachers());
-    System.out.println("Get modules: " + sn.getModules());
-    System.out.println("Active user: " + sn.getActiveUser());
-  }
-
-  /**
-   * Log out 
-   * @throws IOException
-   */
-  @FXML
-  private void SwitchToLogin() throws IOException {
-      App.setRoot("Login.fxml", "login");
-  }
-
-  /**
-   * Update user info, including username and password
-   */
-  @FXML
-  private void SaveNewUserInfo() {
-    String newUserName = newUserNameSettings.getText();
-    String newPwd = newPasswordSettings.getText();
-    String confirmPwd = confirmNewPasswordSettings.getText();
-
-    if (newUserName.equals("")) {
-      userUpdatedNoti.setText("Please enter a new username!");
-      return;
-    }
-    if (newPwd.equals("")) {
-      userUpdatedNoti.setText("Please enter a new password!");
-      return;
-    }
-    if (confirmPwd.equals("")) {
-      userUpdatedNoti.setText("Please confirm your new password!");
-      return;
-    }
-    if (newPwd.equals(confirmPwd)) {
-      this.activeUser.setUsername(newUserName);
-      // save the hashed password instead of the original password
-      this.activeUser.setPassword(sn.hashPassword(newPwd, this.activeUser.getSalt()));
-      sn.saveUsers("src/main/resources/jsons/users.json");
-      userUpdatedNoti.setText("Update user credentials successfully!");
-
-      newUserNameSettings.setText("");
-      newPasswordSettings.setText("");
-      confirmNewPasswordSettings.setText("");
-    } else {
-      userUpdatedNoti.setText("Passwords do not match!");
-    }
-  }
-
-  /**
-   * Cancel update user info
-   */
-  @FXML 
-  private void cancelChangeUserInfo() {
-    newUserNameSettings.setText("");
-    newPasswordSettings.setText("");
-    confirmNewPasswordSettings.setText("");
-    userUpdatedNoti.setText("");
   }
 }
