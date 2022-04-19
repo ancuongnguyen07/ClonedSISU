@@ -53,45 +53,7 @@ public class MainAppController {
     this.api = new APIReader();
   }
 
-  private void APICall() {
-    ArrayList<DegreeProgram> degrees = api.getDegrees();
-    //----------call API degree list -------------------------------------
-    JsonArray degreeArray = api.callAllDegrees();
-    // Take the first degree from the list
-    JsonObject degreeOverview = degreeArray.get(0).getAsJsonObject();
-    // create the API to call that specific degree
-    String currentDegreeAPI = api.getDegreeDetailAPI() + degreeOverview.get("id").getAsString();
-
-    // -------------- and added to degrees array -----------------
-    
-
-    //System.out.println(degrees.size());
-    //---------------Call API 1 degree detail --------------------------------
-    JsonObject degreeDetail = api.connectAPI(currentDegreeAPI, "id");
-    // Make the degree class and add it to the degrees list up in the beginning of this file.
-    DegreeProgram degree = api.JsonToDegreeProgram(degreeDetail);
-    degrees.add(degree);
-    JsonArray degreeRules = api.takeRules(degreeDetail.get("rule").getAsJsonObject());
-    for (int i=0; i<degreeRules.size(); i++){
-        degree.addStudyModule(degreeRules.get(i).getAsJsonObject());
-    }
-
-    // ---------------- take submodules/courses from degree detail----------------
-
-    // call out 1 module (usually suppose to be only 1) ----------------------------
-    JsonObject studyModuleOverview = degreeRules.get(0).getAsJsonObject();
-    String currentStudyModuleAPI = api.getStudyModuleAPI() + studyModuleOverview.get("moduleGroupId").getAsString() + api.getIdentifierTUNI();
-    // contain: submodule or course
-    JsonObject studyModuleDetail = api.connectAPI(currentStudyModuleAPI, "groupId");
-    StudyModule firStudyModule = api.JsonToStudyModule(studyModuleDetail);
-    // create that StudyModule structure
-    api.studyModuleRecursive(studyModuleDetail, firStudyModule);
-  }
-
-  /**
-   *  Update the active user that just logged into the program. Will change some GUI displayed elements
-   * accordingly to the active user's information.
-   */  
+  // --------------------------- UPDATE GUI BASED ON ACTIVE USER ---------------------------
   public void updateActiveUser() {
     // Get current active user
     this.activeUser = sn.getActiveUser();
@@ -116,25 +78,15 @@ public class MainAppController {
   }
 
   @FXML
-  private void GetInfo() {
-    System.out.println("Get students: " + sn.getStudents());
-    System.out.println("Get teachers: " + sn.getTeachers());
-    System.out.println("Get modules: " + sn.getModules());
-    System.out.println("Active user: " + sn.getActiveUser());
+  private void SwitchToLogin() {
+      try {
+        App.setRoot("Login.fxml", "login");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
   }
 
-  /**
-   * Log out 
-   * @throws IOException
-   */
-  @FXML
-  private void SwitchToLogin() throws IOException {
-      App.setRoot("Login.fxml", "login");
-  }
-
-  /**
-   * Update user info, including username and password
-   */
+  // --------------------------- UPDATE USER CREDENTIALS IN SETTINGS ---------------------------
   @FXML
   private void SaveNewUsername() {
     String newUserName = newUserNameSettings.getText();
@@ -188,9 +140,6 @@ public class MainAppController {
     }
   }
 
-  /**
-   * Cancel update user info
-   */
   @FXML 
   private void cancelUsernameChange() {
     newUserNameSettings.setText("");
@@ -203,5 +152,41 @@ public class MainAppController {
     newPasswordSettings.setText("");
     confirmNewPasswordSettings.setText("");
     userUpdatedNoti.setText("");
+  }
+
+  // --------------------------- API CALLS FOR DISPLAYING THE MODULE CONTENTS ---------------------------
+  private void APICall() {
+    ArrayList<DegreeProgram> degrees = api.getDegrees();
+    //----------call API degree list -------------------------------------
+    JsonArray degreeArray = api.callAllDegrees();
+    // Take the first degree from the list
+    JsonObject degreeOverview = degreeArray.get(0).getAsJsonObject();
+    // create the API to call that specific degree
+    String currentDegreeAPI = api.getDegreeDetailAPI() + degreeOverview.get("id").getAsString();
+
+    // -------------- and added to degrees array -----------------
+    
+
+    //System.out.println(degrees.size());
+    //---------------Call API 1 degree detail --------------------------------
+    JsonObject degreeDetail = api.connectAPI(currentDegreeAPI, "id");
+    // Make the degree class and add it to the degrees list up in the beginning of this file.
+    DegreeProgram degree = api.JsonToDegreeProgram(degreeDetail);
+    degrees.add(degree);
+    JsonArray degreeRules = api.takeRules(degreeDetail.get("rule").getAsJsonObject());
+    for (int i=0; i<degreeRules.size(); i++){
+        degree.addStudyModule(degreeRules.get(i).getAsJsonObject());
+    }
+
+    // ---------------- take submodules/courses from degree detail----------------
+
+    // call out 1 module (usually suppose to be only 1) ----------------------------
+    JsonObject studyModuleOverview = degreeRules.get(0).getAsJsonObject();
+    String currentStudyModuleAPI = api.getStudyModuleAPI() + studyModuleOverview.get("moduleGroupId").getAsString() + api.getIdentifierTUNI();
+    // contain: submodule or course
+    JsonObject studyModuleDetail = api.connectAPI(currentStudyModuleAPI, "groupId");
+    StudyModule firStudyModule = api.JsonToStudyModule(studyModuleDetail);
+    // create that StudyModule structure
+    api.studyModuleRecursive(studyModuleDetail, firStudyModule);
   }
 }
