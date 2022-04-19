@@ -81,6 +81,47 @@ public class SkyNet {
     }
     
     /**
+     * Generate a random salt used in hashing password
+     * @return a byte-string salt
+     */
+    private String randomSalt(){
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+        return Base64.getEncoder().encodeToString(salt);
+    }
+    
+    private boolean isValidPassword(String password){
+        if (password.length() < 6){
+            return false;
+        }
+        
+        char ch;
+        boolean capitalFlag = false;
+        boolean lowerFlag = false;
+        boolean specialFlag = false;
+        for (int i = 0; i < password.length(); i++){
+            ch = password.charAt(i);
+            if (Character.isLowerCase(ch)){
+                lowerFlag = true;
+            }
+            else if(Character.isUpperCase(ch)){
+                capitalFlag = true;
+            }
+            else if(!Character.isDigit(ch) && !Character.isAlphabetic(i)){
+                // check special symbol
+                specialFlag = true;
+            }
+        }
+        
+        return lowerFlag && capitalFlag && specialFlag;
+    }
+    // ======================================= PUBLIC METHODS
+    // Methods should be used in Controllers
+    // =======================================
+    
+    
+    /**
      * Save user information to json file
      */
     public void saveUsers(String usersFilePath){
@@ -94,7 +135,7 @@ public class SkyNet {
      * @param saltString random string added to password before doing hash
      * @return a hashed password - String
      */
-    private String hashPassword(String password, String saltString){
+    public String hashPassword(String password, String saltString){
         try {
             byte[] salt = Base64.getDecoder().decode(saltString);
             KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
@@ -134,5 +175,53 @@ public class SkyNet {
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Add new {@link User} into system
+     * @param username username of user
+     * @param fullname fullname of user
+     * @param password un-hashed password of user
+     * @param role role of user: "student" or "teacher"
+     * @return integer values in {0,1,2}, 0: successful, 1: error -
+     * existed username, 2: error - invalid password. Password has at least
+     * 6 characters, containing lower and uppercase and at least one special
+     * symbol such as !,?,%,^,&,etc.
+     */
+    public int addNewUser(String username, String fullname,
+                        String password, String role){
+        
+        // Check already existed user
+        User existUser = null;
+        if (role.equals("student")){
+            existUser = this.students.get(username);
+        }
+        else if(role.equals("teacher")){
+            existUser = this.teachers.get(username);
+        }
+        if (existUser != null){
+            // there is already a user with the same username
+            return 1;
+        }
+        
+        // Check the validation of password
+        if (!isValidPassword(password)){
+            return 2;
+        }
+        
+        // Generate salt for the new user and hash password
+        String salt = randomSalt();
+        String hashedPassword = hashPassword(password, salt);
+        
+        if (role.equals("student")){
+            this.students.put(username, new Student(username, fullname, 
+                    salt, hashedPassword));
+        }
+        else if (role.equals("teacher")){
+            this.teachers.put(username, new Teacher(username, fullname, 
+                    salt, hashedPassword));
+        }
+        
+        return 0;
     }
 }
