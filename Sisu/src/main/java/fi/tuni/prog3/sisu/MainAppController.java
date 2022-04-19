@@ -29,11 +29,19 @@ public class MainAppController {
   // Settings FXML IDs
   @FXML TextField fullNameSettings;
   @FXML TextField currentUserNameSettings;
+
+  // IDs to change username/password
   @FXML TextField newUserNameSettings;
+  @FXML PasswordField confirmNewUsernameSettings;
+
   @FXML PasswordField newPasswordSettings;
-  @FXML TextField confirmNewPasswordSettings;
-  @FXML Button saveBtnSettings;
-  @FXML Button cancelBtnSettings;
+  @FXML PasswordField confirmNewPasswordSettings;
+
+  @FXML Button saveUsernameBtn;
+  @FXML Button cancelUsernameBtn;
+  @FXML Button savePasswordBtn;
+  @FXML Button cancelPasswordBtn;
+
   @FXML Label userUpdatedNoti;
 
   /**
@@ -128,34 +136,55 @@ public class MainAppController {
    * Update user info, including username and password
    */
   @FXML
-  private void SaveNewUserInfo() {
+  private void SaveNewUsername() {
     String newUserName = newUserNameSettings.getText();
-    String newPwd = newPasswordSettings.getText();
-    String confirmPwd = confirmNewPasswordSettings.getText();
+    String confirmPwd = confirmNewUsernameSettings.getText();
 
     if (newUserName.equals("")) {
       userUpdatedNoti.setText("Please enter a new username!");
       return;
     }
+    if (confirmPwd.equals("")) {
+      userUpdatedNoti.setText("Please confirm change by entering your password!");
+      return;
+    }
+    if (sn.validatePassword(activeUser.getUsername(), confirmPwd)) {
+      this.activeUser.setUsername(newUserName);
+      sn.saveUsers("src/main/resources/jsons/users.json");
+      userUpdatedNoti.setText("Update new username successfully!");
+
+      newUserNameSettings.setText("");
+      confirmNewUsernameSettings.setText("");
+    } else {
+      userUpdatedNoti.setText("Password do not match! Please try again");
+      newUserNameSettings.setText("");
+    }
+  }
+
+  @FXML 
+  private void SaveNewPassword() {
+    String newPwd = newPasswordSettings.getText();
+    String confirmNewPwd = confirmNewPasswordSettings.getText();
+
     if (newPwd.equals("")) {
       userUpdatedNoti.setText("Please enter a new password!");
       return;
     }
-    if (confirmPwd.equals("")) {
+    if (confirmNewPwd.equals("")) {
       userUpdatedNoti.setText("Please confirm your new password!");
       return;
     }
-    if (newPwd.equals(confirmPwd)) {
-      this.activeUser.setUsername(newUserName);
+    if (newPwd.equals(confirmNewPwd)) {
       this.activeUser.setPassword(newPwd);
       sn.saveUsers("src/main/resources/jsons/users.json");
-      userUpdatedNoti.setText("Update user credentials successfully!");
+      userUpdatedNoti.setText("Update new password successfully!");
 
-      newUserNameSettings.setText("");
       newPasswordSettings.setText("");
       confirmNewPasswordSettings.setText("");
     } else {
-      userUpdatedNoti.setText("Passwords do not match!");
+      userUpdatedNoti.setText("Password do not match! Please try again");
+      confirmNewPasswordSettings.setText("");
+      newPasswordSettings.setText("");
     }
   }
 
@@ -163,8 +192,14 @@ public class MainAppController {
    * Cancel update user info
    */
   @FXML 
-  private void cancelChangeUserInfo() {
+  private void cancelUsernameChange() {
     newUserNameSettings.setText("");
+    userUpdatedNoti.setText("");
+    confirmNewUsernameSettings.setText("");
+  }
+
+  @FXML
+  private void cancelPasswordChange() {
     newPasswordSettings.setText("");
     confirmNewPasswordSettings.setText("");
     userUpdatedNoti.setText("");
