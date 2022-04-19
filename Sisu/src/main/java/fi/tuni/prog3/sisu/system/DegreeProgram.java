@@ -32,7 +32,8 @@ public class DegreeProgram extends AbstractModule{
 
     private String type;
     //constructor for CompositeRule
-    public DegreeProgram(String name, String id, String groupID, String API, int minRequire, int maxRequire, String description, boolean allMandatory) {
+    public DegreeProgram(String name, String id, String groupID, String API,
+            int minRequire, int maxRequire, String description, boolean allMandatory) {
       super(name, id, groupID, API);
       //TODO Auto-generated constructor stub
       this.type = "composite";

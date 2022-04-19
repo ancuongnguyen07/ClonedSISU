@@ -127,7 +127,8 @@ public class MainAppController {
       return;
     }
     if (newPwd.equals(confirmNewPwd)) {
-      this.activeUser.setPassword(newPwd);
+      // save the hashed password instead of the original password
+      this.activeUser.setPassword(sn.hashPassword(newPwd, this.activeUser.getSalt()));
       sn.saveUsers("src/main/resources/jsons/users.json");
       userUpdatedNoti.setText("Update new password successfully!");
 
