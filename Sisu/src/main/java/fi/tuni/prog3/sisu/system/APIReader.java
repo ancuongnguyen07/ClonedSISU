@@ -16,7 +16,7 @@ import java.net.URL;
  *
  * @author An Nguyen
  */
-public class JsonReader {
+public class APIReader {
     private ArrayList<DegreeProgram > degrees = new ArrayList<>();
     private final String degreeListAPI = "https://sis-tuni.funidata.fi/kori/api/module-search?curriculumPeriodId=uta-lvv-2021&universityId=tuni-university-root-id&moduleType=DegreeProgramme&limit=1000";
     private final String degreeDetailAPI = "https://sis-tuni.funidata.fi/kori/api/modules/";

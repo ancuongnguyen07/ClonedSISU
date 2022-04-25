@@ -57,4 +57,46 @@ public class SkyNetTest {
         assertEquals(expResult, result);
     }
     
+    /**
+     * Test addNewUser function
+     */
+    @Test
+    public void testAddNewUser(){
+        System.out.println("addNewUser");
+        SkyNet sn = new SkyNet(userFilePath);
+        
+        // case 1: add existed username
+        String username = "khoa";
+        String fullname = "khoa nguyen";
+        String password = "abc123E!"; // valid password
+        String role = "teacher";
+        
+        int code = sn.addNewUser(username, fullname, password, role);
+        boolean flag1 = code == 1;
+        System.out.println(flag1);
+        
+        // case 2: invalid password
+        username = "jadon";
+        password = "abcertE";
+        
+        code = sn.addNewUser(username, fullname, password, role);
+        boolean flag2 = code == 2;
+        System.out.println(flag2);
+        
+        // case 3: successful
+        password = "Jadon123!"; // valid password
+        
+        code = sn.addNewUser(username, fullname, password, role);
+        boolean flag3 = code == 0;
+        System.out.println(flag3);
+        
+        Teacher addedUser = sn.getTeachers().get("jadon");
+        String salt = addedUser.getSalt();
+        Teacher testUser = new Teacher(username, fullname, salt, 
+                                        sn.hashPassword(password, salt));
+        boolean flag4 = addedUser.equals(testUser);
+        System.out.println(flag4);
+        
+        assertTrue(flag1 && flag2 && flag3 && flag4);
+    }
 }
