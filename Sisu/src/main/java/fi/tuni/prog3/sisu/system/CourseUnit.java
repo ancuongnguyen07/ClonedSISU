@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
  *
  * @author Cuong Nguyen && An Nguyen
  */
-public class CourseUnit extends AbstractModule{
+public class CourseUnit extends AbstractModule {
     //https://sis-tuni.funidata.fi/kori/api/course-units/by-group-id?groupId=uta-ykoodi-39231&universityId=tuni-university-root-id
     private String content;
     private String additional;
@@ -33,7 +33,6 @@ public class CourseUnit extends AbstractModule{
 
     public CourseUnit(String name, String id, String groupID, int minCredit, int maxCredit, String API, String content, String additional, JsonObject learningMaterial, JsonArray substitutions, JsonArray completionMethods, String courseCode, String gradeScaleId, String outcomes, String prerequisites, JsonArray recommendedFormalPrerequisites, JsonArray compulsoryFormalPrerequisites, JsonArray studyFields, JsonArray responsibilityInfos, JsonArray possibleAttainmentLanguages, JsonArray curriculumPeriodIds, String inclusionApplicationInstruction ) {
         super(name, id, groupID, API);
-        //TODO Auto-generated constructor stub
         this.content = content;
         this.additional = additional;
         this.learningMaterial = learningMaterial;

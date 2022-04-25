@@ -4,8 +4,6 @@
  */
 package fi.tuni.prog3.sisu.system;
 
-import java.util.HashMap;
-
 /**
  *
  * @author Cuong Nguyen && An Nguyen
@@ -33,5 +31,9 @@ public class AbstractModule {
 
     public String getGroupID() {
         return groupID;
+    }
+
+    public String getAPI(){
+        return API;
     }
 }
