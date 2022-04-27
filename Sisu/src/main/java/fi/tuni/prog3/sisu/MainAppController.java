@@ -211,6 +211,7 @@ public class MainAppController {
             this.modules.add(module);
 
             Button btn = new Button(module.getName());
+            btn.getStyleClass().add("module-heading");
             TreeItem item = new TreeItem(btn);
             parentItem.getChildren().add(item);
 
@@ -244,6 +245,7 @@ public class MainAppController {
             this.modules.add(m);
 
             Button btn = new Button(m.getName());
+            btn.getStyleClass().add("module-heading");
             TreeItem item = new TreeItem(btn);
             parentItem.getChildren().add(item);
 
@@ -264,6 +266,7 @@ public class MainAppController {
             this.courses.add(course);
 
             Button btn = new Button(course.getName());
+            btn.getStyleClass().add("module-heading");
             TreeItem item = new TreeItem(btn);
             parentItem.getChildren().add(item);
 
@@ -294,6 +297,7 @@ public class MainAppController {
     // Degree: Bachelor program in Sci&En
     DegreeProgram degree = degrees.get(0);
     Button degreeButton = new Button(degree.getName());
+    degreeButton.getStyleClass().add("module-heading");
     TreeItem<Button> degreeRoot = new TreeItem<Button>(degreeButton);
     degreeButton.setOnAction(event -> {
       Object node = event.getSource();
