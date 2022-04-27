@@ -3,6 +3,25 @@ package fi.tuni.prog3.sisu;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.util.Callback;
+
 // import javax.swing.JSpinner.DefaultEditor;
 
 import com.google.gson.JsonArray;
@@ -16,11 +35,13 @@ import fi.tuni.prog3.sisu.system.SkyNet;
 import fi.tuni.prog3.sisu.system.StudyModule;
 import fi.tuni.prog3.sisu.system.SubCompositeRule;
 import fi.tuni.prog3.sisu.system.User;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.TreeItem;
@@ -30,6 +51,8 @@ public class MainAppController {
   // --------------------------- API STUFFS FOR SISU ---------------------------
   // ===========================================================================
   private ArrayList<DegreeProgram> degrees = new ArrayList<DegreeProgram>();
+  private ArrayList<StudyModule> modules = new ArrayList<StudyModule>();
+  private ArrayList<CourseUnit> courses = new ArrayList<CourseUnit>();
   private final String degreeListAPI = "https://sis-tuni.funidata.fi/kori/api/module-search?curriculumPeriodId=uta-lvv-2021&universityId=tuni-university-root-id&moduleType=DegreeProgramme&limit=1000";
   private final String degreeDetailAPI = "https://sis-tuni.funidata.fi/kori/api/modules/";
   private final String studyModuleAPI = "https://sis-tuni.funidata.fi/kori/api/modules/by-group-id?groupId=";
@@ -74,6 +97,9 @@ public class MainAppController {
   // =======================================================================================
   // --------------------------- UPDATE GUI BASED ON ACTIVE USER ---------------------------
   // =======================================================================================
+  /**
+   * Update the information in the GUI based on the information of the current logged-in user
+   */
   public void updateActiveUser() {
     // Get current active user
     this.activeUser = sn.getActiveUser();
@@ -176,86 +202,113 @@ public class MainAppController {
     userUpdatedNoti.setText("");
   }
   
-  // private void getAPIData() {
-  //   String studyModuleAPI = studyModule.getAPI();
-  //   JsonObject studyModuleJson = api.connectAPI(studyModuleAPI, "groupId");
-  //   api.onClickStudyModule(studyModuleJson, studyModule);
-  // }
+  private void updateStudyStructureDisplay(String moduleName, TreeItem parentItem, String moduleType) throws AnException {
+    if (moduleType.equals("DegreeProgram") && parentItem.getChildren().size() == 0) {
+      // If the parsed module is a degree program
+      for (DegreeProgram degree : this.degrees) {
+        if (degree.getName().equals(moduleName)) {
+          for (StudyModule module : degree.getCompositeRule().getSubModules()) {
+            this.modules.add(module);
 
+            Button btn = new Button(module.getName());
+            TreeItem item = new TreeItem(btn);
+            parentItem.getChildren().add(item);
+
+            btn.setOnAction(event -> {
+              
+              Object node = event.getSource();
+              Button b = (Button)node;
+              System.out.println(b.getText());
+              System.out.println(module.getClass().getSimpleName());
+              try {
+                updateStudyStructureDisplay(b.getText(), item, module.getClass().getSimpleName());
+              } catch (AnException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+              }
+            });
+          }
+        }
+      }
+    }
+    
+    if (moduleType.equals("StudyModule") && parentItem.getChildren().size() == 0) {
+      // If the parsed module is a study module
+      for (StudyModule module : this.modules) {
+        if (module.getName().equals(moduleName)) {
+          api.onClickStudyModule(module);
+          ArrayList<StudyModule> subModules = module.getCompositeRule().getSubModules();
+          ArrayList<CourseUnit> subCourses = module.getCompositeRule().getSubCourses();
+
+          for (StudyModule m : subModules) {
+            this.modules.add(m);
+
+            Button btn = new Button(m.getName());
+            TreeItem item = new TreeItem(btn);
+            parentItem.getChildren().add(item);
+
+            btn.setOnAction(event -> {
+              
+              Object node = event.getSource();
+              Button b = (Button)node;
+              System.out.println(b.getText());
+              System.out.println(m.getClass().getSimpleName());
+              try {
+                updateStudyStructureDisplay(b.getText(), item, m.getClass().getSimpleName());
+              } catch (AnException e) {
+                e.printStackTrace();
+              }
+            });
+          }
+          for (CourseUnit course : subCourses) {
+            this.courses.add(course);
+
+            Button btn = new Button(course.getName());
+            TreeItem item = new TreeItem(btn);
+            parentItem.getChildren().add(item);
+
+            btn.setOnAction(event -> {
+              
+              Object node = event.getSource();
+              Button b = (Button)node;
+              System.out.println(b.getText());
+              System.out.println(course.getClass().getSimpleName());
+              try {
+                updateStudyStructureDisplay(b.getText(), item, course.getClass().getSimpleName());
+              } catch (AnException e) {
+                e.printStackTrace();
+              }
+            });
+          }
+          System.out.println("Sub module(s) of " + moduleName + " are: " + subModules);
+          System.out.println("Sub course(s) of " + moduleName + " are: " + subCourses);
+        }
+      }
+    }
+  }
 
   @FXML 
   private void callAPI() throws AnException {
     getDegree();
 
+    // Degree: Bachelor program in Sci&En
     DegreeProgram degree = degrees.get(0);
-    TreeItem degreeRoot = new TreeItem<>(degree.getName());
-    studyStructureTreeView.setRoot(degreeRoot);
+    Button degreeButton = new Button(degree.getName());
+    TreeItem<Button> degreeRoot = new TreeItem<Button>(degreeButton);
+    degreeButton.setOnAction(event -> {
+      Object node = event.getSource();
+      Button b = (Button)node;
+      try {
+        updateStudyStructureDisplay(b.getText(), degreeRoot, degree.getClass().getSimpleName());
+      } catch (AnException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    });
+    studyStructureTreeView.setRoot(degreeRoot);    
 
-    // Math track
-    ArrayList<StudyModule> degreeModules = degree.getCompositeRule().getSubModules();
-    StudyModule mathTrack = degreeModules.get(0);
+    
 
-    api.onClickStudyModule(mathTrack);
-
-    TreeItem mathTrackTreeItem = new TreeItem<>(mathTrack.getName());
-    degreeRoot.getChildren().add(mathTrackTreeItem);
-
-    // In the math track
-    ArrayList<StudyModule> mathTrackStudyModules = mathTrack.getCompositeRule().getSubModules();
-
-    StudyModule jointStudiesModules = mathTrackStudyModules.get(0);
-    api.onClickStudyModule(jointStudiesModules);
-    StudyModule basicStudiesModules = mathTrackStudyModules.get(1);
-    api.onClickStudyModule(basicStudiesModules);
-    StudyModule intermediateStudiesModules = mathTrackStudyModules.get(2);
-    api.onClickStudyModule(intermediateStudiesModules);
-    StudyModule freeChoiceStudiesModules = mathTrackStudyModules.get(3);
-    api.onClickStudyModule(freeChoiceStudiesModules);
-    StudyModule freeChoiceCourseUnit = mathTrackStudyModules.get(4);
-    api.onClickStudyModule(freeChoiceCourseUnit);
-
-    TreeItem jointStudiesTreeItem = new TreeItem<>(jointStudiesModules.getName());
-    TreeItem basicStudiesTreeItem = new TreeItem<>(basicStudiesModules.getName());
-    TreeItem intermediateStudiesTreeItem = new TreeItem<>(intermediateStudiesModules.getName());
-    TreeItem freeChoiceStudiesTreeItem = new TreeItem<>(freeChoiceStudiesModules.getName());
-    TreeItem freeChoiceCourseUnitTreeItem = new TreeItem<>(freeChoiceCourseUnit.getName());
-
-    ArrayList<CourseUnit> jointStudyCourses = jointStudiesModules.getCompositeRule().getSubCourses();
-    for (int i = 0; i < jointStudyCourses.size(); i++) {
-      TreeItem course = new TreeItem<>(jointStudyCourses.get(i).getName());
-      jointStudiesTreeItem.getChildren().add(course);
-    }
-
-    ArrayList<CourseUnit> basicStudyCourses = basicStudiesModules.getCompositeRule().getSubCourses();
-    for (int i = 0; i < basicStudyCourses.size(); i++) {
-      TreeItem course = new TreeItem<>(basicStudyCourses.get(i).getName());
-      basicStudiesTreeItem.getChildren().add(course);
-    }
-
-    // Select the Physics major in the 5 available majors
-    StudyModule intermediateStudiesMajor = intermediateStudiesModules.getCompositeRule().getSubModules().get(0);
-    api.onClickStudyModule(intermediateStudiesMajor);
-    TreeItem majorTreeItem = new TreeItem<>(intermediateStudiesMajor.getName());
-    ArrayList<CourseUnit> majorCourses = intermediateStudiesMajor.getCompositeRule().getSubCourses();
-    for (int i = 0; i < majorCourses.size(); i++) {
-      TreeItem course = new TreeItem<>(majorCourses.get(i).getName());
-      majorTreeItem.getChildren().add(course);
-    }
-
-    ArrayList<StudyModule> freeChoiceIntermediateStudyModule = freeChoiceStudiesModules.getCompositeRule().getSubModules();
-    for (int i = 0; i < freeChoiceIntermediateStudyModule.size(); i++) {
-      api.onClickStudyModule(freeChoiceIntermediateStudyModule.get(i));
-      TreeItem freeChoiceIntermediateTreeItem = new TreeItem<>(freeChoiceIntermediateStudyModule.get(i).getName());
-      freeChoiceStudiesTreeItem.getChildren().add(freeChoiceIntermediateTreeItem);
-    }
-
-    intermediateStudiesTreeItem.getChildren().add(majorTreeItem);
-
-    mathTrackTreeItem.getChildren().add(jointStudiesTreeItem);
-    mathTrackTreeItem.getChildren().add(basicStudiesTreeItem);
-    mathTrackTreeItem.getChildren().add(intermediateStudiesTreeItem);
-    mathTrackTreeItem.getChildren().add(freeChoiceStudiesTreeItem);
-    mathTrackTreeItem.getChildren().add(freeChoiceCourseUnitTreeItem);
   }
   
   // ====================================================================================================
