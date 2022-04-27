@@ -2,6 +2,11 @@ package fi.tuni.prog3.sisu.system;
 
 import java.util.ArrayList;
 
+/**
+ * Contains information of sub modules of a degree
+ * Get functions:
+ *  
+ */
 public class SubCompositeRule {
     private int minRequire;
     private int maxRequire;
@@ -12,6 +17,7 @@ public class SubCompositeRule {
     private int minCredit;
     private int maxCredit;
 
+    
     private ArrayList<CourseUnit> subCourses = new ArrayList<>();
     private ArrayList<StudyModule> subModules = new ArrayList<>();
     private ArrayList<AnyRule> subAnyRules = new ArrayList<>();

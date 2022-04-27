@@ -65,7 +65,7 @@ public class APIReader {
     // Like set up in sisu: https://sis-tuni.funidata.fi/kori/api/modules/otm-df83fbbd-f82d-4fda-b819-78f6b2077fcb
     // "https://sis-tuni.funidata.fi/kori/api/modules/by-group-id?groupId=tut-sm-g-7094&universityId=tuni-university-root-id"
     // 5th degree
-    public static JsonArray takeRules(JsonObject rule) throws AnException{
+    public JsonArray takeRules(JsonObject rule) throws AnException{
         JsonArray rules = new JsonArray();
         String ruleType = rule.get("type").getAsString();
         if (ruleType.equals("CompositeRule")){
@@ -99,7 +99,7 @@ public class APIReader {
     }
     
     // check the object not null and not JsonNull
-    public boolean checkNotJsonNull(JsonObject obj, String entity){
+    private boolean checkNotJsonNull(JsonObject obj, String entity){
         try{
             // check if the object itself is null
             if (obj.get(entity) == null){
@@ -114,16 +114,16 @@ public class APIReader {
     }
 
     // Prioritize fi version, check if the content has en or fi and return it
-    public String enOrFi(JsonObject content){
-        if (checkNotJsonNull(content, "fi")){
-            return content.get("fi").getAsString();
-        } else {
+    private String enOrFi(JsonObject content){
+        if (checkNotJsonNull(content, "en")){
             return content.get("en").getAsString();
+        } else {
+            return content.get("fi").getAsString();
         }
     }
 
     //object can be studyModule or courseUnit(basic form) in Json basic form (in a rules, not its own JSON)
-    public String makeAPIFromJson(JsonObject object) throws AnException{
+    private String makeAPIFromJson(JsonObject object) throws AnException{
         String type = object.get("type").getAsString();
         if (type.equals("ModuleRule")){
             return studyModuleAPI + object.get("moduleGroupId").getAsString() + identifierTUNI;
@@ -136,9 +136,8 @@ public class APIReader {
         }
     }
 
-
     // Get detail information on the Degree or StudyModule
-    public SubCompositeRule JsonToCompositeRule(JsonObject rule) throws AnException{
+    private SubCompositeRule JsonToCompositeRule(JsonObject rule) throws AnException{
         String ruleType = rule.get("type").getAsString();
         if (ruleType.equals("CompositeRule") || ruleType.equals("CreditsRule")){
             Boolean isCredits = false;
@@ -261,7 +260,7 @@ public class APIReader {
         String id = courseUnitJson.get("id").getAsString();
         // name have en or/and fi
         String name = null;
-        if (checkNotJsonNull(courseUnitJson, name)){
+        if (checkNotJsonNull(courseUnitJson, "name")){
             name = enOrFi(courseUnitJson.get("name").getAsJsonObject());
         }
         String groupID = courseUnitJson.get("groupId").getAsString();
@@ -307,8 +306,10 @@ public class APIReader {
 
     
     // Take in studyModule in Json form and studyModule class form to create the structure below it.
-    public void onClickStudyModule(JsonObject studyModuleJSON, StudyModule studyModule) throws AnException{
-        System.out.println("Clicking");
+    public void onClickStudyModule(StudyModule studyModule) throws AnException{
+        String studyModuleAPI = studyModule.getAPI();
+        JsonObject studyModuleJSON = connectAPI(studyModuleAPI, "groupId");
+        //System.out.println("Clicking");
         JsonObject rule = studyModuleJSON.get("rule").getAsJsonObject();
         String ruleType = rule.get("type").getAsString();
         if (ruleType.equals("CompositeRule") || ruleType.equals("CreditsRule")){
@@ -357,13 +358,13 @@ public class APIReader {
         JsonObject studyModuleDetail = connectAPI(currentStudyModuleAPI, "groupId");
         StudyModule firStudyModule = JsonToStudyModule(studyModuleDetail);
         // User click on the studyModule to see more details
-        onClickStudyModule(studyModuleDetail, firStudyModule);
+        onClickStudyModule(firStudyModule);
         // Look at the Basic Studies in Natural Sciences in Natural Sciences and Mathematics
         String basic_studies_api = firStudyModule.getCompositeRule().getSubModules().get(1).getAPI();
         JsonObject basic_studies_obj = connectAPI(basic_studies_api, "groupId");
         StudyModule basic_studies_module = firStudyModule.getCompositeRule().getSubModules().get(1);
         // When user click on it
-        onClickStudyModule(basic_studies_obj, basic_studies_module);
+        onClickStudyModule(basic_studies_module);
 
     }
 
