@@ -2,7 +2,8 @@
     {
         "username": "cuong",
         "degree" : "otm-df83fbbd-f82d-4fda-b819-78f6b2077fcb",
-        "modules": [ 
+        "modules": [
+            "otm-33387748-1dbf-4632-87d8-0c4e610b96dd",
             "otm-8159ce51-8c25-44a5-85c4-0bab02e314e9",
             "otm-308727ff-d91a-4a5a-9f1c-e58c8aa97d8b",
             "otm-db1d8c96-6cfe-4ae3-b5e2-a8c557ba87fa",
@@ -23,13 +24,14 @@
                     "tut-cu-g-36355",
                     "tut-cu-g-45446",
                     "tut-cu-g-45679",
-                    "otm-429c15d5-a063-4145-86fb-91466f0aa81e"
+                    "otm-05bc8cb9-4bbc-4170-aa3b-0625e3a57914"
         ]
     },
     {
         "username": "khoa",
         "degree" : "otm-df83fbbd-f82d-4fda-b819-78f6b2077fcb",
         "modules": [ 
+            "otm-33387748-1dbf-4632-87d8-0c4e610b96dd",
             "otm-8159ce51-8c25-44a5-85c4-0bab02e314e9",
             "otm-308727ff-d91a-4a5a-9f1c-e58c8aa97d8b",
             "otm-db1d8c96-6cfe-4ae3-b5e2-a8c557ba87fa",
@@ -51,13 +53,14 @@
                     "tut-cu-g-36477",
                     "otm-06cd6f5d-4ec2-42d4-b003-66f04cee3f65",
                     "tut-cu-g-45259",
-                    "otm-429c15d5-a063-4145-86fb-91466f0aa81e"
+                    "otm-05bc8cb9-4bbc-4170-aa3b-0625e3a57914"
         ]
     },
     {
         "username": "an",
         "degree" : "otm-df83fbbd-f82d-4fda-b819-78f6b2077fcb",
         "modules": [ 
+            "otm-33387748-1dbf-4632-87d8-0c4e610b96dd",
             "otm-8159ce51-8c25-44a5-85c4-0bab02e314e9",
             "otm-308727ff-d91a-4a5a-9f1c-e58c8aa97d8b",
             "otm-db1d8c96-6cfe-4ae3-b5e2-a8c557ba87fa",
@@ -80,7 +83,7 @@
                     "tut-cu-g-45501",
                     "tut-cu-g-45508",
                     "otm-c29f09e4-f5d6-4b4a-9dd7-cf14090f9d2a",
-                    "otm-429c15d5-a063-4145-86fb-91466f0aa81e"
+                    "otm-05bc8cb9-4bbc-4170-aa3b-0625e3a57914"
         ]
     }
 ]

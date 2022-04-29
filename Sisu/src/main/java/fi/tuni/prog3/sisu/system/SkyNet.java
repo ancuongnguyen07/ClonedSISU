@@ -48,6 +48,11 @@ public class SkyNet {
         
         // demo load Sci&Eng degree structure into DegreeProgam obj
         loadStudyPlans();
+        
+//        this.activeUser = this.students.get("an");
+//        StudyModule s = findStudyModuleByID(this.programs.get(0).getCompositeRule(),
+//                                        "otm-0fc04f22-f797-48fc-9222-48d5d47d1870");
+//        System.out.println(achievedCreStudyModule(s));
     }
 
     public HashMap<String, Student> getStudents() {
@@ -370,25 +375,60 @@ public class SkyNet {
      * @param rule
      * @return achieved credits
      */
-    public int achievedCreStudyModule(SubCompositeRule rule){
-        Student activeStudent = this.students.get(this.activeUser.getUsername());
-        ArrayList<String> coursesIDs = activeStudent.getCourseIDs();
-        int cre = 0;   
+    public int achievedCreStudyModule(StudyModule m){
+        int cre = 0;  
+        System.out.println(m.getName());
+        try {
+            Student activeStudent = this.students.get(this.activeUser.getUsername());
+            ArrayList<String> coursesIDs = activeStudent.getCourseIDs();
+            SubCompositeRule rule = m.getCompositeRule();
+
+
+            for (CourseUnit c : rule.getSubCourses()){
+//                System.out.println(c.getGroupID());
+                if (coursesIDs.indexOf(c.getGroupID()) != -1){
+                    cre += c.getMaxCredit();
+                }
+            }
+
+            for (StudyModule sm : rule.getSubModules()){
+                cre += achievedCreStudyModule(sm);
+            }
+
+            for (SubCompositeRule scr : rule.getSubComposites()){
+                for (StudyModule s : scr.getSubModules()){
+                    cre += achievedCreStudyModule(s);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
-        for (CourseUnit c : rule.getSubCourses()){
-            if (coursesIDs.indexOf(c.getId()) != -1){
-                cre += c.getMinCredit();
+        
+        return cre;
+    }
+    
+    public StudyModule findStudyModuleByID(SubCompositeRule root, String id){
+        for (StudyModule sm : root.getSubModules()){
+            System.out.println(sm.getId());
+            if (sm.getId().equals(id)){
+                return sm;
             }
         }
         
-        for (StudyModule sm : rule.getSubModules()){
-            cre += achievedCreStudyModule(sm.getCompositeRule());
+        for (StudyModule sm : root.getSubModules()){
+            StudyModule result = findStudyModuleByID(sm.getCompositeRule(), id);
+            if (result != null){
+                return result;
+            }
         }
         
-        for (SubCompositeRule scr : rule.getSubComposites()){
-            cre += achievedCreStudyModule(scr);
+        for (SubCompositeRule scr : root.getSubComposites()){
+            StudyModule result = findStudyModuleByID(scr, id);
+            if (result != null){
+                return result;
+            }
         }
-        
-        return cre;
+        return null;
     }
 }
