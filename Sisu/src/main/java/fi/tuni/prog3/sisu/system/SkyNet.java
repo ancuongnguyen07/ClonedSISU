@@ -408,6 +408,12 @@ public class SkyNet {
         return cre;
     }
     
+    /**
+     * Return a StudyModule object with given ID
+     * @param root
+     * @param id
+     * @return StudyModule object with given ID
+     */
     public StudyModule findStudyModuleByID(SubCompositeRule root, String id){
         for (StudyModule sm : root.getSubModules()){
             System.out.println(sm.getId());
