@@ -4,6 +4,8 @@
  */
 package fi.tuni.prog3.sisu.system;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -14,6 +16,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import fi.tuni.prog3.sisu.utility.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,8 +27,10 @@ public class SkyNet {
     
     private HashMap<String, Student> students;
     private HashMap<String, Teacher> teachers;
+    private final String studyPlanFilePath = "src/main/resources/jsons/studyPlan.json";
     
-    private HashMap<String, AbstractModule> modules;
+    private ArrayList<DegreeProgram> programs;
+    private APIReader api;
     private User activeUser;
     
     /**
@@ -35,9 +40,11 @@ public class SkyNet {
     public SkyNet(String usersFilePath){
         this.students = new HashMap<>();
         this.teachers = new HashMap<>();
-        this.modules = new HashMap<>();
+        this.programs = new ArrayList<>();
+        this.api = new APIReader();
         
         loadUsers(usersFilePath);
+        loadUserStudyPlan();
     }
 
     public HashMap<String, Student> getStudents() {
@@ -48,15 +55,39 @@ public class SkyNet {
         return teachers;
     }
 
-    public HashMap<String, AbstractModule> getModules() {
-        return modules;
+    public ArrayList<DegreeProgram> getPrograms() {
+        return programs;
     }
 
     public User getActiveUser() {
         return activeUser;
     }
     
+    private void loadUserStudyPlan(){
+        try {
+            JsonReader reader = new JsonReader();
+            List<StudyPlanJSON> plans = reader.readUserStudyPlan(studyPlanFilePath);
+            for (StudyPlanJSON p : plans){
+                Student tar = this.students.get(p.getUsername());
+                tar.setDegreeID(p.getDegree());
+                tar.setModuleIDs(p.getModules());
+                tar.setCourseIDs(p.getPassedCourses());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
+    private void loadStudyPlans(){
+        // add Science and Engineering program
+        JsonArray degreeArray = this.api.callAllDegrees();
+        JsonObject degreeOverview = degreeArray.get(8).getAsJsonObject();
+        DegreeProgram dp = getDegreeByID(degreeOverview.get("id").getAsString());
+        this.programs.add(dp);
+        
+        // load degree detail through API to database
+        
+    }
     
     /**
      * Load user information from json file to HashMaps for separate
@@ -91,6 +122,13 @@ public class SkyNet {
         return Base64.getEncoder().encodeToString(salt);
     }
     
+    /**
+     * Password has at least
+     * 6 characters, containing lower and uppercase and at least one special
+     * symbol such as !,?,%,^,&,etc.
+     * @param password
+     * @return True if the password is valid, otherwise False
+     */
     private boolean isValidPassword(String password){
         if (password.length() < 6){
             return false;
@@ -184,9 +222,7 @@ public class SkyNet {
      * @param password un-hashed password of user
      * @param role role of user: "student" or "teacher"
      * @return integer values in {0,1,2}, 0: successful, 1: error -
-     * existed username, 2: error - invalid password. Password has at least
-     * 6 characters, containing lower and uppercase and at least one special
-     * symbol such as !,?,%,^,&,etc.
+     * existed username, 2: error - invalid password. 
      */
     public int addNewUser(String username, String fullname,
                         String password, String role){
@@ -223,5 +259,21 @@ public class SkyNet {
         }
         
         return 0;
+    }
+    
+    /**
+     * Return a object of {@link DegreeProgram} representing its components detail
+     * @param id
+     * @return a object of {@link DegreeProgram} with given id
+     */
+    public DegreeProgram getDegreeByID(String id){
+        String currentDegreeAPI = this.api.getDegreeDetailAPI() + id;
+        try {
+            JsonObject degreeDetail = api.connectAPI(currentDegreeAPI, "id");
+            return api.JsonToDegreeProgram(degreeDetail);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

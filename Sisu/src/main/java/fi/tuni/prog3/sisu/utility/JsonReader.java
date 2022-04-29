@@ -27,10 +27,7 @@ public class JsonReader {
      * Construct an initially empty JsonReader
      */
     public JsonReader(){
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(UserJson.class, new UserJsonAdapter());
-        builder.setPrettyPrinting();
-        this.gson = builder.create();
+        this.gson = new Gson();
     }
     
     
@@ -38,7 +35,12 @@ public class JsonReader {
      * Read user information in Json file into a List<{@link fi.tuni.prog3.sisu.system.User}>
      * @param filePath the path of Json file containing user information
      */
-    public List<User> readUsers(String filePath){   
+    public List<User> readUsers(String filePath){  
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(UserJson.class, new UserJsonAdapter());
+        builder.setPrettyPrinting();
+        this.gson = builder.create();
+        
         List<User> users = new ArrayList<>();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
@@ -67,5 +69,22 @@ public class JsonReader {
         }
         
         return users;
+    }
+    
+    public List<StudyPlanJSON> readUserStudyPlan(String filePath){
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(StudyPlanJSON.class, new StudyPlanJSONAdapter());
+        this.gson = builder.create();
+        
+        List<StudyPlanJSON> plans = new ArrayList<>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            
+            plans = this.gson.fromJson(reader, 
+                    new TypeToken<List<StudyPlanJSON>>() {}.getType());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return plans;
     }
 }

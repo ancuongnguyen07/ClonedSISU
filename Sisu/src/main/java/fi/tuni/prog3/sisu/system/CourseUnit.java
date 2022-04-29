@@ -31,7 +31,14 @@ public class CourseUnit extends AbstractModule {
     private String inclusionApplicationInstruction;
     
 
-    public CourseUnit(String name, String id, String groupID, int minCredit, int maxCredit, String API, String content, String additional, JsonObject learningMaterial, JsonArray substitutions, JsonArray completionMethods, String courseCode, String gradeScaleId, String outcomes, String prerequisites, JsonArray recommendedFormalPrerequisites, JsonArray compulsoryFormalPrerequisites, JsonArray studyFields, JsonArray responsibilityInfos, JsonArray possibleAttainmentLanguages, JsonArray curriculumPeriodIds, String inclusionApplicationInstruction ) {
+    public CourseUnit(String name, String id, String groupID, int minCredit,
+            int maxCredit, String API, String content, String additional, 
+            JsonObject learningMaterial, JsonArray substitutions, 
+            JsonArray completionMethods, String courseCode, String gradeScaleId,
+            String outcomes, String prerequisites, JsonArray recommendedFormalPrerequisites, 
+            JsonArray compulsoryFormalPrerequisites, JsonArray studyFields, 
+            JsonArray responsibilityInfos, JsonArray possibleAttainmentLanguages,
+            JsonArray curriculumPeriodIds, String inclusionApplicationInstruction ) {
         super(name, id, groupID, API);
         this.content = content;
         this.additional = additional;

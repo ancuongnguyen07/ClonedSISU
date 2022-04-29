@@ -23,6 +23,27 @@ public class APIReader {
     private final String studyModuleAPI = "https://sis-tuni.funidata.fi/kori/api/modules/by-group-id?groupId=";
     private final String courseUnitAPI = "https://sis-tuni.funidata.fi/kori/api/course-units/by-group-id?groupId=";
     private final String identifierTUNI = "&universityId=tuni-university-root-id";
+
+    public String getDegreeListAPI() {
+        return degreeListAPI;
+    }
+
+    public String getDegreeDetailAPI() {
+        return degreeDetailAPI;
+    }
+
+    public String getStudyModuleAPI() {
+        return studyModuleAPI;
+    }
+
+    public String getCourseUnitAPI() {
+        return courseUnitAPI;
+    }
+
+    public String getIdentifierTUNI() {
+        return identifierTUNI;
+    }
+    
     
     // Purpose: get Json form the given API, type is "id" or "groupId" for taking out JsonObject properly;
     public JsonObject connectAPI(String link, String type){
@@ -301,7 +322,11 @@ public class APIReader {
         if (checkNotJsonNull(courseUnitJson, "inclusionApplicationInstruction")){
             inclusionApplicationInstruction = enOrFi(courseUnitJson.get("inclusionApplicationInstruction").getAsJsonObject());
         }
-        return new CourseUnit(name, id, groupID, minCredit, maxCredit, API, content, additional, learningMaterial, substitutions, completionMethods, courseCode, gradeScaleId, outcomes, prerequisites, recommendedFormalPrerequisites, compulsoryFormalPrerequisites, studyFields, responsibilityInfos, possibleAttainmentLanguages, curriculumPeriodIds, inclusionApplicationInstruction);
+        return new CourseUnit(name, id, groupID, minCredit, maxCredit, API, content, 
+                additional, learningMaterial, substitutions, completionMethods, courseCode, 
+                gradeScaleId, outcomes, prerequisites, recommendedFormalPrerequisites,
+                compulsoryFormalPrerequisites, studyFields, responsibilityInfos, 
+                possibleAttainmentLanguages, curriculumPeriodIds, inclusionApplicationInstruction);
     }
 
     
@@ -368,4 +393,15 @@ public class APIReader {
 
     }
 
+    public ArrayList<String> getSubModulesGroupId(String studyModuleGroupId){
+        String link = studyModuleAPI + studyModuleGroupId + identifierTUNI;
+        JsonObject studyModuleJson = connectAPI(link, "groupId");
+        StudyModule studyModule = JsonToStudyModule(studyModuleJson);
+        ArrayList<StudyModule> subModules = studyModule.getCompositeRule().getSubModules();
+        ArrayList<String> subModulesGroupId = new ArrayList<>();
+        for (int i=0; i<subModules.size(); i++){
+            subModulesGroupId.add( subModules.get(i).getGroupID());
+        }
+        return subModulesGroupId;
+    }
 }

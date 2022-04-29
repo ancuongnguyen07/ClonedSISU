@@ -4,6 +4,8 @@
  */
 package fi.tuni.prog3.sisu.system;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Cuong Nguyen
@@ -13,7 +15,6 @@ public class User {
     private String fullName;
     private String salt;
     private String password;
-    
     
     public User(String username, String fullName,String salt, String password){
         this.username = username;
@@ -53,6 +54,7 @@ public class User {
     public String getRole(){
         return this.getClass().getSimpleName().toLowerCase();
     }
+    
     
     /**
      * 
