@@ -45,6 +45,9 @@ public class SkyNet {
         
         loadUsers(usersFilePath);
         loadUserStudyPlan();
+        
+        // demo load Sci&Eng degree structure into DegreeProgam obj
+        loadStudyPlans();
     }
 
     public HashMap<String, Student> getStudents() {
@@ -63,6 +66,9 @@ public class SkyNet {
         return activeUser;
     }
     
+    /**
+     * Load all completed courses and registered study modules of all users
+     */
     private void loadUserStudyPlan(){
         try {
             JsonReader reader = new JsonReader();
@@ -78,6 +84,30 @@ public class SkyNet {
         }
     }
     
+    // print detail of a composite rule for debuging
+    private void printCompositeRule(SubCompositeRule rule){
+        for (StudyModule sm : rule.getSubModules()){
+            System.out.println(sm.getName());
+            printCompositeRule(sm.getCompositeRule());
+        }
+        
+        for (CourseUnit c : rule.getSubCourses()){
+            System.out.println(c.getName());
+        }
+        
+        for (SubCompositeRule r : rule.getSubComposites()){
+            printCompositeRule(r);
+        }
+    }
+    
+    // // print detail of a degree program for debuging
+    private void printRec(DegreeProgram obj){
+        System.out.println("xxxxxxxxxxxxxxxxxxx");
+        System.out.println(obj.getName());
+        printCompositeRule(obj.getCompositeRule());
+    }
+    
+    // Demo load detail structure of degree program
     private void loadStudyPlans(){
         // add Science and Engineering program
         JsonArray degreeArray = this.api.callAllDegrees();
@@ -86,7 +116,8 @@ public class SkyNet {
         this.programs.add(dp);
         
         // load degree detail through API to database
-        
+        loadCompositeRuleRec(this.programs.get(0).getCompositeRule());
+        printRec(dp);
     }
     
     /**
@@ -275,5 +306,89 @@ public class SkyNet {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    /**
+     * Recursively get data of a study module
+     */
+    public void loadStudyModuleRec(StudyModule obj){
+        try {
+            api.onClickStudyModule(obj);
+            loadCompositeRuleRec(obj.getCompositeRule());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Recursively get data of a composite rule
+     * @param obj
+     */
+    public void loadCompositeRuleRec(SubCompositeRule obj){
+        try {
+            for (int i = 0; i < obj.getSubModules().size(); i++){
+                loadStudyModuleRec(obj.getSubModules().get(i));
+            }
+            for (int i = 0; i < obj.getSubComposites().size(); i++){
+                loadCompositeRuleRec(obj.getSubComposites().get(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Get data of a study module 1-layered depth 
+     * @param obj
+     */
+    public void loadStudyModule(StudyModule obj){
+        try {
+            api.onClickStudyModule(obj);
+            loadCompositeRule(obj.getCompositeRule());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Get data of a composite rule 1-layered depth
+     * @param obj
+     */
+    public void loadCompositeRule(SubCompositeRule obj){
+        try {
+            for (int i = 0; i < obj.getSubModules().size(); i++){
+                loadStudyModule(obj.getSubModules().get(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Recursively calculating the achieved credits of one specific module 
+     * of logged in user
+     * @param rule
+     * @return achieved credits
+     */
+    public int achievedCreStudyModule(SubCompositeRule rule){
+        Student activeStudent = this.students.get(this.activeUser.getUsername());
+        ArrayList<String> coursesIDs = activeStudent.getCourseIDs();
+        int cre = 0;   
+        
+        for (CourseUnit c : rule.getSubCourses()){
+            if (coursesIDs.indexOf(c.getId()) != -1){
+                cre += c.getMinCredit();
+            }
+        }
+        
+        for (StudyModule sm : rule.getSubModules()){
+            cre += achievedCreStudyModule(sm.getCompositeRule());
+        }
+        
+        for (SubCompositeRule scr : rule.getSubComposites()){
+            cre += achievedCreStudyModule(scr);
+        }
+        
+        return cre;
     }
 }

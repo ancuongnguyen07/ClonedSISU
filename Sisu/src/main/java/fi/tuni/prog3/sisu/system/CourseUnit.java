@@ -29,6 +29,8 @@ public class CourseUnit extends AbstractModule {
     private JsonArray possibleAttainmentLanguages;
     private JsonArray curriculumPeriodIds;
     private String inclusionApplicationInstruction;
+    private int minCredit;
+    private int maxCredit;
     
 
     public CourseUnit(String name, String id, String groupID, int minCredit,
@@ -41,6 +43,8 @@ public class CourseUnit extends AbstractModule {
             JsonArray curriculumPeriodIds, String inclusionApplicationInstruction ) {
         super(name, id, groupID, API);
         this.content = content;
+        this.minCredit = minCredit;
+        this.maxCredit = maxCredit;
         this.additional = additional;
         this.learningMaterial = learningMaterial;
         this.substitutions = substitutions;
@@ -70,6 +74,14 @@ public class CourseUnit extends AbstractModule {
         return learningMaterial;
     }
 
+    public int getMinCredit() {
+        return minCredit;
+    }
+
+    public int getMaxCredit() {
+        return maxCredit;
+    }
+        
     public JsonArray getSubstitutions(){
         return substitutions;
     }
