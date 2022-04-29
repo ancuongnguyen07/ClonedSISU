@@ -48,6 +48,7 @@ public class SkyNet {
         
         // demo load Sci&Eng degree structure into DegreeProgam obj
         loadStudyPlans();
+        printRec(this.programs.get(0));
         
 //        this.activeUser = this.students.get("an");
 //        StudyModule s = findStudyModuleByID(this.programs.get(0).getCompositeRule(),
@@ -122,7 +123,7 @@ public class SkyNet {
         
         // load degree detail through API to database
         loadCompositeRuleRec(this.programs.get(0).getCompositeRule());
-        printRec(dp);
+//        printRec(dp);
     }
     
     /**
