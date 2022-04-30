@@ -5,15 +5,24 @@
 package fi.tuni.prog3.sisu.system;
 
 /**
- *
+ * The special AnyRule (having any course or any StudyModule is possible)
  * @author An Nguyen
  */
 public class AnyRule {
-    String type;
+    private String type;
+
+    /**
+     * Constructor for AnyRule to set its type
+     * @param type Can be AnyCourse or AnyStudyModule
+     */
     public AnyRule(String type){
         this.type = type;
     }
 
+    /**
+     * Return the type of this AnyRule
+     * @return the type of this AnyRule
+     */
     public String getType(){
         return this.type;
     }
