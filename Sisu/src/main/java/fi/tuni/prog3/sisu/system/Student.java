@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author Cuong Nguyen
  */
-public class Student extends User{
+public class Student extends User {
     private String degreeID;
     private ArrayList<String> moduleIDs;
     private ArrayList<String> courseIDs;

@@ -32,6 +32,9 @@ public class SkyNet {
     private ArrayList<DegreeProgram> programs;
     private APIReader api;
     private User activeUser;
+    // private Student activeStudent;
+    // private Teacher activeStudent;
+
     
     /**
      * Construct an initially empty SkyNet object and then
@@ -47,8 +50,8 @@ public class SkyNet {
         loadUserStudyPlan();
         
         // demo load Sci&Eng degree structure into DegreeProgam obj
-        loadStudyPlans();
-        printRec(this.programs.get(0));
+        // loadStudyPlans();
+        // printRec(this.programs.get(0));
         
 //        this.activeUser = this.students.get("an");
 //        StudyModule s = findStudyModuleByID(this.programs.get(0).getCompositeRule(),
@@ -191,13 +194,21 @@ public class SkyNet {
         
         return lowerFlag && capitalFlag && specialFlag;
     }
-    // ======================================= PUBLIC METHODS
-    // Methods should be used in Controllers
-    // =======================================
-    
+    // ============== PUBLIC METHODS ===============
+    // Methods should be used in Controllers for GUI
+    // =============================================
     
     /**
-     * Save user information to json file
+     * Return the active student in this session
+     * @return the active Student 
+     */
+    public Student getActiveStudent() {
+        return this.students.get(this.activeUser.getUsername());
+    }
+    
+    /**
+     * Save user data to JSON file
+     * @param usersFilePath file path to the JSON file that contains the user data
      */
     public void saveUsers(String usersFilePath){
         JsonWriter writer = new JsonWriter();
