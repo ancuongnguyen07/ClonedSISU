@@ -50,7 +50,7 @@ public class MainAppController {
   // ===========================================================================
   // --------------------------- API STUFFS FOR SISU ---------------------------
   // ===========================================================================
-  private ArrayList<DegreeProgram> degrees = new ArrayList<DegreeProgram>();
+  private ArrayList<String> allDegreeName = new ArrayList<String>();
   private ArrayList<StudyModule> modules = new ArrayList<StudyModule>();
   private ArrayList<CourseUnit> courses = new ArrayList<CourseUnit>();
 
@@ -103,6 +103,15 @@ public class MainAppController {
     this.sn = sn;
     this.api = new APIReader();
   }
+  
+  @FXML
+  private void SwitchToLogin() {
+      try {
+        App.setRoot("Login.fxml", "login");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+  }
   // =======================================================================================
   // --------------------------- UPDATE GUI BASED ON ACTIVE USER ---------------------------
   // =======================================================================================
@@ -120,9 +129,11 @@ public class MainAppController {
 
       sn.loadCompositeRuleRec(this.activeStudentDegree.getCompositeRule());
 
-      showStudyStructure(this.activeStudentDegree);
+      showStudyStructure(this.activeStudentDegree, studyStructureTreeView, true);
       updateCredits();
     }
+
+    // getAllDegreeProgram();
 
     // Get role and full name of the active user
     String fullName = activeUser.getFullName();
@@ -143,14 +154,6 @@ public class MainAppController {
     currentUserNameSettings.setEditable(false);
   }
 
-  @FXML
-  private void SwitchToLogin() {
-      try {
-        App.setRoot("Login.fxml", "login");
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-  }
   // ===========================================================================================
   // --------------------------- UPDATE USER CREDENTIALS IN SETTINGS ---------------------------
   // ===========================================================================================
@@ -222,136 +225,82 @@ public class MainAppController {
     userUpdatedNoti.setText("");
   }
   
-  // ====================================================================================================
-  // --------------------------- API CALLS FOR DISPLAYING THE MODULE CONTENTS ---------------------------
-  // ====================================================================================================
-  private void updateStudyStructureDisplay(String moduleName, TreeItem parentItem, String moduleType) throws AnException {
-    if (moduleType.equals("DegreeProgram") && parentItem.getChildren().size() == 0) {
-      // If the parsed module is a degree program
-      for (DegreeProgram degree : this.degrees) {
-        if (degree.getName().equals(moduleName)) {
-          for (StudyModule module : degree.getCompositeRule().getSubModules()) {
-            this.modules.add(module);
+  // ============================================================================================
+  // --------------------------- API CALLS FOR DISPLAYING ALL DEGREES ---------------------------
+  // ============================================================================================
+  @FXML private TreeView degreeSelectionTreeView;
+  @FXML private TreeView degreeOverviewTreeView;
+  @FXML
+  private void getAllDegreeProgram() {
+    TreeItem root = new TreeItem();
+    degreeSelectionTreeView.setRoot(root);
 
-            Button btn = new Button(module.getName());
-            btn.getStyleClass().add("module-heading");
-            TreeItem item = new TreeItem(btn);
-            parentItem.getChildren().add(item);
-
-            btn.setOnAction(event -> {
-              
-              Object node = event.getSource();
-              Button b = (Button)node;
-              System.out.println(b.getText());
-              System.out.println(module.getClass().getSimpleName());
-              try {
-                updateStudyStructureDisplay(b.getText(), item, module.getClass().getSimpleName());
-              } catch (AnException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-              }
-            });
-          }
-        }
+    JsonArray degreeArray = this.api.callAllDegrees();
+    for (int i = 0; i < degreeArray.size(); i++) {
+      JsonObject degreeOverview = degreeArray.get(i).getAsJsonObject();
+      String degreeName = degreeOverview.get("name").getAsString();
+      this.allDegreeName.add(degreeName);
+      if (degreeName != null) {
+        createDegreeHeading(degreeName, root);
       }
+    }
+    degreeSelectionTreeView.setShowRoot(false);
+  }
+
+  private TreeItem createDegreeHeading(String name, TreeItem parent) {
+    Button btn = new Button(name);
+    btn.setOnAction(event -> {
+      Object node = event.getSource();
+      Button b = (Button) node;
+      showDegreeData(b.getText());
+    });
+    btn.setMaxWidth(200);
+    btn.setWrapText(true);
+    btn.getStyleClass().add("module-heading");
+    TreeItem item = new TreeItem(btn);
+    parent.getChildren().add(item);
+    return item;
+  }
+
+  private void showDegreeData(String degreeName) {
+    JsonArray degreeArray = this.api.callAllDegrees();
+    DegreeProgram dp;
+    for (int i = 0; i < degreeArray.size(); i++) {
+      JsonObject degreeOverview = degreeArray.get(i).getAsJsonObject();
+      String name = degreeOverview.get("name").getAsString();
+      if (degreeName.equals(name)) {
+        dp = sn.getDegreeByID(degreeOverview.get("id").getAsString());
+        System.out.println("==============================");
+        System.out.println(dp.getAPI());
+        System.out.println("==============================");
+        sn.loadCompositeRuleRec(dp.getCompositeRule());
+        showStudyStructure(dp, degreeOverviewTreeView, false);
+        break;
+      }
+    }
+  }
+
+  private void showCompositeRuleForAll(SubCompositeRule rule, TreeItem parentItem) {
+    for (StudyModule sm : rule.getSubModules()) {
+      showCompositeRuleForAll(sm.getCompositeRule(), createStudyPlanHeading(sm.getName(), parentItem));
     }
     
-    if (moduleType.equals("StudyModule") && parentItem.getChildren().size() == 0) {
-      // If the parsed module is a study module
-      for (StudyModule module : this.modules) {
-        if (module.getName().equals(moduleName)) {
-          api.onClickStudyModule(module);
-          ArrayList<StudyModule> subModules = module.getCompositeRule().getSubModules();
-          ArrayList<CourseUnit> subCourses = module.getCompositeRule().getSubCourses();
-
-          for (StudyModule m : subModules) {
-            this.modules.add(m);
-
-            Button btn = new Button(m.getName());
-            btn.getStyleClass().add("module-heading");
-            TreeItem item = new TreeItem(btn);
-            parentItem.getChildren().add(item);
-
-            btn.setOnAction(event -> {
-              
-              Object node = event.getSource();
-              Button b = (Button)node;
-              System.out.println(b.getText());
-              System.out.println(m.getClass().getSimpleName());
-              try {
-                updateStudyStructureDisplay(b.getText(), item, m.getClass().getSimpleName());
-              } catch (AnException e) {
-                e.printStackTrace();
-              }
-            });
-          }
-          for (CourseUnit course : subCourses) {
-            this.courses.add(course);
-
-            Button btn = new Button(course.getName());
-            btn.getStyleClass().add("module-heading");
-            TreeItem item = new TreeItem(btn);
-            parentItem.getChildren().add(item);
-
-            btn.setOnAction(event -> {
-              
-              Object node = event.getSource();
-              Button b = (Button)node;
-              System.out.println(b.getText());
-              System.out.println(course.getClass().getSimpleName());
-              try {
-                updateStudyStructureDisplay(b.getText(), item, course.getClass().getSimpleName());
-              } catch (AnException e) {
-                e.printStackTrace();
-              }
-            });
-          }
-          System.out.println("Sub module(s) of " + moduleName + " are: " + subModules);
-          System.out.println("Sub course(s) of " + moduleName + " are: " + subCourses);
-        }
+    if (!rule.getSubCourses().isEmpty()) {
+      GridPane courseGrid = new GridPane();
+      // courseGrid.setMinSize(920, 300);
+      courseGrid.setVgap(5);
+      courseGrid.setHgap(5);
+      for (int i = 0; i < rule.getSubCourses().size(); i++){
+        System.out.println(rule.getSubCourses().get(i).getName());
+        addCourseCard(rule.getSubCourses().get(i), i, courseGrid);
       }
+      TreeItem gridItem = new TreeItem(courseGrid);
+      parentItem.getChildren().add(gridItem);
     }
-  }
-
-  @FXML 
-  private void callAPI() throws AnException {
-    getDegree();
-
-    // Degree: Bachelor program in Sci&En
-    DegreeProgram degree = degrees.get(0);
-    Button degreeButton = new Button(degree.getName());
-    degreeButton.getStyleClass().add("module-heading");
-    degreeButton.setMaxWidth(1000);
-    TreeItem<Button> degreeRoot = new TreeItem<Button>(degreeButton);
-    degreeButton.setOnAction(event -> {
-      Object node = event.getSource();
-      Button b = (Button)node;
-      try {
-        updateStudyStructureDisplay(b.getText(), degreeRoot, degree.getClass().getSimpleName());
-      } catch (AnException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    });
-    studyStructureTreeView.setRoot(degreeRoot);    
-  }
-  
-
-  private void getDegree() throws AnException {
-
-    //----------call API degree list -------------------------------------
-    JsonArray degreeArray = api.callAllDegrees();
-    // SISU: Take the Bachelor of Science and Engineering degree
-    JsonObject degreeOverview = degreeArray.get(8).getAsJsonObject();
-    // create the API to call that specific degree
-    String currentDegreeAPI = api.getDegreeDetailAPI() + degreeOverview.get("id").getAsString();
-
-
-    //---------------Call API 1 degree detail --------------------------------
-    JsonObject degreeDetail = api.connectAPI(currentDegreeAPI, "id");
-    // Make the degree class and add it to the degrees list up in the beginning of this file.
-    DegreeProgram degree = api.JsonToDegreeProgram(degreeDetail);
-    this.degrees.add(degree);
+    
+    for (SubCompositeRule r : rule.getSubComposites()){
+      showCompositeRule(r, parentItem);
+    }
   }
 
   // ==============================================================================================
@@ -359,16 +308,20 @@ public class MainAppController {
   // ==============================================================================================
   @FXML
   private void showActiveStudentStudies() {
-    showStudyStructure(this.activeStudentDegree);
+    showStudyStructure(this.activeStudentDegree, studyStructureTreeView, true);
   }
 
-  private void showStudyStructure(DegreeProgram deg) {
+  private void showStudyStructure(DegreeProgram deg, TreeView treeView, Boolean matchWithUser) {
     Button degreeButton = new Button(deg.getName());
     degreeButton.getStyleClass().add("module-heading");
     degreeButton.setMaxWidth(1000);
     TreeItem<Button> degreeRoot = new TreeItem<Button>(degreeButton);
-    studyStructureTreeView.setRoot(degreeRoot); 
-    showCompositeRule(deg.getCompositeRule(), degreeRoot);
+    treeView.setRoot(degreeRoot); 
+    if (matchWithUser) {
+      showCompositeRule(deg.getCompositeRule(), degreeRoot);
+    } else {
+      showCompositeRuleForAll(deg.getCompositeRule(), degreeRoot);
+    }
   }
 
   private void showCompositeRule(SubCompositeRule rule, TreeItem parentItem) {
@@ -385,6 +338,7 @@ public class MainAppController {
       courseGrid.setHgap(5);
       for (int i = 0; i < rule.getSubCourses().size(); i++){
         activeStudentAllCourses.add(rule.getSubCourses().get(i));
+        System.out.println(rule.getSubCourses().get(i).getName());
         addCourseCard(rule.getSubCourses().get(i), i, courseGrid);
       }
       TreeItem gridItem = new TreeItem(courseGrid);
@@ -405,10 +359,6 @@ public class MainAppController {
     return item;
   }
   
-  
-
-  // Sisu\src\main\resources\fi\tuni\prog3\sisu\images\star-32.png
-
   private void addCourseCard(CourseUnit course, int index, GridPane grid) {
     Button btn;
     btn = new Button(course.getName());

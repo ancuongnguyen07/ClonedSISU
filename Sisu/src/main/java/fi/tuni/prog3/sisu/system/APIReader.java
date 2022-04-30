@@ -187,10 +187,8 @@ public class APIReader {
                 }
                 isCredits = true;
                 JsonArray subRules = rule.get("rule").getAsJsonObject().get("rules").getAsJsonArray();
-                if (subRules.size() == 1){
-                    if (subRules.get(0).getAsJsonObject().get("type").getAsString().equals("CompositeRule")){
-                        rule = subRules.get(0).getAsJsonObject();
-                    }
+                if (subRules.size() == 1 && subRules.get(0).getAsJsonObject().get("type").getAsString().equals("CompositeRule")){
+                    rule = subRules.get(0).getAsJsonObject();
                 } else {
                     rule = rule.get("rule").getAsJsonObject();
                 }
@@ -305,8 +303,15 @@ public class APIReader {
             name = enOrFi(courseUnitJson.get("name").getAsJsonObject());
         }
         String groupID = courseUnitJson.get("groupId").getAsString();
-        int minCredit = courseUnitJson.get("credits").getAsJsonObject().get("min").getAsInt();
-        int maxCredit = courseUnitJson.get("credits").getAsJsonObject().get("max").getAsInt();
+        int minCredit = -1;
+        int maxCredit = -1;
+        JsonObject credits = courseUnitJson.get("credits").getAsJsonObject();
+        minCredit = credits.get("min").getAsInt();
+        if (checkNotJsonNull(credits, "max")){
+            maxCredit = credits.get("max").getAsInt();
+        } else {
+            maxCredit = minCredit;
+        }
         String API = courseUnitAPI + courseUnitJson.get("groupId").getAsString() + identifierTUNI;
         String content = null;
         if (checkNotJsonNull(courseUnitJson, "content")){
