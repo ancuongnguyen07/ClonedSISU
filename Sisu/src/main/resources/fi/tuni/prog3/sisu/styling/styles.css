@@ -74,6 +74,23 @@
   -fx-fill: #fff;
 }
 
+.passed-course {
+  -fx-padding: 5 20 5 20;
+  -fx-background-color: #aceb98;
+  -fx-background-radius: 0;
+  -fx-border-color: #3e4e50;
+  -fx-border-width: 0 0 2px 0;
+}
+.passed-course .text {
+  -fx-fill: #4346b8;
+}
+.passed-course:hover {
+  -fx-background-color: #156064;
+}
+.passed-course:hover .text {
+  -fx-fill: #fff;
+}
+
 /* Text fields */
 .text-field {
   -fx-background-color: -fx-text-box-border, -fx-background;
