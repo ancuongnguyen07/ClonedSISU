@@ -459,7 +459,7 @@ public class MainAppController {
         
         courseStatusLabel.setText("Status: not passed.");
         courseGradeLabel.setText("Grade: 0.");
-        if (c.getId().equals(activeStudentPassedCourseIDs)) {
+        if (activeStudentPassedCourseIDs.contains(c.getGroupID())) {
           courseStatusLabel.setText("Status: passed.");
           courseGradeLabel.setText("Grade: Student's grade.");
         }
@@ -481,7 +481,7 @@ public class MainAppController {
       if (max != -1) {
         totalMax += max;
       }
-      if (activeStudentPassedCourseIDs.contains(c.getId())) {
+      if (activeStudentPassedCourseIDs.contains(c.getGroupID())) {
         completed += min;
       }
     }
