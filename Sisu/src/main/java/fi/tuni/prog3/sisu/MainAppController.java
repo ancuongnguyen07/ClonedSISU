@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -41,6 +42,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -52,9 +54,7 @@ public class MainAppController {
   private ArrayList<StudyModule> modules = new ArrayList<StudyModule>();
   private ArrayList<CourseUnit> courses = new ArrayList<CourseUnit>();
 
-  // ===================================================================================
-  // --------------------------- DATA CONTROLLER WITH SKYNET ---------------------------
-  // ===================================================================================
+
   private SkyNet sn;
   private User activeUser;
 
@@ -63,6 +63,11 @@ public class MainAppController {
   private ArrayList<String> activeStudentModuleIDs;
   private ArrayList<String> activeStudentPassedCourseIDs;
   private ArrayList<CourseUnit> activeStudentAllCourses = new ArrayList<CourseUnit>();
+
+  // ==================================================================
+  // --------------------------- GUI STUFFS ---------------------------
+  // ==================================================================
+  
 
   private Teacher activeTeacher;
   private APIReader api;
@@ -380,7 +385,7 @@ public class MainAppController {
       courseGrid.setHgap(5);
       for (int i = 0; i < rule.getSubCourses().size(); i++){
         activeStudentAllCourses.add(rule.getSubCourses().get(i));
-        addCourseCard(rule.getSubCourses().get(i).getName(), i, courseGrid);
+        addCourseCard(rule.getSubCourses().get(i), i, courseGrid);
       }
       TreeItem gridItem = new TreeItem(courseGrid);
       parentItem.getChildren().add(gridItem);
@@ -390,6 +395,7 @@ public class MainAppController {
       showCompositeRule(r, parentItem);
     }
   }
+  
   private TreeItem createStudyPlanHeading(String name, TreeItem parentItem) {
     Button btn = new Button(name);
     btn.setMaxWidth(1000);
@@ -398,13 +404,23 @@ public class MainAppController {
     parentItem.getChildren().add(item);
     return item;
   }
-  private void addCourseCard(String name, int index, GridPane grid) {
-    Button btn = new Button(name);
+  
+  
+
+  // Sisu\src\main\resources\fi\tuni\prog3\sisu\images\star-32.png
+
+  private void addCourseCard(CourseUnit course, int index, GridPane grid) {
+    Button btn;
+    btn = new Button(course.getName());
     btn.setWrapText(true);
     btn.setMinSize(250, 50);
     btn.setMaxSize(250, 50);
     btn.setTextAlignment(TextAlignment.CENTER);
-    btn.getStyleClass().add("module-heading");
+    if (activeStudentPassedCourseIDs.contains(course.getGroupID())) {
+      btn.getStyleClass().add("passed-course");
+    } else {
+      btn.getStyleClass().add("module-heading");
+    }
     grid.add(btn, index % 3, index / 3);
   }
 
@@ -416,7 +432,9 @@ public class MainAppController {
   private void showAllCourses() {
     for (int i = 0; i < activeStudentAllCourses.size(); i++) {
       CourseUnit course = activeStudentAllCourses.get(i);
-      Button btn = new Button(course.getName());
+      Button btn;
+      
+      btn = new Button(course.getName());
       btn.setOnAction(event -> {
         Object node = event.getSource();
         Button b = (Button) node;
@@ -426,7 +444,12 @@ public class MainAppController {
       btn.setMaxWidth(310);
       btn.setMaxHeight(60);
       btn.setTextAlignment(TextAlignment.CENTER);
-      btn.getStyleClass().add("module-heading");
+      
+      if (activeStudentPassedCourseIDs.contains(course.getGroupID())) {
+        btn.getStyleClass().add("passed-course");
+      } else {
+        btn.getStyleClass().add("module-heading");
+      }
       allCoursesGrid.add(btn, i % 2, i / 2);
     }
   }
@@ -436,6 +459,7 @@ public class MainAppController {
   @FXML private Label courseStatusLabel;
   @FXML private Label courseGradeLabel;
   @FXML private Label courseCreditLabel;
+
   private void displaySelectedCourseInfo(String courseName) {
     for (CourseUnit c : activeStudentAllCourses) {
       if (c.getName().equals(courseName)) {
