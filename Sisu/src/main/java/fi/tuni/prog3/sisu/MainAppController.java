@@ -17,8 +17,10 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -49,11 +51,6 @@ public class MainAppController {
   private ArrayList<DegreeProgram> degrees = new ArrayList<DegreeProgram>();
   private ArrayList<StudyModule> modules = new ArrayList<StudyModule>();
   private ArrayList<CourseUnit> courses = new ArrayList<CourseUnit>();
-  // private final String degreeListAPI = "https://sis-tuni.funidata.fi/kori/api/module-search?curriculumPeriodId=uta-lvv-2021&universityId=tuni-university-root-id&moduleType=DegreeProgramme&limit=1000";
-  // private final String degreeDetailAPI = "https://sis-tuni.funidata.fi/kori/api/modules/";
-  // private final String studyModuleAPI = "https://sis-tuni.funidata.fi/kori/api/modules/by-group-id?groupId=";
-  // private final String courseUnitAPI = "https://sis-tuni.funidata.fi/kori/api/course-units/by-group-id?groupId=";
-  // private final String identifierTUNI = "&universityId=tuni-university-root-id";
 
   // ===================================================================================
   // --------------------------- DATA CONTROLLER WITH SKYNET ---------------------------
@@ -64,7 +61,8 @@ public class MainAppController {
   private Student activeStudent;
   private DegreeProgram activeStudentDegree;
   private ArrayList<String> activeStudentModuleIDs;
-  private ArrayList<String> activeStudentCourseIDs;
+  private ArrayList<String> activeStudentPassedCourseIDs;
+  private ArrayList<CourseUnit> activeStudentAllCourses = new ArrayList<CourseUnit>();
 
   private Teacher activeTeacher;
   private APIReader api;
@@ -112,8 +110,13 @@ public class MainAppController {
     this.activeStudent = sn.getActiveStudent();
     if (this.activeStudent != null) {
       this.activeStudentDegree = sn.getDegreeByID(this.activeStudent.getDegreeID());
-      this.activeStudentCourseIDs = this.activeStudent.getCourseIDs();
+      this.activeStudentPassedCourseIDs = this.activeStudent.getCourseIDs();
       this.activeStudentModuleIDs = this.activeStudent.getModuleIDs();
+
+      sn.loadCompositeRuleRec(this.activeStudentDegree.getCompositeRule());
+
+      showStudyStructure(this.activeStudentDegree);
+      updateCredits();
     }
 
     // Get role and full name of the active user
@@ -313,6 +316,7 @@ public class MainAppController {
     DegreeProgram degree = degrees.get(0);
     Button degreeButton = new Button(degree.getName());
     degreeButton.getStyleClass().add("module-heading");
+    degreeButton.setMaxWidth(1000);
     TreeItem<Button> degreeRoot = new TreeItem<Button>(degreeButton);
     degreeButton.setOnAction(event -> {
       Object node = event.getSource();
@@ -345,19 +349,18 @@ public class MainAppController {
     this.degrees.add(degree);
   }
 
-  // ==========================================================================================
-  // --------------------------- GET STUDY DETAILS FOR ACTIVE USER  ---------------------------
-  // ==========================================================================================
+  // ==============================================================================================
+  // --------------------------- DISPLAY STUDY DETAILS FOR ACTIVE USER  ---------------------------
+  // ==============================================================================================
   @FXML
   private void showActiveStudentStudies() {
-    System.out.println(this.activeStudentDegree.getName());
-    sn.loadCompositeRuleRec(this.activeStudentDegree.getCompositeRule());
     showStudyStructure(this.activeStudentDegree);
   }
 
   private void showStudyStructure(DegreeProgram deg) {
     Button degreeButton = new Button(deg.getName());
     degreeButton.getStyleClass().add("module-heading");
+    degreeButton.setMaxWidth(1000);
     TreeItem<Button> degreeRoot = new TreeItem<Button>(degreeButton);
     studyStructureTreeView.setRoot(degreeRoot); 
     showCompositeRule(deg.getCompositeRule(), degreeRoot);
@@ -370,8 +373,17 @@ public class MainAppController {
       }
     }
     
-    for (CourseUnit c : rule.getSubCourses()){
-      createStudyPlanHeading(c.getName(), parentItem);
+    if (!rule.getSubCourses().isEmpty()) {
+      GridPane courseGrid = new GridPane();
+      // courseGrid.setMinSize(920, 300);
+      courseGrid.setVgap(5);
+      courseGrid.setHgap(5);
+      for (int i = 0; i < rule.getSubCourses().size(); i++){
+        activeStudentAllCourses.add(rule.getSubCourses().get(i));
+        addCourseCard(rule.getSubCourses().get(i).getName(), i, courseGrid);
+      }
+      TreeItem gridItem = new TreeItem(courseGrid);
+      parentItem.getChildren().add(gridItem);
     }
     
     for (SubCompositeRule r : rule.getSubComposites()){
@@ -380,10 +392,104 @@ public class MainAppController {
   }
   private TreeItem createStudyPlanHeading(String name, TreeItem parentItem) {
     Button btn = new Button(name);
+    btn.setMaxWidth(1000);
     btn.getStyleClass().add("module-heading");
     TreeItem item = new TreeItem(btn);
     parentItem.getChildren().add(item);
     return item;
+  }
+  private void addCourseCard(String name, int index, GridPane grid) {
+    Button btn = new Button(name);
+    btn.setWrapText(true);
+    btn.setMinSize(250, 50);
+    btn.setMaxSize(250, 50);
+    btn.setTextAlignment(TextAlignment.CENTER);
+    btn.getStyleClass().add("module-heading");
+    grid.add(btn, index % 3, index / 3);
+  }
+
+  // ===============================================================================================
+  // --------------------------- DISPLAY ALL COURSES OF CURRENT STUDENT  ---------------------------
+  // ===============================================================================================
+  @FXML private GridPane allCoursesGrid;
+  @FXML
+  private void showAllCourses() {
+    for (int i = 0; i < activeStudentAllCourses.size(); i++) {
+      CourseUnit course = activeStudentAllCourses.get(i);
+      Button btn = new Button(course.getName());
+      btn.setOnAction(event -> {
+        Object node = event.getSource();
+        Button b = (Button) node;
+        displaySelectedCourseInfo(b.getText());
+      });
+      btn.setWrapText(true);
+      btn.setMaxWidth(310);
+      btn.setMaxHeight(60);
+      btn.setTextAlignment(TextAlignment.CENTER);
+      btn.getStyleClass().add("module-heading");
+      allCoursesGrid.add(btn, i % 2, i / 2);
+    }
+  }
+
+  @FXML private Label courseNameLabel;
+  @FXML private Label courseCodeLabel;
+  @FXML private Label courseStatusLabel;
+  @FXML private Label courseGradeLabel;
+  @FXML private Label courseCreditLabel;
+  private void displaySelectedCourseInfo(String courseName) {
+    for (CourseUnit c : activeStudentAllCourses) {
+      if (c.getName().equals(courseName)) {
+        courseNameLabel.setText(c.getName());
+        courseCodeLabel.setText(c.getCourseCode());
+
+        int min = c.getMinCredit();
+        int max = c.getMaxCredit();
+        System.out.println(c.getAPI());
+        System.out.println(min);
+        System.out.println(max);
+        if (max == -1) {
+          courseCreditLabel.setText("Credits: " + min +"cr");
+        }
+        if (max == min) {
+          courseCreditLabel.setText("Credits: " + min +"cr");
+        }
+        if (max != min && max != -1) {
+          courseCreditLabel.setText("Credits: " + min + "-" + max +" cr");
+        }
+        
+        courseStatusLabel.setText("Status: not passed.");
+        courseGradeLabel.setText("Grade: 0.");
+        if (c.getId().equals(activeStudentPassedCourseIDs)) {
+          courseStatusLabel.setText("Status: passed.");
+          courseGradeLabel.setText("Grade: Student's grade.");
+        }
+      }
+    }
+  }
+  
+  @FXML private Label completedCreditsLabel;
+  @FXML private Label totalCreditsLabel;
+
+  private void updateCredits() {
+    int completed = 0;
+    int totalMin = 0;
+    int totalMax = 0;
+    for (CourseUnit c : activeStudentAllCourses) {
+      int min = c.getMinCredit();
+      int max = c.getMaxCredit();
+      totalMin += min;
+      if (max != -1) {
+        totalMax += max;
+      }
+      if (activeStudentPassedCourseIDs.contains(c.getId())) {
+        completed += min;
+      }
+    }
+    completedCreditsLabel.setText(Integer.toString(completed));
+    totalCreditsLabel.setText(Integer.toString(totalMin));
+    if (totalMax != totalMin) {
+      totalCreditsLabel.setText(Integer.toString(totalMin) + "-" + Integer.toString(totalMax));
+    }
   }
 }
 

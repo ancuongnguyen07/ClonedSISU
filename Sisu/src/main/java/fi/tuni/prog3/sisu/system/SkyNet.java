@@ -51,6 +51,10 @@ public class SkyNet {
         
         // demo load Sci&Eng degree structure into DegreeProgam obj
         // loadStudyPlans();
+
+        // Later, comment this line out if there will be multiple different degrees for
+        // different students
+        // loadCompositeRuleRec(this.programs.get(0).getCompositeRule());
         // printRec(this.programs.get(0));
         
 //        this.activeUser = this.students.get("an");
