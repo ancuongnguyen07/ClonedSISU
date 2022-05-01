@@ -27,10 +27,9 @@ The program will have the following **Class Tree**.
 2. `User` is the user of the Sisu service. They can be students or teachers.
 
    - `Student` are the students that studying in the degree programs. Every student has:
-     - A study plan.
-     - Within that study plan, there are different degree options.
-     - And study modules with courses under those degrees.
-   - `Teacher` are the teachers of the courses. Every teacher can:
+     - Degree program
+     - And study modules with courses under that degree.
+   - `Teacher` are the teachers of the courses. Every teacher can **(Not implemented in this version)** :
      - Have access to the courses. They can modify the content of each course.
      - Grade the students.
 
@@ -78,6 +77,14 @@ For the GUI, the program will have a `Login` screen that shows at the start. Wit
 ## Testing
 
 The tests are written with JUnit Tests.
+
+[JsonWriter test](./Sisu/src/test/java/fi/tuni/prog3/sisu/utility/JsonWriterTest.java) : testing methods for saving user information - `username`, `full name`, `password`, `salt` into a JSON file  
+
+[SkyNet test](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/SkyNetTest.java) :  
+- Testing methods for loading user information - `username`, `full name`, `password`, `salt`, `degreeID`. `modules`, `passedCourses` - into a `Student` object
+- Testing methods for validating the password which a user typing when login/change-password. A password is hashed by **PBKDF2** applying **HMAC-SHA1** to the input password along with a `salt` value and repeats the process many times to produce a derived key (hashed-password)
+- Testing methods for creating a new `User` which includes checking existed `username`, valid `password`, and then saving to a JSON file
+
 
 </br>
 

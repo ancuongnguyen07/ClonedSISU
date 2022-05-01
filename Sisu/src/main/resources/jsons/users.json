@@ -10,14 +10,14 @@
     "username": "an",
     "fullname": "An Nguyen",
     "salt": "ufxZLnxh27y8lkYXfBJfXw\u003d\u003d",
-    "hashedPassword": "GUx4lpRvPI0rYWwLqB77Pg\u003d\u003d",
+    "hashedPassword": "GUx4lpRvPI0rYWwLqB77Pg==",
     "role": "student"
   },
   {
     "username": "cuong",
     "fullname": "Cuong Nguyen",
     "salt": "n5cWiBGuTku/0YzOo3PvZQ\u003d\u003d",
-    "hashedPassword": "HnQ9qAgYC7NTPOHEh13qaA\u003d\u003d",
+    "hashedPassword": "HnQ9qAgYC7NTPOHEh13qaA==",
     "role": "student"
   }
 ]

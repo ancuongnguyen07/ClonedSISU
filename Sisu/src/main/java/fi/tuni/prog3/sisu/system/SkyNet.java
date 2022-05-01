@@ -38,6 +38,7 @@ public class SkyNet {
      * do {@link SkyNet#loadUsers() } and {@link SkyNet#loadUserStudyPlan() () }
      */
     public SkyNet(String usersFilePath, String studyPlanFilePath){
+        
         this.students = new HashMap<>();
         this.teachers = new HashMap<>();
         this.programs = new ArrayList<>();
@@ -148,7 +149,9 @@ public class SkyNet {
             List<User> users = reader.readUsers(usersFilePath);
             
             for(User u : users){
+                
                 if (u instanceof Student){
+                    
                     this.students.put(u.getUsername(), (Student) u);
                 }
                 else{
