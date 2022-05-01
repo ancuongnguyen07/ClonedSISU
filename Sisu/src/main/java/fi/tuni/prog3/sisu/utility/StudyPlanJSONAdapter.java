@@ -72,44 +72,6 @@ public class StudyPlanJSONAdapter extends TypeAdapter<StudyPlanJSON>{
                     
                     break;
             }
-//            JsonToken token = reader.peek();
-//            
-//            if (token.equals(JsonToken.NAME)){
-//                // get the current token
-//                fieldname = reader.nextName();
-//            }
-//            
-//            if ("username".equals(fieldname)){
-//                token = reader.peek();
-//                plan.setUsername(reader.nextString());
-//            }
-//                
-//            if ("degree".equals(fieldname)){
-//                token = reader.peek();
-//                plan.setDegree(reader.nextString());
-//            }
-//                
-//            if ("modules".equals(fieldname)){
-//                token = reader.peek();
-//                reader.beginArray();
-//                ArrayList<String> ms = new ArrayList<>();
-//                while(reader.hasNext()){
-//                    ms.add(reader.nextString());
-//                }
-//                plan.setModules(ms);
-//                reader.endArray();
-//            }
-//                
-//            if ("passedCourses".equals(fieldname)){
-//                token = reader.peek();
-//                reader.beginArray();
-//                ArrayList<String> cs = new ArrayList<>();
-//                while(reader.hasNext()){
-//                    cs.add(reader.nextString());
-//                }
-//                plan.setPassedCourses(cs);
-//                reader.endArray();
-//            }
         }
         reader.endObject();
         return plan;
