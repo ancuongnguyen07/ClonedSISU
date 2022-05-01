@@ -8,7 +8,8 @@ import com.google.gson.JsonObject;
 
 /**
  *  The structure represent a degree
- * @author Cuong Nguyen && An Nguyen
+ * @author Cuong Nguyen
+ * @author An Nguyen
  */
 public class DegreeProgram extends AbstractModule{
   // Link all degree: https://sis-tuni.funidata.fi/kori/api/module-search?curriculumPeriodId=uta-lvv-2021&universityId=tuni-university-root-id&moduleType=DegreeProgramme&limit=1000

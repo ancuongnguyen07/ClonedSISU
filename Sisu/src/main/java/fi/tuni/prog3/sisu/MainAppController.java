@@ -38,6 +38,8 @@ import fi.tuni.prog3.sisu.system.StudyModule;
 import fi.tuni.prog3.sisu.system.SubCompositeRule;
 import fi.tuni.prog3.sisu.system.Teacher;
 import fi.tuni.prog3.sisu.system.User;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -455,6 +457,7 @@ public class MainAppController {
     int completed = 0;
     int totalMin = 0;
     int totalMax = 0;
+    float sumGrade = 0;
     for (CourseUnit c : activeStudentAllCourses) {
       int min = c.getMinCredit();
       int max = c.getMaxCredit();
@@ -469,7 +472,14 @@ public class MainAppController {
     completedCreditsLabel.setText(Integer.toString(completed));
     totalCreditsLabel.setText(Integer.toString(totalMin));
     // Average grade of student
-    studentAverageGradeLabel.setText(Integer.toString(4));
+    for (Integer grade : activeStudentPassedCourses.values()){
+        sumGrade += grade;
+    }
+    int n = activeStudentPassedCourses.size();
+    // only show 2 decimal points
+    NumberFormat formatter = new DecimalFormat("0.00");
+    System.out.println(sumGrade / n);
+    studentAverageGradeLabel.setText(formatter.format(sumGrade / n));
     if (totalMax != totalMin) {
       totalCreditsLabel.setText(Integer.toString(totalMin) + "-" + Integer.toString(totalMax));
     }

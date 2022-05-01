@@ -66,7 +66,7 @@ public class AppTest extends ApplicationTest {
     Assertions.assertThat(totalCredits).isVisible();
     Assertions.assertThat(totalCredits.getText()).isEqualTo("246-248");
     Assertions.assertThat(averageGrade).isVisible();
-    Assertions.assertThat(averageGrade.getText()).isEqualTo("4");
+    Assertions.assertThat(averageGrade.getText()).isEqualTo("4.07");
     System.out.println("Credits information in courses tab is correct!");
 
     System.out.println("Attempt to view all courses of this student.");
@@ -87,7 +87,7 @@ public class AppTest extends ApplicationTest {
     Assertions.assertThat(courseStatus).isVisible();
     Assertions.assertThat(courseStatus.getText()).isEqualTo("Status: passed.");
     Assertions.assertThat(courseGrade).isVisible();
-    Assertions.assertThat(courseGrade.getText()).isEqualTo("Grade: 5");
+    Assertions.assertThat(courseGrade.getText()).isEqualTo("Grade: 4");
     System.out.println("Correct data for course! Move on to settings");
 
     clickOn("#settingsTab");

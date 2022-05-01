@@ -6,7 +6,8 @@ package fi.tuni.prog3.sisu.system;
 
 /**
  * The class provide basic template for degree, study module and course unit.
- * @author Cuong Nguyen and An Nguyen
+ * @author Cuong Nguyen
+ * @author An Nguyen
  */
 public class AbstractModule {
     private String name;

@@ -4,7 +4,7 @@ The project's goal is to create an implementation of the Sisu system, using Java
 
 Our team included:
 
-- Cuong Nguyen, cuong.nguyen@tuni.fi, `student num`. Handle the data manipulation with the `SkyNet` class.
+- Cuong Nguyen, cuong.nguyen@tuni.fi, `050358715`. Handle the data manipulation with the `SkyNet` class.
 - Khoa Nguyen, khoa.h.nguyen@tuni.fi, `50359141`. Handle the GUI part of the program, using the classes provided by An and Cuong.
 - An Nguyen, an.nguyen@tuni.fi, `50359099`. Handle the API data fetching with the `APIReader` class.
 
@@ -24,14 +24,12 @@ The program will have the following **Class Tree**.
    - `StudyModule` is the module of courses in the degree programme. Each study module can contain multiple courses, or sub study modules under it. This class is the middle level of the class structure.
    - `CourseUnit` is the courses inside each study module of a program. This class has the lowest level in the class structure.
 
-2. `StudyPlan` is the study plan for each student. Each student can have multiple different study plans at once. Each study plan can contains multiple `AbstractModule`
-3. `User` is the user of the Sisu service. They can be students or teachers.
+2. `User` is the user of the Sisu service. They can be students or teachers.
 
    - `Student` are the students that studying in the degree programs. Every student has:
-     - A study plan.
-     - Within that study plan, there are different degree options.
-     - And study modules with courses under those degrees.
-   - `Teacher` are the teachers of the courses. Every teacher can:
+     - Degree program
+     - And study modules with courses under that degree.
+   - `Teacher` are the teachers of the courses. Every teacher can **(Not implemented in this version)** :
      - Have access to the courses. They can modify the content of each course.
      - Grade the students.
 
@@ -80,10 +78,13 @@ For the GUI, the program will have a `Login` screen that shows at the start. Wit
 
 The tests are written with JUnit Tests.
 
-1. API reading test:
+[JsonWriter test](./Sisu/src/test/java/fi/tuni/prog3/sisu/utility/JsonWriterTest.java) : testing methods for saving user information - `username`, `full name`, `password`, `salt` into a JSON file
 
-- DegreeProgram, StudyModule, CourseUnit, AbstractModule, AnyRule, SubCompositeRule: These classes tests are for getter functions mainly. The test created 1-2 test object of the class and compare each entity that the object has to the caller function.
-- APIReader: This class is for reading and converting API Json into the program structure. Including the complicated/deeply nested Rule that DegreeProgram and StudyModule has.
+[SkyNet test](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/SkyNetTest.java) :
+
+- Testing methods for loading user information - `username`, `full name`, `password`, `salt`, `degreeID`. `modules`, `passedCourses` - into a `Student` object
+- Testing methods for validating the password which a user typing when login/change-password. A password is hashed by **PBKDF2** applying **HMAC-SHA1** to the input password along with a `salt` value and repeats the process many times to produce a derived key (hashed-password)
+- Testing methods for creating a new `User` which includes checking existed `username`, valid `password`, and then saving to a JSON file
 
 </br>
 

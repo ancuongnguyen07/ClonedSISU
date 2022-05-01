@@ -20,61 +20,66 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Manage all information for the sytem
+ * Manage all information for the system
  * @author Cuong Nguyen
  */
 public class SkyNet {
     
     private HashMap<String, Student> students;
     private HashMap<String, Teacher> teachers;
-    private final String studyPlanFilePath = "src/main/resources/jsons/studyPlan.json";
+//    private final String studyPlanFilePath = "src/main/resources/jsons/studyPlan.json";
     
     private ArrayList<DegreeProgram> programs;
     private APIReader api;
     private User activeUser;
-    // private Student activeStudent;
-    // private Teacher activeStudent;
 
-    
     /**
      * Construct an initially empty SkyNet object and then
-     * do {@link SkyNet#loadUsers() }
+     * do {@link SkyNet#loadUsers() } and {@link SkyNet#loadUserStudyPlan() () }
      */
-    public SkyNet(String usersFilePath){
+    public SkyNet(String usersFilePath, String studyPlanFilePath){
+        
         this.students = new HashMap<>();
         this.teachers = new HashMap<>();
         this.programs = new ArrayList<>();
         this.api = new APIReader();
         
         loadUsers(usersFilePath);
-        loadUserStudyPlan();
-        
-        // demo load Sci&Eng degree structure into DegreeProgam obj
-        // loadStudyPlans();
-
-        // Later, comment this line out if there will be multiple different degrees for
-        // different students
-        // loadCompositeRuleRec(this.programs.get(0).getCompositeRule());
-        // printRec(this.programs.get(0));
-        
-//        this.activeUser = this.students.get("an");
-//        StudyModule s = findStudyModuleByID(this.programs.get(0).getCompositeRule(),
-//                                        "otm-0fc04f22-f797-48fc-9222-48d5d47d1870");
-//        System.out.println(achievedCreStudyModule(s));
+        loadUserStudyPlan(studyPlanFilePath);
     }
 
+    /**
+     * return the HashMap with key is student's username / value is the
+     * object of {@link Student}
+     * @return the HashMap with key is student's username / value is the
+     * object of {@link Student}
+     */
     public HashMap<String, Student> getStudents() {
         return students;
     }
 
+    /**
+     * return the HashMap with key is student's username / value is the
+     * object of {@link Teacher}
+     * @return the HashMap with key is student's username / value is the
+     * object of {@link Teacher}
+     */
     public HashMap<String, Teacher> getTeachers() {
         return teachers;
     }
 
+    /**
+     * return ArrayList of {@link DegreeProgram}
+     * @return ArrayList of {@link DegreeProgram}
+     */
     public ArrayList<DegreeProgram> getPrograms() {
         return programs;
     }
 
+    /**
+     * return the {@link User} who is currently logged in
+     * @return the {@link User} who is currently logged in
+     */
     public User getActiveUser() {
         return activeUser;
     }
@@ -82,7 +87,7 @@ public class SkyNet {
     /**
      * Load all completed courses and registered study modules of all users
      */
-    private void loadUserStudyPlan(){
+    private void loadUserStudyPlan(String studyPlanFilePath){
         try {
             JsonReader reader = new JsonReader();
             List<StudyPlanJSON> plans = reader.readUserStudyPlan(studyPlanFilePath);
@@ -136,6 +141,7 @@ public class SkyNet {
     /**
      * Load user information from json file to HashMaps for separate
      * role of user {@link Student} and {@link Teacher}
+     * @param usersFilePath file path of a json file containing data about users
      */
     private void loadUsers(String usersFilePath){
         try {
@@ -143,7 +149,9 @@ public class SkyNet {
             List<User> users = reader.readUsers(usersFilePath);
             
             for(User u : users){
+                
                 if (u instanceof Student){
+                    
                     this.students.put(u.getUsername(), (Student) u);
                 }
                 else{
@@ -170,7 +178,7 @@ public class SkyNet {
      * Password has at least
      * 6 characters, containing lower and uppercase and at least one special
      * symbol such as !,?,%,^,&,etc.
-     * @param password
+     * @param password password typed by user
      * @return True if the password is valid, otherwise False
      */
     private boolean isValidPassword(String password){
@@ -220,17 +228,19 @@ public class SkyNet {
     }
     
     /**
-     * Generate a hash of (text_password + salt)
+     * Generate a hash of (text_password + salt) using PBKDF2WithHmacSHA1 cryptographic system
      * @param password password typed by users
      * @param saltString random string added to password before doing hash
      * @return a hashed password - String
      */
     public String hashPassword(String password, String saltString){
         try {
+            // generating salt string
             byte[] salt = Base64.getDecoder().decode(saltString);
             KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             
+            // generating hash
             byte[] hash = factory.generateSecret(spec).getEncoded();
             return Base64.getEncoder().encodeToString(hash);
         } catch (NoSuchAlgorithmException nsae){
@@ -315,7 +325,7 @@ public class SkyNet {
     
     /**
      * Return a object of {@link DegreeProgram} representing its components detail
-     * @param id
+     * @param id id of degree
      * @return a object of {@link DegreeProgram} with given id
      */
     public DegreeProgram getDegreeByID(String id){
@@ -331,6 +341,7 @@ public class SkyNet {
     
     /**
      * Recursively get data of a study module
+     * @param obj {@link StudyModule} object is loaded
      */
     public void loadStudyModuleRec(StudyModule obj){
         try {
@@ -343,7 +354,7 @@ public class SkyNet {
     
     /**
      * Recursively get data of a composite rule
-     * @param obj
+     * @param obj {@link SubCompositeRule} object is loaded
      */
     public void loadCompositeRuleRec(SubCompositeRule obj){
         try {
@@ -360,7 +371,7 @@ public class SkyNet {
     
     /**
      * Get data of a study module 1-layered depth 
-     * @param obj
+     * @param obj {@link StudyModule} object is loaded
      */
     public void loadStudyModule(StudyModule obj){
         try {
@@ -373,7 +384,7 @@ public class SkyNet {
     
     /**
      * Get data of a composite rule 1-layered depth
-     * @param obj
+     * @param obj {@link SubCompositeRule} object is loaded
      */
     public void loadCompositeRule(SubCompositeRule obj){
         try {
@@ -388,7 +399,7 @@ public class SkyNet {
     /**
      * Recursively calculating the achieved credits of one specific module 
      * of logged in user
-     * @param rule
+     * @param m {@link StudyModule} root object
      * @return achieved credits
      */
     public int achievedCreStudyModule(StudyModule m){
@@ -399,18 +410,19 @@ public class SkyNet {
             ArrayList<String> coursesIDs = new ArrayList<>(activeStudent.getCourses().keySet());
             SubCompositeRule rule = m.getCompositeRule();
 
-
+            // traverse through course units
             for (CourseUnit c : rule.getSubCourses()){
-//                System.out.println(c.getGroupID());
                 if (coursesIDs.indexOf(c.getGroupID()) != -1){
                     cre += c.getMaxCredit();
                 }
             }
 
+            // traverse thourgh sub modules
             for (StudyModule sm : rule.getSubModules()){
                 cre += achievedCreStudyModule(sm);
             }
 
+            // traverse through sub composite rules
             for (SubCompositeRule scr : rule.getSubComposites()){
                 for (StudyModule s : scr.getSubModules()){
                     cre += achievedCreStudyModule(s);
@@ -426,11 +438,12 @@ public class SkyNet {
     
     /**
      * Return a StudyModule object with given ID
-     * @param root
-     * @param id
+     * @param root {@link SubCompositeRule} root object
+     * @param id id of {@link StudyModule}
      * @return StudyModule object with given ID
      */
     public StudyModule findStudyModuleByID(SubCompositeRule root, String id){
+        // traverse thourgh sub modules
         for (StudyModule sm : root.getSubModules()){
             System.out.println(sm.getId());
             if (sm.getId().equals(id)){
@@ -438,6 +451,7 @@ public class SkyNet {
             }
         }
         
+        // traverse thourgh sub modules for the inner composite rule
         for (StudyModule sm : root.getSubModules()){
             StudyModule result = findStudyModuleByID(sm.getCompositeRule(), id);
             if (result != null){
@@ -445,6 +459,7 @@ public class SkyNet {
             }
         }
         
+        // traverse through sub composite rules
         for (SubCompositeRule scr : root.getSubComposites()){
             StudyModule result = findStudyModuleByID(scr, id);
             if (result != null){
