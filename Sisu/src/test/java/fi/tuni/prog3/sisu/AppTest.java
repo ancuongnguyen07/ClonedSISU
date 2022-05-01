@@ -170,12 +170,15 @@ public class AppTest extends ApplicationTest {
     clickOn("#showAllDegreesBtn");
     System.out.println("Clicked on all degree... Please wait for the program to fetch the API data...");
     TreeView allDegree = lookup("#degreeSelectionTreeView").query();
+    // When the all degrees button is pressed, show more that 260 degrees (should be 269)
     Assertions.assertThat(allDegree.getRoot().getChildren().size()).isGreaterThan(260);
 
     System.out.println("Move on to help!");
 
     clickOn("#helpTab");
     clickOn("#helpApiButton");
+
+    // TODO: add log out test
 
     System.out.println("Finished testing the GUI!");
     System.out.println("================================================================");
