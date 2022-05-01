@@ -13,18 +13,54 @@
             "otm-ea83cd26-19c3-482d-9158-06382a7a09c6"
         ],
         "passedCourses":[
-                    "tut-cu-g-45454",
-                    "otm-d7c61c94-eb14-478d-b7c5-431c164d4957",
-                    "tut-cu-g-45620",
-                    "tut-cu-g-35898",
-                    "tut-cu-g-35897",
-                    "tut-cu-g-35899",
-                    "otm-4da0e13d-222a-4e14-a239-86b76346ba14",
-                    "otm-949208ad-9f08-452d-bd64-78588079c3d6",
-                    "tut-cu-g-36355",
-                    "tut-cu-g-45446",
-                    "tut-cu-g-45679",
-                    "otm-05bc8cb9-4bbc-4170-aa3b-0625e3a57914"
+                    {
+                        "courseGroupID": "tut-cu-g-45454",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "otm-d7c61c94-eb14-478d-b7c5-431c164d4957",
+                        "grade": 4
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45620",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-35898",
+                        "grade": 4
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-35897",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-35899",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "otm-4da0e13d-222a-4e14-a239-86b76346ba14",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "otm-949208ad-9f08-452d-bd64-78588079c3d6",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-36355",
+                        "grade": 3
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45446",
+                        "grade": 3
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45679",
+                        "grade": 4
+                    },
+                    {
+                        "courseGroupID": "otm-05bc8cb9-4bbc-4170-aa3b-0625e3a57914",
+                        "grade": 4
+                    }                 
         ]
     },
     {
@@ -41,19 +77,58 @@
             "otm-ea83cd26-19c3-482d-9158-06382a7a09c6"
         ],
         "passedCourses":[
-                    "tut-cu-g-49138",
-                    "tut-cu-g-45620",
-                    "tut-cu-g-45620",
-                    "tut-cu-g-35898",
-                    "tut-cu-g-35897",
-                    "tut-cu-g-35899",
-                    "tut-cu-g-47510",
-                    "tut-cu-g-45462",
-                    "tut-cu-g-45943",
-                    "tut-cu-g-36477",
-                    "otm-06cd6f5d-4ec2-42d4-b003-66f04cee3f65",
-                    "tut-cu-g-45259",
-                    "otm-05bc8cb9-4bbc-4170-aa3b-0625e3a57914"
+                    {
+                        "courseGroupID": "tut-cu-g-49138",
+                        "grade": 4
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45620",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45620",
+                        "grade": 3
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-35898",
+                        "grade": 4
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-35897",
+                        "grade": 4
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-35899",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-47510",
+                        "grade": 4
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45462",
+                        "grade": 3
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45943",
+                        "grade": 4
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-36477",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "otm-06cd6f5d-4ec2-42d4-b003-66f04cee3f65",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45259",
+                        "grade": 4
+                    },
+                    {
+                        "courseGroupID": "otm-05bc8cb9-4bbc-4170-aa3b-0625e3a57914",
+                        "grade": 5
+                    }              
         ]
     },
     {
@@ -70,20 +145,62 @@
             "otm-ea83cd26-19c3-482d-9158-06382a7a09c6"
         ],
         "passedCourses":[
-                    "tut-cu-g-49138",
-                    "tut-cu-g-45510",
-                    "tut-cu-g-45460",
-                    "tut-cu-g-45620",
-                    "tut-cu-g-35898",
-                    "tut-cu-g-35897",
-                    "tut-cu-g-47510",
-                    "tut-cu-g-47697",
-                    "tut-cu-g-35418",
-                    "otm-9392333f-bff2-4c3d-b1cf-717ce9990253",
-                    "tut-cu-g-45501",
-                    "tut-cu-g-45508",
-                    "otm-c29f09e4-f5d6-4b4a-9dd7-cf14090f9d2a",
-                    "otm-05bc8cb9-4bbc-4170-aa3b-0625e3a57914"
+                    {
+                        "courseGroupID": "tut-cu-g-49138",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45510",
+                        "grade": 3
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45460",
+                        "grade": 4
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45620",
+                        "grade": 3
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-35898",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-35897",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-47510",
+                        "grade": 2
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-47697",
+                        "grade": 3
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-35418",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "otm-9392333f-bff2-4c3d-b1cf-717ce9990253",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45501",
+                        "grade": 4
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45508",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "otm-c29f09e4-f5d6-4b4a-9dd7-cf14090f9d2a",
+                        "grade": 4
+                    },
+                    {
+                        "courseGroupID": "otm-05bc8cb9-4bbc-4170-aa3b-0625e3a57914",
+                        "grade": 5
+                    }                 
         ]
     }
 ]

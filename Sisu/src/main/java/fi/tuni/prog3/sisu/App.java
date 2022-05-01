@@ -24,6 +24,7 @@ public class App extends Application {
         App.mainAppController = new MainAppController(sn);
 
         scene = new Scene(loadFXML("Login.fxml", "login"), 1000, 600);
+        stage.setTitle("Sisu Student System");
         stage.setScene(scene);
         stage.show();
     }

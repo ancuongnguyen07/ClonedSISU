@@ -86,7 +86,14 @@ The tests are written with JUnit Tests.
 
 ## Using the Application
 
-Compile the project using NetBeans.
+The project can be compile by:
+
+1. Opening the the folders as a NetBeans project, then compile and run in NetBeans.
+2. In the root directory of the project, run
+
+```
+$ mvn javafx:run
+```
 
 </br>
 

@@ -90,7 +90,7 @@ public class SkyNet {
                 Student tar = this.students.get(p.getUsername());
                 tar.setDegreeID(p.getDegree());
                 tar.setModuleIDs(p.getModules());
-                tar.setCourseIDs(p.getPassedCourses());
+                tar.setCourses(p.getPassedCourses());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -396,7 +396,7 @@ public class SkyNet {
         System.out.println(m.getName());
         try {
             Student activeStudent = this.students.get(this.activeUser.getUsername());
-            ArrayList<String> coursesIDs = activeStudent.getCourseIDs();
+            ArrayList<String> coursesIDs = new ArrayList<>(activeStudent.getCourses().keySet());
             SubCompositeRule rule = m.getCompositeRule();
 
 
