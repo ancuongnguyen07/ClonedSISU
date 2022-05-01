@@ -6,7 +6,8 @@ package fi.tuni.prog3.sisu.system;
 
 /**
  *  The structure represent a StudyModule
- * @author Cuong Nguyen && An Nguyen
+ * @author Cuong Nguyen
+ * @author An Nguyen
  */
 public class StudyModule extends AbstractModule{
   // Link: https://sis-tuni.funidata.fi/kori/api/modules/by-group-id?groupId=uta-ok-ykoodi-41176&universityId=tuni-university-root-id 

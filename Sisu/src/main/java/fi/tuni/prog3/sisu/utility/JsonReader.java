@@ -7,8 +7,6 @@ package fi.tuni.prog3.sisu.utility;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import java.io.InputStream;
-import java.util.HashMap;
 import fi.tuni.prog3.sisu.system.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author An Nguyen
+ * A class wrapping methods used for reading JSON files into objects
+ * @author Cuong Nguyen
  */
 public class JsonReader {
     private Gson gson;
@@ -32,7 +30,7 @@ public class JsonReader {
     
     
     /**
-     * Read user information in Json file into a List<{@link fi.tuni.prog3.sisu.system.User}>
+     * Read user information in Json file into a List of {@link fi.tuni.prog3.sisu.system.User}
      * @param filePath the path of Json file containing user information
      */
     public List<User> readUsers(String filePath){  
@@ -64,13 +62,17 @@ public class JsonReader {
                 }
                 users.add(newUser);
             }
+            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        
+        }        
         return users;
     }
     
+    /**
+     * Read users study plan information in Json file into a List of {@link StudyPlanJSON}
+     * @param filePath the path of Json file containing users study plan information 
+     */
     public List<StudyPlanJSON> readUserStudyPlan(String filePath){
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(StudyPlanJSON.class, new StudyPlanJSONAdapter());
@@ -82,7 +84,8 @@ public class JsonReader {
             
             plans = this.gson.fromJson(reader, 
                     new TypeToken<List<StudyPlanJSON>>() {}.getType());
-        } catch (Exception e) {
+            reader.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return plans;

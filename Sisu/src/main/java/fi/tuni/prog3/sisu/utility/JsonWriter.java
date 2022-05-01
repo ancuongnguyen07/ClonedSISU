@@ -15,8 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- *
- * @author An Nguyen
+ * A class wrapping methods used for writing all fields of an object 
+ * into JSON files
+ * @author Cuong Nguyen
  */
 public class JsonWriter {
     

@@ -13,16 +13,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- *
+ * A class describe type adapter for {@link StudyPlanJSON}
  * @author Cuong Nguyen
  */
 public class StudyPlanJSONAdapter extends TypeAdapter<StudyPlanJSON>{
 
+    /**
+     * Override method of writing which is unsupported in this case
+     */
     @Override
     public void write(JsonWriter writer, StudyPlanJSON t) throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Override method of reading JSON files
+     */
     @Override
     public StudyPlanJSON read(JsonReader reader) throws IOException {
         StudyPlanJSON plan = new StudyPlanJSON();

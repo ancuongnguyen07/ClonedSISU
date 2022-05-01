@@ -10,11 +10,14 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 
 /**
- *
+ * A class describe type adapter for {@link UserJson}
  * @author Cuong Nguyen
  */
 public class UserJsonAdapter extends TypeAdapter<UserJson>{
 
+    /**
+     Override method of writing
+     */
     @Override
     public void write(JsonWriter writer, UserJson u) throws IOException {
         writer.beginObject();
@@ -31,6 +34,9 @@ public class UserJsonAdapter extends TypeAdapter<UserJson>{
         writer.endObject();
     }
 
+    /**
+     * Override method reading
+     */
     @Override
     public UserJson read(com.google.gson.stream.JsonReader reader) throws IOException {
         UserJson user = new UserJson();

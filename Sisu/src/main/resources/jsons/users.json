@@ -1,23 +1,23 @@
 [
   {
-    "username": "cuong",
-    "fullname": "Cuong Nguyen",
-    "salt": "n5cWiBGuTku/0YzOo3PvZQ==",
-    "hashedPassword": "Gh3WOYbcuVwnetfmddurDQ==",
-    "role": "student"
-  },
-  {
     "username": "khoa",
     "fullname": "Khoa Nguyen",
-    "salt": "k/Rcd6ELpCLtH4RAWrXhqQ==",
-    "hashedPassword": "omhH9RT77dsEZI9Wpi9dUw==",
+    "salt": "k/Rcd6ELpCLtH4RAWrXhqQ\u003d\u003d",
+    "hashedPassword": "omhH9RT77dsEZI9Wpi9dUw\u003d\u003d",
     "role": "student"
   },
   {
     "username": "an",
     "fullname": "An Nguyen",
-    "salt": "ufxZLnxh27y8lkYXfBJfXw==",
-    "hashedPassword": "GUx4lpRvPI0rYWwLqB77Pg==",
+    "salt": "ufxZLnxh27y8lkYXfBJfXw\u003d\u003d",
+    "hashedPassword": "GUx4lpRvPI0rYWwLqB77Pg\u003d\u003d",
+    "role": "student"
+  },
+  {
+    "username": "cuong",
+    "fullname": "Cuong Nguyen",
+    "salt": "n5cWiBGuTku/0YzOo3PvZQ\u003d\u003d",
+    "hashedPassword": "HnQ9qAgYC7NTPOHEh13qaA\u003d\u003d",
     "role": "student"
   }
 ]

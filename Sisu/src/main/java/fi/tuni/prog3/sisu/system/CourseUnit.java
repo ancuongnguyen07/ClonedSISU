@@ -6,8 +6,9 @@ package fi.tuni.prog3.sisu.system;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 /**
- *  The CourseUnit that represent a course
- * @author Cuong Nguyen && An Nguyen
+ * The CourseUnit that represent a course
+ * @author Cuong Nguyen
+ * @author An Nguyen
  */
 public class CourseUnit extends AbstractModule {
     //https://sis-tuni.funidata.fi/kori/api/course-units/by-group-id?groupId=uta-ykoodi-39231&universityId=tuni-university-root-id

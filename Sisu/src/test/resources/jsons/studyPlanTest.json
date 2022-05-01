@@ -1,0 +1,25 @@
+[  
+    {
+        "username": "an",
+        "degree" : "otm-df83fbbd-f82d-4fda-b819-78f6b2077fcb",
+        "modules" : [
+            "otm-db1d8c96-6cfe-4ae3-b5e2-a8c557ba87fa",
+            "otm-de1f8d9b-db28-424e-bba1-06f110e08195",
+            "otm-0fc04f22-f797-48fc-9222-48d5d47d1870"
+        ],
+        "passedCourses":[
+                    {
+                        "courseGroupID": "tut-cu-g-45454",
+                        "grade": 5
+                    },
+                    {
+                        "courseGroupID": "otm-d7c61c94-eb14-478d-b7c5-431c164d4957",
+                        "grade": 4
+                    },
+                    {
+                        "courseGroupID": "tut-cu-g-45620",
+                        "grade": 5
+                    }
+        ]
+    }
+]

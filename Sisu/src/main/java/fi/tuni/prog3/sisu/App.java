@@ -10,6 +10,7 @@ import fi.tuni.prog3.sisu.system.*;
 
 /**
  * JavaFX App
+ * @author Khoa Nguyen
  */
 public class App extends Application {
 
@@ -19,7 +20,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        SkyNet sn = new SkyNet("src/main/resources/jsons/users.json");
+        SkyNet sn = new SkyNet("src/main/resources/jsons/users.json",
+                "src/main/resources/jsons/studyPlan.json");
         App.loginController = new LoginController(sn);
         App.mainAppController = new MainAppController(sn);
 
