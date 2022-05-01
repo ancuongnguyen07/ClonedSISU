@@ -47,7 +47,7 @@ public class AppTest extends ApplicationTest {
     clickOn("#loginBtn");
 
     Label userStatus = lookup("#activeUserStatus").query();
-    Button degreeRoot = lookup("#Bachelor'sProgrammeinScienceandEngineering").query();
+    Button degreeRoot = lookup("#BachelorsProgrammeinScienceandEngineering").query();
     Assertions.assertThat(userStatus).isVisible();
     Assertions.assertThat(userStatus.getText()).isEqualTo("An Nguyen - student");
     Assertions.assertThat(degreeRoot).isVisible();
@@ -166,9 +166,9 @@ public class AppTest extends ApplicationTest {
 
     clickOn("#degreesTab");
     clickOn("#showAllDegreesBtn");
-    clickOn("#Bachelor'sProgrammeinEducationalStudies,EarlyChildhoodEducationandCareTeacher");
+    clickOn("#BachelorsProgrammeinEducationalStudies,EarlyChildhoodEducationandCareTeacher");
     System.out.println("Clicked on a degree program... Please wait for up to a minute to fetch the API data...");
-    Button degreeName =  lookup("#Bachelor'sProgrammeinEducationalStudies,EarlyChildhoodEducationandCareTeacher").query();
+    Button degreeName =  lookup("#BachelorsProgrammeinEducationalStudies,EarlyChildhoodEducationandCareTeacher").query();
     Assertions.assertThat(degreeName).isVisible();
     Assertions.assertThat(degreeName.getText()).isEqualTo("Bachelor's Programme in Educational Studies, Early Childhood Education and Care Teacher");
 

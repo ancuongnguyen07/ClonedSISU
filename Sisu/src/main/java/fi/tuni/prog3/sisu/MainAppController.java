@@ -257,7 +257,7 @@ public class MainAppController {
     });
     btn.setMaxWidth(200);
     btn.setWrapText(true);
-    btn.setId(name.replace(" ", ""));
+    btn.setId(name.replace(" ", "").replace("'", ""));
     btn.getStyleClass().add("module-heading");
     TreeItem item = new TreeItem(btn);
     parent.getChildren().add(item);
@@ -317,7 +317,7 @@ public class MainAppController {
     Button degreeButton = new Button(deg.getName());
     degreeButton.getStyleClass().add("module-heading");
     degreeButton.setMaxWidth(1000);
-    degreeButton.setId(deg.getName().replace(" ", ""));
+    degreeButton.setId(deg.getName().replace(" ", "").replace("'", ""));
     TreeItem<Button> degreeRoot = new TreeItem<Button>(degreeButton);
     treeView.setRoot(degreeRoot); 
     if (matchWithUser) {
@@ -357,7 +357,7 @@ public class MainAppController {
     Button btn = new Button(name);
     btn.setMaxWidth(1000);
     btn.getStyleClass().add("module-heading");
-    btn.setId(name.replace(" ", ""));
+    btn.setId(name.replace(" ", "").replace("'", ""));
     TreeItem item = new TreeItem(btn);
     parentItem.getChildren().add(item);
     return item;
@@ -366,7 +366,7 @@ public class MainAppController {
   private void addCourseCard(CourseUnit course, int index, GridPane grid) {
     Button btn;
     btn = new Button(course.getName());
-    btn.setId(course.getName().replace(" ", ""));
+    btn.setId(course.getName().replace(" ", "").replace("'", ""));
     btn.setWrapText(true);
     btn.setMinSize(250, 50);
     btn.setMaxSize(250, 50);
@@ -390,7 +390,7 @@ public class MainAppController {
       Button btn;
       
       btn = new Button(course.getName());
-      btn.setId(course.getName().replace(" ", ""));
+      btn.setId(course.getName().replace(" ", "").replace("'", ""));
       btn.setOnAction(event -> {
         Object node = event.getSource();
         Button b = (Button) node;
