@@ -5,14 +5,49 @@ The project's goal is to create an implementation of the Sisu system, using Java
 Our team included:
 
 - Cuong Nguyen, cuong.nguyen@tuni.fi, `050358715`. Handle the data manipulation with the `SkyNet` class.
-- Khoa Nguyen, khoa.h.nguyen@tuni.fi, `50359141`. Handle the GUI part of the program, using the classes provided by An and Cuong.
-- An Nguyen, an.nguyen@tuni.fi, `50359099`. Handle the API data fetching with the `APIReader` class.
+- Khoa Nguyen, khoa.h.nguyen@tuni.fi, `050359141`. Handle the GUI part of the program, using the classes provided by An and Cuong.
+- An Nguyen, an.nguyen@tuni.fi, `050359099`. Handle the API data fetching with the `APIReader` class.
+
+Each of our team members are then document their our work and write the necessary tests for the parts that they worked on.
 
 </br>
 
 ---
 
-## Program structure
+## 1. Program Functionality
+
+Our program has the following functionalities based on the requirements from Plussa.
+
+1. Minimum requirements:
+   - The program compiles.
+   - The program contains one dialog window (e.g. the initial dialog).
+   - The program uses the course provided UI as its main window.
+   - The program gets the structures of the degrees from a defined JSON file.
+   - The program is able to show the selected study program structure in the main window.
+   - A final document that contains:
+     - Class responsibilities.
+     - Division of labour in the team.
+1. Intermediate requirements:
+   - A graphical user interface has been fully implemented by the team. The UI is:
+     - Procedural - it gets updated based on the data parsed from user and fetched from Sisu's API.
+     - Responsive - interactive objects e.g, buttons, has different states to indicate what is being selected.
+     - Color and contrast - a dedicated color scheme was chosen for better UX.
+     - Minimal - minimal design language, that can help with the program's information hierarchy.
+   - The program gets the degree structures from the Sisu API.
+   - The program works i.e. the degree shown can be changes and the progress situation of the student’s degree is shown.
+   - The program handles errors in file handling.
+   - Unit tests have been implemented for the program, using `JUnit Test` for classes and `TestFX` for GUI.
+1. Top-grade requirements:
+   - Course view. On clicking the mouse cursor on a course card, information about that course is shown.
+   - Student settings. Every student's data is stored in JSON files (more on this later). Logged in students can freely update their credentials in the program.
+   - Showing the schedule of student progress in respect to the degree structure, i.e, completed credits, average grade, and total credits planned.
+   - A dedicated **Help** tab that describes how the program can be used.
+
+</br>
+
+---
+
+## 2. Program structure
 
 ### **Classes**
 
@@ -50,59 +85,128 @@ The data for the application is handled primarily with 2 classes: `SkyNet` (it's
 
 ---
 
-## Navigation
+## 3. GUI
 
-The application has 2 windows: the **Login** window and the **Main App** window. After running the application, user will land on the **Login** window.
+For the GUI, the program will have a `Login` screen that shows at the start. Within this window, the user can log into the system and identified them as student, or teacher (`Teacher` **role is not implemented in this version**). The user can also select the option _Forgot password?_ to reset their password (**this functionality is not implemented in this version**).
 
-1. **Login**
-2. **Main App**
+Upon successfully logged in, the user will be directed to the `MainApp`.
+
+The `MainApp` is the main GUI of the app. On top of the view, user can see the **SISU** logo, their full name with role, and a _Log Out_ button - that obviously, _log you out_ of the system, and back to the `Login` screen. The `MainApp` also has the following main tabs (which can be switched between simply by clicking on them):
+
+### **Homepage**
+
+- Shows the _Full name_ and _Role_ of the active user.
+- Shows the study structure of the active user, i.e., the _degree program_, _study modules_, and _courses_. This structure is shown in a `TreeView` format (similar to the actual Sisu page). In the degree structure, users can see their passed courses that are colored green.
+
+### **Courses**
+
+After pressing the _Show all courses_ button, the user can:
+
+- View all of the courses in the degree program of that active user. They can view the information of a course by clicking on them. They can also see which courses they have finished because those are also colored green.
+- This tab also shows the progress of the current active user in the degree program: how many credits have they finished, what is their average grade, and how many total credits have they planned in the current program.
+
+### **Settings**
+
+There are 2 sub-tabs in this tab: **Update User Information** and **All Degrees**
+
+1. **Update User Information**
+
+- View the active user's information i.e., _Full Name_ and _Current Username_.
+- Change the credentials of the active users, i.e., changing username or password. The changes will be updated in the `JSON` data files.
+
+1. **All Degrees**
+
+- The user can view all 269 degree programs in the Sisu API by clicking the _Show all Degrees_ button.
+- They can click on any of the shown degrees, and the information from that degree will be fetched from the Sisu API and displayed in a `TreeView` similar to the **Homepage** tab. Again, if any of the courses in these degrees are passed, it will be colored green.
+
+### **Help**
+
+- Explain how one can use the program. Briefly go through the functionalities and elements in the GUI.
+- Viewing the documentation of the program by pressing the _View Documentation_ button.
 
 </br>
 
 ---
 
-## GUI
+## 4. Navigation
 
-For the GUI, the program will have a `Login` screen that shows at the start. Within this window, the user can **Login:** and identified them as student, or teacher. Upon successfully logged in, the user will be directed to a `MainWindow` that has:
-
-1. **Homepage:** that shows the study structure of the active user, i.e., the degree program, study modules, and courses. This structure is shown in a `TreeView` format.
-2. **Courses:** view all of the courses of the active user in the current degree program. They can view the information of a course by clicking on them. They can check their finished courses here. This session also shows the progress of this active user in the degree program: how many credits have they finished, what is the average grade, and how many total credits are there in the current program.
-3. **Settings:** change the credentials of the active users, i.e., changing user or password.
-4. **Help:** viewing the documentation of the program.
+The application has 2 windows: the `Login` window and the `MainApp` window. After running the application, user will land on the `Login` window. They can then
 
 </br>
 
 ---
 
-## Testing
+## 5. Testing
 
-The tests are written with JUnit Tests.
+The tests include the data handling tests, and UI tests. The data handling tests are written with JUnit Tests. The UI tests are written with TestFX.
 
-[JsonWriter test](./Sisu/src/test/java/fi/tuni/prog3/sisu/utility/JsonWriterTest.java) : testing methods for saving user information - `username`, `full name`, `password`, `salt` into a JSON file
+1. **JUnit Tests**: these tests include tests for the `JsonWriter` and `SkyNet` classes.
 
-[SkyNet test](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/SkyNetTest.java) :
+   - [JsonWriter tests](./Sisu/src/test/java/fi/tuni/prog3/sisu/utility/JsonWriterTest.java) testing methods for saving user information - including `username`, `full name`, `password`, and `salt` the password - into a JSON file
 
-- Testing methods for loading user information - `username`, `full name`, `password`, `salt`, `degreeID`. `modules`, `passedCourses` - into a `Student` object
-- Testing methods for validating the password which a user typing when login/change-password. A password is hashed by **PBKDF2** applying **HMAC-SHA1** to the input password along with a `salt` value and repeats the process many times to produce a derived key (hashed-password)
-- Testing methods for creating a new `User` which includes checking existed `username`, valid `password`, and then saving to a JSON file
+   - [SkyNet tests](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/SkyNetTest.java):
+
+     - Test methods for loading user information - `username`, `full name`, `password`, `salt`, `degreeID`. `modules`, `passedCourses` - into a `Student` object
+     - Test methods for validating the password which a user typing when login/change-password. A password is hashed by **PBKDF2** applying **HMAC-SHA1** to the input password along with a `salt` value and repeats the process many times to produce a derived key (hashed-password)
+     - Test methods for creating a new `User` which includes checking existed `username`, valid `password`, and then saving to a JSON file
+
+   - [APIReader tests](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/APIReaderTest.java)
+     - Test something in here
+   - [DegreeProgram tests,](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/DegreeProgramTest.java),
+     [StudyModule tests](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/StudyModuleTest.java),
+     [CourseUnit tests](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/CourseUnitTest.java),
+     [AbstractModule tests](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/AbstractModuleTest.java),
+     [AnyRule tests](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/AnyRuleTest.java), and
+     [SubCompositeRule tests](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/SubCompositeRuleTest.java):
+     these tests mainly verify the getter functions for these classes. The tests created 1-2 test object(s) of the tested class and compare each entity that the object has to the caller function.
+     </br>
+
+2. **TestFX Tests**: these tests simulate a real user's actions, and test all the functionalities of the GUI based on those actions. Please be mindful that, these GUI tests are far from perfect, but should cover the "intended" use case of the program. There are some inconsistency in the data fetched from Sisu's API, so some of the displayed data might be erroneous. Albeit, in most cases, the application should work fine. Following is a run down of the GUI test.
+   - Test the login functionalities of the app. A user can log into the app with correct credentials. The app will also notifies the user if they enter an incorrect username/password.
+   - Test the main application's interface. Which includes:
+     - The **Homepage** tab: test that correct information of the active student is displayed. Also check that the degree program's structure of the student is also presented.
+     - The **Courses** tab: test that the student's average grade, completed credits, and total credits planned are correctly visible. Also test that the app can fetch all of the student's courses, and display the information of those courses accordingly.
+     - The **Settings** tab: There are 2 sub-tabs in the **Settings** tab, of which will be tested independently.
+       - The **Update User Information** tab: test that the user can view their information, including _Full Name_ and _Current Username_. Also test that the user can change their _username_ and _password_. The functionalities of these features are tested accordingly e.g., wrong password confirmation handling, empty fields handling, cancel change handling, update successful handling.
+       - The **All Degrees** tab: test that the user can fetch all 269 different degree programs from the Sisu API with the _Show all Degrees_ button. Also test that, when the user clicks on any of the shown degree's button, the details of that degree will be displayed and the user can freely view those data.
+     - The **Help** tab: test that the user can press the _View Documentation_ button to view the documentation for the whole application.
+   - Lastly, test the **Log Out** functionality of the program by pressing the _Log Out_ button on the top right corner.
 
 </br>
 
 ---
 
-## Using the Application
+## 6. Using and Testing the Application
 
-The project can be compile by:
+This application is built using the [Maven](https://maven.apache.org/) project management. We used NetBeans and VSCode as our primary coding IDE. So commands from `Maven` can be used for compiling and testing.
+
+### **Compile and Run the Project**
+
+The project can be compiled by:
 
 1. Opening the the folders as a NetBeans project, then compile and run in NetBeans.
-2. In the root directory of the project, run
+2. In the root directory of the project, run the following command
 
 ```
 $ mvn javafx:run
 ```
 
+The project will then be compiled and run as a `JAR`-executable, and will automatically start. You can then start using the app as any other normal desktop app!
+
+### **Testing the Project**
+
+The project can be tested by running the following command in the root directory of the project:
+
+```
+$ mvn test
+```
+
+The result of the tests will be printed in the terminal, and the test results will be displayed by `Maven`'s testing framework.
+
 </br>
 
 ---
 
-## Finalization
+## 7. Finalization
+
+This was a very challenging project for all of us. We managed to
