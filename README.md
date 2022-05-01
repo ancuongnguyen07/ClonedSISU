@@ -1,5 +1,7 @@
 # Programming 3 Project: Sisu Unravel
 
+### **This `README.md` also serves as a documentation for the project. Additional documentation are also provided [here](./documentation/).**
+
 The project's goal is to create an implementation of the Sisu system, using Java, JavaFX library, and SceneBuilder. The program will have a working GUI, as well as functionalities that will be described briefly in this `README.md` and in more detailed in the [provided documentation]().
 
 Our team included:
@@ -150,8 +152,14 @@ The tests include the data handling tests, and UI tests. The data handling tests
      - Test methods for validating the password which a user typing when login/change-password. A password is hashed by **PBKDF2** applying **HMAC-SHA1** to the input password along with a `salt` value and repeats the process many times to produce a derived key (hashed-password)
      - Test methods for creating a new `User` which includes checking existed `username`, valid `password`, and then saving to a JSON file
 
-   - [APIReader tests](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/APIReaderTest.java)
-     - Test something in here
+   - [APIReader tests](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/APIReaderTest.java): in these tests, the tester looked at the API, and manually took out the information to put into the test for comparison - this is called _"the true"_ information.
+
+     - The `connectAPI()` function is special (when testing) because it was written to throw some error, but the `try - catch` block catches that error. This is why `JUnitTest` can’t `assertThrows` - because the error is already caught. Instead, when `connectAPI()` hits the catch block, it `return null` so `assertNull` is the way to go (and the error will still be printed out in the terminal when testing - even though the tests are pass).
+     - For the 3 functions that convert `JSON` to `DegreeProgram`, `StudyModule`, and `CourseUnit`, a specify API was called and took _“the true”_ information, compared it to every entity the made `Object` has.
+     - Some getter functions are tested by comparing the gotten results directly to what they should return.
+     - `callAllDegrees()` is tested by comparing the total degrees number, and take a random object and compare its name against _“the true”_ name.
+     - `getSubModuleGroupId()` and `onClickSubModule()` is tested by comparing _“the true”_ list of `GroupId` against the function generated one.
+
    - [DegreeProgram tests,](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/DegreeProgramTest.java),
      [StudyModule tests](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/StudyModuleTest.java),
      [CourseUnit tests](./Sisu/src/test/java/fi/tuni/prog3/sisu/system/CourseUnitTest.java),
@@ -161,7 +169,7 @@ The tests include the data handling tests, and UI tests. The data handling tests
      these tests mainly verify the getter functions for these classes. The tests created 1-2 test object(s) of the tested class and compare each entity that the object has to the caller function.
      </br>
 
-2. **TestFX Tests**: these tests simulate a real user's actions, and test all the functionalities of the GUI based on those actions. Please be mindful that, these GUI tests are far from perfect, but should cover the "intended" use case of the program. There are some inconsistency in the data fetched from Sisu's API, so some of the displayed data might be erroneous. Albeit, in most cases, the application should work fine. Following is a run down of the GUI test.
+1. **TestFX Tests**: these tests simulate a real user's actions, and test all the functionalities of the GUI based on those actions. Please be mindful that, these GUI tests are far from perfect, but should cover the "intended" use case of the program. There are some inconsistency in the data fetched from Sisu's API, so some of the displayed data might be erroneous. Albeit, in most cases, the application should work fine. Following is a run down of the GUI test.
    - Test the login functionalities of the app. A user can log into the app with correct credentials. The app will also notifies the user if they enter an incorrect username/password.
    - Test the main application's interface. Which includes:
      - The **Homepage** tab: test that correct information of the active student is displayed. Also check that the degree program's structure of the student is also presented.
