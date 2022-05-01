@@ -48,7 +48,7 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Label fx:id="gradeLabel" alignment="CENTER" layoutX="38.0" layoutY="20.0" prefHeight="53.0" prefWidth="139.0" text="null" textFill="#6761a8">
+                              <Label fx:id="studentAverageGradeLabel" alignment="CENTER" layoutX="38.0" layoutY="20.0" prefHeight="53.0" prefWidth="139.0" text="null" textFill="#6761a8">
                                  <font>
                                     <Font name="System Bold" size="36.0" />
                                  </font>

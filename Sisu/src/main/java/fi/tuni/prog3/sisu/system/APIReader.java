@@ -99,10 +99,13 @@ public class APIReader {
                     JsonInformation = JsonParser.parseString(String.valueOf(informationString)).getAsJsonObject();
                 } else if (type.equals("groupId")){
                     JsonInformation = JsonParser.parseString(String.valueOf(informationString)).getAsJsonArray().get(0).getAsJsonObject();
+                } else {
+                    throw new AnException("Unexpected api type " + type);
                 }
             }
         } catch (Exception e){
             e.printStackTrace();
+            return null;
         }
         return JsonInformation;
     }
@@ -319,7 +322,7 @@ public class APIReader {
         }
         String additional = null;
         if (checkNotJsonNull(courseUnitJson, "additional")){
-            content = enOrFi(courseUnitJson.get("additional").getAsJsonObject());
+            additional = enOrFi(courseUnitJson.get("additional").getAsJsonObject());
         }
         JsonObject learningMaterial = new JsonObject();
         if (checkNotJsonNull(courseUnitJson, "learningMaterial")){
@@ -331,7 +334,7 @@ public class APIReader {
         String gradeScaleId = courseUnitJson.get("gradeScaleId").getAsString();
         String outcomes = null;
         if (checkNotJsonNull(courseUnitJson, "outcomes")){
-            content = enOrFi(courseUnitJson.get("outcomes").getAsJsonObject());
+            outcomes = enOrFi(courseUnitJson.get("outcomes").getAsJsonObject());
         }
         String prerequisites = null;
         if (checkNotJsonNull(courseUnitJson, "prerequisites")){
@@ -387,11 +390,13 @@ public class APIReader {
      * Return the list of subModules groupId.
      * @param studyModuleGroupId The studyModule that need to get subModules from.
      * @return The list of subModules groupId.
+     * @throws AnException
      */
-    public ArrayList<String> getSubModulesGroupId(String studyModuleGroupId){
+    public ArrayList<String> getSubModulesGroupId(String studyModuleGroupId) throws AnException{
         String link = studyModuleAPI + studyModuleGroupId + identifierTUNI;
         JsonObject studyModuleJson = connectAPI(link, "groupId");
         StudyModule studyModule = JsonToStudyModule(studyModuleJson);
+        onClickStudyModule(studyModule);
         ArrayList<StudyModule> subModules = studyModule.getCompositeRule().getSubModules();
         ArrayList<String> subModulesGroupId = new ArrayList<>();
         for (int i=0; i<subModules.size(); i++){
