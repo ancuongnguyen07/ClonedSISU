@@ -257,6 +257,7 @@ public class MainAppController {
     });
     btn.setMaxWidth(200);
     btn.setWrapText(true);
+    btn.setId(name.replace(" ", ""));
     btn.getStyleClass().add("module-heading");
     TreeItem item = new TreeItem(btn);
     parent.getChildren().add(item);
@@ -271,9 +272,9 @@ public class MainAppController {
       String name = degreeOverview.get("name").getAsString();
       if (degreeName.equals(name)) {
         dp = sn.getDegreeByID(degreeOverview.get("id").getAsString());
-        System.out.println("==============================");
-        System.out.println(dp.getAPI());
-        System.out.println("==============================");
+        // System.out.println("==============================");
+        // System.out.println(dp.getAPI());
+        // System.out.println("==============================");
         sn.loadCompositeRuleRec(dp.getCompositeRule());
         showStudyStructure(dp, degreeOverviewTreeView, false);
         break;
@@ -292,7 +293,7 @@ public class MainAppController {
       courseGrid.setVgap(5);
       courseGrid.setHgap(5);
       for (int i = 0; i < rule.getSubCourses().size(); i++){
-        System.out.println(rule.getSubCourses().get(i).getName());
+        // System.out.println(rule.getSubCourses().get(i).getName());
         addCourseCard(rule.getSubCourses().get(i), i, courseGrid);
       }
       TreeItem gridItem = new TreeItem(courseGrid);
@@ -316,6 +317,7 @@ public class MainAppController {
     Button degreeButton = new Button(deg.getName());
     degreeButton.getStyleClass().add("module-heading");
     degreeButton.setMaxWidth(1000);
+    degreeButton.setId(deg.getName().replace(" ", ""));
     TreeItem<Button> degreeRoot = new TreeItem<Button>(degreeButton);
     treeView.setRoot(degreeRoot); 
     if (matchWithUser) {
@@ -339,7 +341,7 @@ public class MainAppController {
       courseGrid.setHgap(5);
       for (int i = 0; i < rule.getSubCourses().size(); i++){
         activeStudentAllCourses.add(rule.getSubCourses().get(i));
-        System.out.println(rule.getSubCourses().get(i).getName());
+        // System.out.println(rule.getSubCourses().get(i).getName());
         addCourseCard(rule.getSubCourses().get(i), i, courseGrid);
       }
       TreeItem gridItem = new TreeItem(courseGrid);
@@ -355,6 +357,7 @@ public class MainAppController {
     Button btn = new Button(name);
     btn.setMaxWidth(1000);
     btn.getStyleClass().add("module-heading");
+    btn.setId(name.replace(" ", ""));
     TreeItem item = new TreeItem(btn);
     parentItem.getChildren().add(item);
     return item;
@@ -363,6 +366,7 @@ public class MainAppController {
   private void addCourseCard(CourseUnit course, int index, GridPane grid) {
     Button btn;
     btn = new Button(course.getName());
+    btn.setId(course.getName().replace(" ", ""));
     btn.setWrapText(true);
     btn.setMinSize(250, 50);
     btn.setMaxSize(250, 50);
@@ -386,6 +390,7 @@ public class MainAppController {
       Button btn;
       
       btn = new Button(course.getName());
+      btn.setId(course.getName().replace(" ", ""));
       btn.setOnAction(event -> {
         Object node = event.getSource();
         Button b = (Button) node;
@@ -419,9 +424,9 @@ public class MainAppController {
 
         int min = c.getMinCredit();
         int max = c.getMaxCredit();
-        System.out.println(c.getAPI());
-        System.out.println(min);
-        System.out.println(max);
+        // System.out.println(c.getAPI());
+        // System.out.println(min);
+        // System.out.println(max);
         if (max == -1) {
           courseCreditLabel.setText("Credits: " + min +"cr");
         }
