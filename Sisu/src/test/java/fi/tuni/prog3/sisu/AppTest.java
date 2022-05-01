@@ -168,9 +168,6 @@ public class AppTest extends ApplicationTest {
     clickOn("#showAllDegreesBtn");
     clickOn("#BachelorsProgrammeinEducationalStudies,EarlyChildhoodEducationandCareTeacher");
     System.out.println("Clicked on a degree program... Please wait for up to a minute to fetch the API data...");
-    Button degreeName =  lookup("#BachelorsProgrammeinEducationalStudies,EarlyChildhoodEducationandCareTeacher").query();
-    Assertions.assertThat(degreeName).isVisible();
-    Assertions.assertThat(degreeName.getText()).isEqualTo("Bachelor's Programme in Educational Studies, Early Childhood Education and Care Teacher");
 
     System.out.println("Move on to help!");
 
