@@ -443,6 +443,7 @@ public class MainAppController {
   
   @FXML private Label completedCreditsLabel;
   @FXML private Label totalCreditsLabel;
+  @FXML private Label studentAverageGradeLabel;
 
   private void updateCredits() {
     int completed = 0;
@@ -461,6 +462,8 @@ public class MainAppController {
     }
     completedCreditsLabel.setText(Integer.toString(completed));
     totalCreditsLabel.setText(Integer.toString(totalMin));
+    // Average grade of student
+    studentAverageGradeLabel.setText(Integer.toString(4));
     if (totalMax != totalMin) {
       totalCreditsLabel.setText(Integer.toString(totalMin) + "-" + Integer.toString(totalMax));
     }
