@@ -6,9 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -166,8 +168,9 @@ public class AppTest extends ApplicationTest {
 
     clickOn("#degreesTab");
     clickOn("#showAllDegreesBtn");
-    clickOn("#BachelorsProgrammeinEducationalStudies,EarlyChildhoodEducationandCareTeacher");
-    System.out.println("Clicked on a degree program... Please wait for up to a minute to fetch the API data...");
+    System.out.println("Clicked on all degree... Please wait for the program to fetch the API data...");
+    TreeView allDegree = lookup("#degreeSelectionTreeView").query();
+    Assertions.assertThat(allDegree.getRoot().getChildren().size()).isGreaterThan(260);
 
     System.out.println("Move on to help!");
 
