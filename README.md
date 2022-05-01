@@ -4,7 +4,7 @@ The project's goal is to create an implementation of the Sisu system, using Java
 
 Our team included:
 
-- Cuong Nguyen, cuong.nguyen@tuni.fi, `student num`. Handle the data manipulation with the `SkyNet` class.
+- Cuong Nguyen, cuong.nguyen@tuni.fi, `050358715`. Handle the data manipulation with the `SkyNet` class.
 - Khoa Nguyen, khoa.h.nguyen@tuni.fi, `50359141`. Handle the GUI part of the program, using the classes provided by An and Cuong.
 - An Nguyen, an.nguyen@tuni.fi, `50359099`. Handle the API data fetching with the `APIReader` class.
 
@@ -24,8 +24,7 @@ The program will have the following **Class Tree**.
    - `StudyModule` is the module of courses in the degree programme. Each study module can contain multiple courses, or sub study modules under it. This class is the middle level of the class structure.
    - `CourseUnit` is the courses inside each study module of a program. This class has the lowest level in the class structure.
 
-2. `StudyPlan` is the study plan for each student. Each student can have multiple different study plans at once. Each study plan can contains multiple `AbstractModule`
-3. `User` is the user of the Sisu service. They can be students or teachers.
+2. `User` is the user of the Sisu service. They can be students or teachers.
 
    - `Student` are the students that studying in the degree programs. Every student has:
      - A study plan.
