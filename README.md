@@ -46,7 +46,7 @@ And the program will also have these utility classes:
 The data for the application is handled primarily with 2 classes: `SkyNet` (it's a reference!) and `APIReader`. The data is read from JSON files that contains users' data, and the corresponding course data is fetched from the Sisu API.
 
 1. `SkyNet`
-2. `APIReader`
+2. `APIReader` is for API handling including calling to Kori API and converting that information into the suitable class (DegreeProgram, StudyModule or CourseUnit)
 
 </br>
 
@@ -79,6 +79,11 @@ For the GUI, the program will have a `Login` screen that shows at the start. Wit
 ## Testing
 
 The tests are written with JUnit Tests.
+
+1. API reading test:
+
+- DegreeProgram, StudyModule, CourseUnit, AbstractModule, AnyRule, SubCompositeRule: These classes tests are for getter functions mainly. The test created 1-2 test object of the class and compare each entity that the object has to the caller function.
+- APIReader: This class is for reading and converting API Json into the program structure. Including the complicated/deeply nested Rule that DegreeProgram and StudyModule has.
 
 </br>
 
