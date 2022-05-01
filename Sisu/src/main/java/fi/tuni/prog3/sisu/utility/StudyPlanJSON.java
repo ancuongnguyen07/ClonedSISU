@@ -5,6 +5,7 @@
 package fi.tuni.prog3.sisu.utility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -14,9 +15,10 @@ public class StudyPlanJSON {
     private String username;
     private String degree;
     private ArrayList<String> modules;
-    private ArrayList<String> passedCourses;
+    private HashMap<String, Integer> passedCourses;
 
-    public StudyPlanJSON(String username, String degree, ArrayList<String> modules, ArrayList<String> passedCourses) {
+    public StudyPlanJSON(String username, String degree, ArrayList<String> modules, 
+                        HashMap<String, Integer> passedCourses) {
         this.username = username;
         this.degree = degree;
         this.modules = modules;
@@ -51,11 +53,11 @@ public class StudyPlanJSON {
         this.modules = modules;
     }
 
-    public ArrayList<String> getPassedCourses() {
+    public HashMap<String, Integer> getPassedCourses() {
         return passedCourses;
     }
 
-    public void setPassedCourses(ArrayList<String> passedCourses) {
+    public void setPassedCourses(HashMap<String, Integer> passedCourses) {
         this.passedCourses = passedCourses;
     }
     

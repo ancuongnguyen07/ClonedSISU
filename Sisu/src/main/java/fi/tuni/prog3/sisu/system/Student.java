@@ -5,6 +5,7 @@
 package fi.tuni.prog3.sisu.system;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -13,12 +14,12 @@ import java.util.ArrayList;
 public class Student extends User {
     private String degreeID;
     private ArrayList<String> moduleIDs;
-    private ArrayList<String> courseIDs;
+    private HashMap<String, Integer> courses;
     
     public Student(String username, String fullName, String salt, String password){
         super(username, fullName, salt, password);
         this.moduleIDs = new ArrayList<>();
-        this.courseIDs = new ArrayList<>();
+        this.courses = new HashMap<>();
     }
 
     public String getDegreeID() {
@@ -37,12 +38,12 @@ public class Student extends User {
         this.moduleIDs = moduleIDs;
     }
 
-    public ArrayList<String> getCourseIDs() {
-        return courseIDs;
+    public HashMap<String, Integer> getCourses() {
+        return courses;
     }
 
-    public void setCourseIDs(ArrayList<String> courseIDs) {
-        this.courseIDs = courseIDs;
+    public void setCourses(HashMap<String, Integer> courses) {
+        this.courses = courses;
     }
     
     

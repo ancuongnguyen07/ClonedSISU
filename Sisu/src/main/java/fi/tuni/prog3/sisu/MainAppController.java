@@ -38,6 +38,7 @@ import fi.tuni.prog3.sisu.system.StudyModule;
 import fi.tuni.prog3.sisu.system.SubCompositeRule;
 import fi.tuni.prog3.sisu.system.Teacher;
 import fi.tuni.prog3.sisu.system.User;
+import java.util.HashMap;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -61,7 +62,7 @@ public class MainAppController {
   private Student activeStudent;
   private DegreeProgram activeStudentDegree;
   private ArrayList<String> activeStudentModuleIDs;
-  private ArrayList<String> activeStudentPassedCourseIDs;
+  private HashMap<String, Integer> activeStudentPassedCourses;
   private ArrayList<CourseUnit> activeStudentAllCourses = new ArrayList<CourseUnit>();
 
   // ==================================================================
@@ -124,7 +125,7 @@ public class MainAppController {
     this.activeStudent = sn.getActiveStudent();
     if (this.activeStudent != null) {
       this.activeStudentDegree = sn.getDegreeByID(this.activeStudent.getDegreeID());
-      this.activeStudentPassedCourseIDs = this.activeStudent.getCourseIDs();
+      this.activeStudentPassedCourses = this.activeStudent.getCourses();
       this.activeStudentModuleIDs = this.activeStudent.getModuleIDs();
 
       sn.loadCompositeRuleRec(this.activeStudentDegree.getCompositeRule());
@@ -366,7 +367,7 @@ public class MainAppController {
     btn.setMinSize(250, 50);
     btn.setMaxSize(250, 50);
     btn.setTextAlignment(TextAlignment.CENTER);
-    if (activeStudentPassedCourseIDs.contains(course.getGroupID())) {
+    if (activeStudentPassedCourses.keySet().contains(course.getGroupID())) {
       btn.getStyleClass().add("passed-course");
     } else {
       btn.getStyleClass().add("module-heading");
@@ -395,7 +396,7 @@ public class MainAppController {
       btn.setMaxHeight(60);
       btn.setTextAlignment(TextAlignment.CENTER);
       
-      if (activeStudentPassedCourseIDs.contains(course.getGroupID())) {
+      if (activeStudentPassedCourses.keySet().contains(course.getGroupID())) {
         btn.getStyleClass().add("passed-course");
       } else {
         btn.getStyleClass().add("module-heading");
@@ -433,9 +434,9 @@ public class MainAppController {
         
         courseStatusLabel.setText("Status: not passed.");
         courseGradeLabel.setText("Grade: 0.");
-        if (activeStudentPassedCourseIDs.contains(c.getGroupID())) {
+        if (activeStudentPassedCourses.keySet().contains(c.getGroupID())) {
           courseStatusLabel.setText("Status: passed.");
-          courseGradeLabel.setText("Grade: Student's grade.");
+          courseGradeLabel.setText("Grade: " + activeStudentPassedCourses.get(c.getGroupID()));
         }
       }
     }
@@ -455,7 +456,7 @@ public class MainAppController {
       if (max != -1) {
         totalMax += max;
       }
-      if (activeStudentPassedCourseIDs.contains(c.getGroupID())) {
+      if (activeStudentPassedCourses.keySet().contains(c.getGroupID())) {
         completed += min;
       }
     }

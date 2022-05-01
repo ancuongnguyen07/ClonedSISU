@@ -10,6 +10,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -29,44 +30,86 @@ public class StudyPlanJSONAdapter extends TypeAdapter<StudyPlanJSON>{
         String fieldname = null;
         
         while(reader.hasNext()){
-            JsonToken token = reader.peek();
-            
-            if (token.equals(JsonToken.NAME)){
-                // get the current token
-                fieldname = reader.nextName();
+            switch(reader.nextName()){
+                case "username":
+                    plan.setUsername(reader.nextString());
+                    break;
+                case "degree":
+                    plan.setDegree(reader.nextString());
+                    break;
+                case "modules":
+                    reader.beginArray();
+                    ArrayList<String> ms = new ArrayList<>();
+                    while (reader.hasNext()){
+                        ms.add(reader.nextString());
+                    }
+                    plan.setModules(ms);
+                    reader.endArray();
+                    break;
+                case "passedCourses":
+                    reader.beginArray();
+                    
+                    HashMap<String, Integer> pc = new HashMap<>();
+                    String id = "";
+                    while(reader.hasNext()){ 
+                        reader.beginObject();
+                        while(reader.hasNext()){
+                            switch(reader.nextName()){
+                            case "courseGroupID":
+                                id = reader.nextString();
+                                pc.put(id, 0);
+                                break;
+                            case "grade":
+                                pc.replace(id, reader.nextInt());
+                                break;
+                            }
+                        }
+                        
+                        reader.endObject();
+                    }
+                    plan.setPassedCourses(pc);
+                    reader.endArray();
+                    
+                    break;
             }
-            
-            if ("username".equals(fieldname)){
-                token = reader.peek();
-                plan.setUsername(reader.nextString());
-            }
-                
-            if ("degree".equals(fieldname)){
-                token = reader.peek();
-                plan.setDegree(reader.nextString());
-            }
-                
-            if ("modules".equals(fieldname)){
-                token = reader.peek();
-                reader.beginArray();
-                ArrayList<String> ms = new ArrayList<>();
-                while(reader.hasNext()){
-                    ms.add(reader.nextString());
-                }
-                plan.setModules(ms);
-                reader.endArray();
-            }
-                
-            if ("passedCourses".equals(fieldname)){
-                token = reader.peek();
-                reader.beginArray();
-                ArrayList<String> cs = new ArrayList<>();
-                while(reader.hasNext()){
-                    cs.add(reader.nextString());
-                }
-                plan.setPassedCourses(cs);
-                reader.endArray();
-            }
+//            JsonToken token = reader.peek();
+//            
+//            if (token.equals(JsonToken.NAME)){
+//                // get the current token
+//                fieldname = reader.nextName();
+//            }
+//            
+//            if ("username".equals(fieldname)){
+//                token = reader.peek();
+//                plan.setUsername(reader.nextString());
+//            }
+//                
+//            if ("degree".equals(fieldname)){
+//                token = reader.peek();
+//                plan.setDegree(reader.nextString());
+//            }
+//                
+//            if ("modules".equals(fieldname)){
+//                token = reader.peek();
+//                reader.beginArray();
+//                ArrayList<String> ms = new ArrayList<>();
+//                while(reader.hasNext()){
+//                    ms.add(reader.nextString());
+//                }
+//                plan.setModules(ms);
+//                reader.endArray();
+//            }
+//                
+//            if ("passedCourses".equals(fieldname)){
+//                token = reader.peek();
+//                reader.beginArray();
+//                ArrayList<String> cs = new ArrayList<>();
+//                while(reader.hasNext()){
+//                    cs.add(reader.nextString());
+//                }
+//                plan.setPassedCourses(cs);
+//                reader.endArray();
+//            }
         }
         reader.endObject();
         return plan;
