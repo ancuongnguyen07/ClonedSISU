@@ -59,11 +59,11 @@ public class APIReaderTest {
         assertEquals(apiReader.connectAPI(validGroupIdAPI, "groupId").get("id").getAsString(), "otm-5e96814d-3ca6-490d-b9f4-6307e974f32c");
 
 
-        System.out.println("Wrong API");
+        System.out.println("Wrong API: This will have MalformedURLException in console because the MalformedURLException is thrown but it's caught in the code so the return is null, can't asserThrows MalformedURLException here");
         String wrongAPI = "Me wrong";
         assertNull(apiReader.connectAPI(wrongAPI, "id"));
 
-        System.out.println("Wrong Type");
+        System.out.println("Wrong Type: This will have AnException in console because the AnException is thrown but it's caught in the code so the return is null, can't asserThrows AnException here");
         assertNull(apiReader.connectAPI(validIdAPI, "no niin"));
     }
 
