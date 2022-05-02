@@ -74,8 +74,8 @@ The program will have the following **Class Tree**.
 
 And the program will also have these utility classes:
 
-- `JsonReader` : reading user info from JSON files to create `User` objects
-- `JsonWriter` : writing info of `User` objects to JSON files
+- `JsonReader` : reading user info from JSON files to create `User` objects, using TypeAdapter to convert data in JSON files to Java objects
+- `JsonWriter` : writing info of `User` objects to JSON files, , using TypeAdapter to convert data in JSON files to Java objects
 - `APIFetcher`
 
 ### **Data Handling**
