@@ -3,10 +3,12 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -23,16 +25,16 @@
          <center>
             <TabPane prefHeight="200.0" prefWidth="200.0" rotateGraphic="true" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
-                <Tab closable="false" text="Homepage">
+                <Tab fx:id="homepageTab" closable="false" text="Homepage">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TextArea layoutX="35.0" layoutY="68.0" prefHeight="200.0" prefWidth="850.0" text="Content for homepage&#10;" />
                               <Label fx:id="activeUserHome" layoutX="36.0" layoutY="26.0" text="Full name - Role" textFill="#6761a8">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
+                              <TreeView fx:id="studyStructureTreeView" layoutX="36.0" layoutY="71.0" prefHeight="381.0" prefWidth="923.0" />
                            </children></AnchorPane>
                   </content>
                      <graphic>
@@ -43,11 +45,108 @@
                         </ImageView>
                      </graphic>
                 </Tab>
-                  <Tab closable="false" text="Courses">
+                  <Tab fx:id="coursesTab" closable="false" text="Courses">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TextArea layoutX="37.0" layoutY="43.0" prefHeight="200.0" prefWidth="200.0" text="Content for courses&#10;" />
+                              <Label fx:id="studentAverageGradeLabel" alignment="CENTER" layoutX="38.0" layoutY="20.0" prefHeight="53.0" prefWidth="139.0" text="null" textFill="#6761a8">
+                                 <font>
+                                    <Font name="System Bold" size="36.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER" layoutX="45.0" layoutY="73.0" prefHeight="17.0" prefWidth="124.0" text="Average grade" textFill="#6761a8">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="completedCreditsLabel" alignment="CENTER" layoutX="409.0" layoutY="20.0" prefHeight="53.0" prefWidth="182.0" text="null" textFill="#6761a8">
+                                 <font>
+                                    <Font name="System Bold" size="36.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER" layoutX="428.0" layoutY="73.0" prefHeight="17.0" prefWidth="149.0" text="Credits completed" textFill="#6761a8">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="totalCreditsLabel" alignment="CENTER" layoutX="801.0" layoutY="20.0" prefHeight="53.0" prefWidth="164.0" text="null" textFill="#6761a8">
+                                 <font>
+                                    <Font name="System Bold" size="36.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER" layoutX="806.0" layoutY="73.0" prefHeight="17.0" prefWidth="155.0" text="Total credits planned" textFill="#6761a8">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="showAllCoursesBtn" layoutX="36.0" layoutY="107.0" mnemonicParsing="false" onAction="#showAllCourses" prefHeight="25.0" prefWidth="108.0" styleClass="button-primary" text="Show all courses" />
+                              <Label layoutX="718.0" layoutY="110.0" text="Course Information" textFill="#6761a8">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <ScrollPane layoutX="36.0" layoutY="140.0" prefHeight="321.0" prefWidth="673.0">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1414.0" prefWidth="673.0">
+                                       <children>
+                                          <GridPane fx:id="allCoursesGrid" hgap="5.0" layoutX="5.0" layoutY="5.0" prefHeight="1408.0" prefWidth="649.0" vgap="5.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                          </GridPane>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </ScrollPane>
+                              <Label fx:id="courseNameLabel" alignment="TOP_LEFT" layoutX="729.0" layoutY="140.0" prefHeight="39.0" prefWidth="236.0" textFill="#6761a8" wrapText="true">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="courseCodeLabel" alignment="TOP_LEFT" layoutX="729.0" layoutY="177.0" prefHeight="25.0" prefWidth="236.0" textFill="#6761a8" />
+                              <Label fx:id="courseStatusLabel" alignment="TOP_LEFT" layoutX="729.0" layoutY="243.0" prefHeight="25.0" prefWidth="236.0" textFill="#6761a8">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="courseGradeLabel" alignment="TOP_LEFT" layoutX="729.0" layoutY="269.0" prefHeight="25.0" prefWidth="236.0" textFill="#6761a8">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="courseCreditLabel" alignment="TOP_LEFT" layoutX="729.0" layoutY="216.0" prefHeight="25.0" prefWidth="236.0" textFill="#6761a8">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
                            </children></AnchorPane>
                      </content>
                      <graphic>
@@ -58,13 +157,13 @@
                         </ImageView>
                      </graphic>
                   </Tab>
-                  <Tab closable="false" text="Settings">
+                  <Tab fx:id="settingsTab" closable="false" text="Settings">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <TabPane layoutY="-1.0" prefHeight="486.0" prefWidth="1000.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
                                 <tabs>
-                                  <Tab text="Update User Information">
+                                  <Tab fx:id="updateUserTab" text="Update User Information">
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="457.0" prefWidth="1000.0">
                                              <children>
@@ -154,9 +253,24 @@
                                           </AnchorPane>
                                     </content>
                                   </Tab>
-                                  <Tab text="Course Settings">
+                                  <Tab fx:id="degreesTab" text="All Degrees">
                                     <content>
-                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <TreeView fx:id="degreeOverviewTreeView" layoutX="271.0" layoutY="50.0" prefHeight="371.0" prefWidth="714.0" />
+                                                <Label layoutX="271.0" layoutY="15.0" prefHeight="25.0" prefWidth="141.0" text="Degree Overview" textFill="#6761a8">
+                                                   <font>
+                                                      <Font name="System Bold" size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <TreeView fx:id="degreeSelectionTreeView" layoutX="9.0" layoutY="50.0" prefHeight="371.0" prefWidth="251.0" />
+                                                <Label layoutX="14.0" layoutY="15.0" prefHeight="25.0" prefWidth="141.0" text="All Degrees" textFill="#6761a8">
+                                                   <font>
+                                                      <Font name="System Bold" size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button fx:id="showAllDegreesBtn" layoutX="120.0" layoutY="15.0" mnemonicParsing="false" onAction="#getAllDegreeProgram" prefHeight="25.0" prefWidth="127.0" styleClass="button-primary" text="Show all Degrees" />
+                                             </children></AnchorPane>
                                     </content>
                                   </Tab>
                                 </tabs>
@@ -171,11 +285,19 @@
                         </ImageView>
                      </graphic>
                   </Tab>
-                  <Tab closable="false" text="Help">
+                  <Tab fx:id="helpTab" closable="false" text="Help">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Button layoutX="61.0" layoutY="64.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="189.0" text="Help API" />
+                              <Button fx:id="helpApiButton" layoutX="370.0" layoutY="435.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="261.0" styleClass="button-primary" text="View Documentation">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font></Button>
+                              <TextArea editable="false" layoutX="22.0" layoutY="29.0" prefHeight="392.0" prefWidth="957.0" text="From the top bar of the application, you can view the full name and role of the active user. Next to that is the Log Out button.&#10;&#10;You can view the student's Study Structure in the &quot;Homepage&quot; tab. The structure is displayed in a TreeView, similar to how the real Sisu works.  The Homepage also shows the full name and role of the active user similar to the top bar. Passed course in the study structure are colored green.&#10;&#10;Inside of the &quot;Courses&quot; tab, you can view all the courses in the current study structure. It also shows information about the student's average grade, total credits planned, and total credits finished (similar to the real Sisu). Clicking the &quot;Show all courses&quot; button will show all of this student's courses in the grid below. You can click on each course to view its detail on the right. This includes the course name, course code, course credit, course status (passed or not), and course grade. The student's passed courses are colored green, again.&#10;&#10;Inside of the &quot;Settings&quot; tab, there are 2 sub-tabs: &quot;Update User Information&quot; and &quot;All Degrees&quot;. You can update the active user's credentials in the Update User Information tab. The process should be straight-forward. In the All Degrees tab, when you click on the &quot;Show all Degrees&quot; button, all 269 degree programs from the Sisu API will be fetched to the &quot;All Degrees&quot; view. After that, you can click on any of the degree's button to view its content. Note that it can take a while for the application to fetch all information in the degree program. After the fetching, you can view the content of that degree similar to the view in the &quot;Homepage&quot; tab.&#10;&#10;For more information on the system, click the &quot;View Documentation&quot; button bellow to check the documentation of the app out! You can also check out README.md fora walkthrough of how the app is used.&#10;" wrapText="true">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextArea>
                            </children></AnchorPane>
                      </content>
                      <graphic>

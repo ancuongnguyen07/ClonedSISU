@@ -1,14 +1,11 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java to edit this template
+ * Handling data from stored JSON files
  */
 package fi.tuni.prog3.sisu.utility;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import java.io.InputStream;
-import java.util.HashMap;
 import fi.tuni.prog3.sisu.system.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author An Nguyen
+ * A class wrapping methods used for reading JSON files into objects
+ * @author Cuong Nguyen
  */
 public class JsonReader {
     private Gson gson;
@@ -27,18 +24,21 @@ public class JsonReader {
      * Construct an initially empty JsonReader
      */
     public JsonReader(){
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(UserJson.class, new UserJsonAdapter());
-        builder.setPrettyPrinting();
-        this.gson = builder.create();
+        this.gson = new Gson();
     }
     
     
     /**
-     * Read user information in Json file into a List<{@link fi.tuni.prog3.sisu.system.User}>
+     * Read user information in Json file into a List of {@link fi.tuni.prog3.sisu.system.User}
      * @param filePath the path of Json file containing user information
+     * @return 
      */
-    public List<User> readUsers(String filePath){   
+    public List<User> readUsers(String filePath){  
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(UserJson.class, new UserJsonAdapter());
+        builder.setPrettyPrinting();
+        this.gson = builder.create();
+        
         List<User> users = new ArrayList<>();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
@@ -62,10 +62,33 @@ public class JsonReader {
                 }
                 users.add(newUser);
             }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }        
+        return users;
+    }
+    
+    /**
+     * Read users study plan information in Json file into a List of {@link StudyPlanJSON}
+     * @param filePath the path of Json file containing users study plan information 
+     * @return  
+     */
+    public List<StudyPlanJSON> readUserStudyPlan(String filePath){
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(StudyPlanJSON.class, new StudyPlanJSONAdapter());
+        this.gson = builder.create();
+        
+        List<StudyPlanJSON> plans = new ArrayList<>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            
+            plans = this.gson.fromJson(reader, 
+                    new TypeToken<List<StudyPlanJSON>>() {}.getType());
+            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        return users;
+        return plans;
     }
 }

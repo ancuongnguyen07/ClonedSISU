@@ -56,6 +56,41 @@
   -fx-fill: #ff92a4;
 }
 
+/* Study module headings button */
+.module-heading {
+  -fx-padding: 5 20 5 20;
+  -fx-background-color: #e6e6f6;
+  -fx-background-radius: 0;
+  -fx-border-color: #4346b8;
+  -fx-border-width: 0 0 2px 0;
+}
+.module-heading .text {
+  -fx-fill: #4346b8;
+}
+.module-heading:hover {
+  -fx-background-color: #4346b8;
+}
+.module-heading:hover .text {
+  -fx-fill: #fff;
+}
+
+.passed-course {
+  -fx-padding: 5 20 5 20;
+  -fx-background-color: #aceb98;
+  -fx-background-radius: 0;
+  -fx-border-color: #3e4e50;
+  -fx-border-width: 0 0 2px 0;
+}
+.passed-course .text {
+  -fx-fill: #4346b8;
+}
+.passed-course:hover {
+  -fx-background-color: #156064;
+}
+.passed-course:hover .text {
+  -fx-fill: #fff;
+}
+
 /* Text fields */
 .text-field {
   -fx-background-color: -fx-text-box-border, -fx-background;
@@ -96,10 +131,10 @@
   -fx-background-color: #afbbe3;
 }
 
-.tab-pane:focused
+/* .tab-pane:focused
   > .tab-header-area
   > .headers-region
   > .tab:selected
   .focus-indicator {
   -fx-border-color: transparent;
-}
+} */

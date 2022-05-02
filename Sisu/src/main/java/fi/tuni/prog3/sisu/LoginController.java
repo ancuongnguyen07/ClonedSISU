@@ -1,3 +1,6 @@
+/**
+ * Handling controllers, GUI
+ */
 package fi.tuni.prog3.sisu;
 
 import java.io.IOException;

@@ -1,6 +1,5 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java to edit this template
+ * Handling data from API and updating user info
  */
 package fi.tuni.prog3.sisu.system;
 
@@ -13,18 +12,63 @@ import java.util.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 /**
- *
+ *  A class to Read and Process information from API into the program structure. 
  * @author An Nguyen
  */
 public class APIReader {
-    private ArrayList<DegreeProgram > degrees = new ArrayList<>();
     private final String degreeListAPI = "https://sis-tuni.funidata.fi/kori/api/module-search?curriculumPeriodId=uta-lvv-2021&universityId=tuni-university-root-id&moduleType=DegreeProgramme&limit=1000";
     private final String degreeDetailAPI = "https://sis-tuni.funidata.fi/kori/api/modules/";
     private final String studyModuleAPI = "https://sis-tuni.funidata.fi/kori/api/modules/by-group-id?groupId=";
     private final String courseUnitAPI = "https://sis-tuni.funidata.fi/kori/api/course-units/by-group-id?groupId=";
     private final String identifierTUNI = "&universityId=tuni-university-root-id";
+
+    /**
+     * Return the constant if the degree list provided in the project description.
+     * @return The API containing basic information of all degrees (https://sis-tuni.funidata.fi/kori/api/module-search?curriculumPeriodId=uta-lvv-2021&universityId=tuni-university-root-id&moduleType=DegreeProgramme&limit=1000)
+     */
+    public String getDegreeListAPI() {
+        return degreeListAPI;
+    }
+
+    /**
+     * Return the string constant of the degree specific API
+     * @return The API format to add with degree ID to get information (https://sis-tuni.funidata.fi/kori/api/modules/)
+     */
+    public String getDegreeDetailAPI() {
+        return degreeDetailAPI;
+    }
+
+    /**
+     * Return the string constant of study module specific API
+     * @return The API format to add with study module groupId (https://sis-tuni.funidata.fi/kori/api/modules/by-group-id?groupId=) and with TUNI identifier to get information.
+     */
+    public String getStudyModuleAPI() {
+        return studyModuleAPI;
+    }
+
+    /**
+     * Return the string constant of course unit specific API
+     * @return The API format to add with course unit groupId (https://sis-tuni.funidata.fi/kori/api/course-units/by-group-id?groupId=) and with TUNI identifier to get information.
+     */
+    public String getCourseUnitAPI() {
+        return courseUnitAPI;
+    }
+
+    /**
+     * Return the string constant of TUNI identifier on API
+     * @return (&universityId=tuni-university-root-id)
+     */
+    public String getIdentifierTUNI() {
+        return identifierTUNI;
+    }
     
-    // Purpose: get Json form the given API, type is "id" or "groupId" for taking out JsonObject properly;
+    
+    /**
+     * Connect to the given API and get information from it. Convert it to JsonObject and return it.
+     * @param link The API to get information from.
+     * @param type Because degree API is get by ID and other are get by groupId. The format is different so needed to handle seperately.
+     * @return The JsonObject of the given API.
+     */
     public JsonObject connectAPI(String link, String type){
 
         JsonObject JsonInformation = JsonParser.parseString("{}").getAsJsonObject();
@@ -54,47 +98,24 @@ public class APIReader {
                     JsonInformation = JsonParser.parseString(String.valueOf(informationString)).getAsJsonObject();
                 } else if (type.equals("groupId")){
                     JsonInformation = JsonParser.parseString(String.valueOf(informationString)).getAsJsonArray().get(0).getAsJsonObject();
+                } else {
+                    throw new AnException("Unexpected api type " + type);
                 }
             }
         } catch (Exception e){
             e.printStackTrace();
+            return null;
         }
         return JsonInformation;
     }
     
-    // Like set up in sisu: https://sis-tuni.funidata.fi/kori/api/modules/otm-df83fbbd-f82d-4fda-b819-78f6b2077fcb
-    // "https://sis-tuni.funidata.fi/kori/api/modules/by-group-id?groupId=tut-sm-g-7094&universityId=tuni-university-root-id"
-    // 5th degree
-    // Purpose: for taking all submodules and courses in rule and return jsonarray containing them.
-    public JsonArray takeRules(JsonObject rule){
-        JsonArray rules = new JsonArray();
-        String ruleType = rule.get("type").getAsString();
-        if (ruleType.equals("CompositeRule")){
-            // has "require"(min,max), "description"(en,fi), "allMandatory"
-            JsonArray curr_rules = rule.get("rules").getAsJsonArray();
-            for (int i=0; i<curr_rules.size(); i++){
-                JsonObject curr_rule = curr_rules.get(i).getAsJsonObject();
-                JsonArray sub_rules = takeRules(curr_rule);
-                for (int j=0; j<sub_rules.size(); j++){
-                    rules.add(sub_rules.get(j).getAsJsonObject());
-                }
-            }
-        } else if (ruleType.equals("CreditsRule")){
-            rules = takeRules(rule.get("rule").getAsJsonObject());
-        } else if (ruleType.equals("ModuleRule")){
-            rules.add(rule);
-        } else if (ruleType.equals("CourseUnitRule")){
-            rules.add(rule);
-        } else if (ruleType.equals("AnyModuleRule") || ruleType.equals("AnyCourseUnitRule")){
-            // No groupID but means can have a search bar for any course/module
-        } else {
-            // nothing will be here
-            System.out.println("Special case happened, which shouldn't be happening!!!!");
-        }     
-        return rules;
-    }
-    
-        public static boolean checkNotJsonNull(JsonObject obj, String entity){
+    /**
+     * Check null entity and the obj itself
+     * @param obj the given JsonObject to check from
+     * @param entity the checking entity
+     * @return true if it's JsonNull or the object is Null, false otherwise.
+     */
+    private boolean checkNotJsonNull(JsonObject obj, String entity){
         try{
             // check if the object itself is null
             if (obj.get(entity) == null){
@@ -107,24 +128,76 @@ public class APIReader {
             return true;
         }
     }
-        
-    // Give in the degreeprogram in Json and return the degreeprogram class
-    public DegreeProgram JsonToDegreeProgram(JsonObject degreeJson){
-        JsonObject rule = degreeJson.get("rule").getAsJsonObject();
-        String API = degreeDetailAPI + degreeJson.get("id").getAsString();
-        String degreeName;
-        if (checkNotJsonNull(degreeJson.get("name").getAsJsonObject(),"en")){
-            degreeName = degreeJson.get("name").getAsJsonObject().get("en").getAsString();
+
+    /**
+     * Check the content of given object. Will prioritize English over Finnish
+     * @param content the content to check from
+     * @return The content of the given object.
+     */
+    private String enOrFi(JsonObject content){
+        if (checkNotJsonNull(content, "en")){
+            return content.get("en").getAsString();
         } else {
-            degreeName = degreeJson.get("name").getAsJsonObject().get("fi").getAsString();
+            return content.get("fi").getAsString();
         }
-        if (rule.get("type").getAsString().equals("CompositeRule")){
-            int maxRequire = -1;
+    }
+
+    /**
+     * Create the appropriate API for StudyModule or CourseUnit in basic form (type of ModuleRule or CourseUnitRule) base on its type.
+     * @param object The object to get API from
+     * @return The API of the given object.
+     * @throws AnException
+     */
+    private String makeAPIFromJson(JsonObject object) throws AnException{
+        String type = object.get("type").getAsString();
+        if (type.equals("ModuleRule")){
+            return studyModuleAPI + object.get("moduleGroupId").getAsString() + identifierTUNI;
+        } else if (type.equals("CourseUnitRule")){
+            return courseUnitAPI + object.get("courseUnitGroupId").getAsString() + identifierTUNI;
+        } else if (type.equals("AnyCourseUnitRule") || type.equals("AnyModuleRule")){
+            return "Any Rule";
+        } else {
+            throw new AnException("makeAPIFromJson: Unexpected type: " + type);
+        }
+    }
+
+    /**
+     * Create the subCompositeRule of the from the given Json rule
+     * @param rule The rule need to be converted into SubCompositeRule class
+     * @return The converted SubCompositeRule
+     * @throws AnException When the rule have unexpected type (other than CompositeRule and CreditsRule)
+     */
+    private SubCompositeRule JsonToCompositeRule(JsonObject rule) throws AnException{
+        String ruleType = rule.get("type").getAsString();
+        if (ruleType.equals("CompositeRule") || ruleType.equals("CreditsRule")){
+            Boolean isCredits = false;
+            int minCredit = -1;
+            int maxCredit = -1;
             int minRequire = -1;
-            String desString = null;   
-            Boolean allMandatory = false;        
+            int maxRequire = -1;
+            String description = null;
+            Boolean allMandatory = false;
+            if (ruleType.equals("CreditsRule")){
+                if (checkNotJsonNull(rule, "credits")){
+                    JsonObject credits = rule.get("credits").getAsJsonObject();
+                    minCredit = credits.get("min").getAsInt();
+                    if (checkNotJsonNull(credits, "max")){
+                        maxCredit = credits.get("max").getAsInt();
+                    } else {
+                        maxCredit = minCredit;
+                    }
+                }
+                isCredits = true;
+                JsonArray subRules = rule.get("rule").getAsJsonObject().get("rules").getAsJsonArray();
+                if (subRules.size() == 1 && subRules.get(0).getAsJsonObject().get("type").getAsString().equals("CompositeRule")){
+                    rule = subRules.get(0).getAsJsonObject();
+                } else {
+                    rule = rule.get("rule").getAsJsonObject();
+                }
+            }
+            
             if (checkNotJsonNull(rule, "require")){
-                    minRequire = rule.get("require").getAsJsonObject().get("min").getAsInt();
+                minRequire = rule.get("require").getAsJsonObject().get("min").getAsInt();
                 if (checkNotJsonNull(rule.get("require").getAsJsonObject(),"max")){
                     maxRequire = rule.get("require").getAsJsonObject().get("max").getAsInt();
                 } else {
@@ -133,117 +206,114 @@ public class APIReader {
             }
     
             if (checkNotJsonNull(rule, "description")){
-                desString = rule.get("description").getAsString();
+                description = enOrFi(rule.get("description").getAsJsonObject());
             }
-
+    
             if (checkNotJsonNull(rule, "allMandatory")){
                 allMandatory = rule.get("allMandatory").getAsBoolean();
             }
-            return new DegreeProgram(degreeName,
-            degreeJson.get("id").getAsString(),
-            degreeJson.get("groupId").getAsString(),
-            API,
-            minRequire,
-            maxRequire,
-            desString,
-            allMandatory);
 
-            
-        } else { // (rule.get("type").getAsString().equals("CreditsRule"))
-            int minCredit = -1;
-            int maxCredit = -1;
-            if (checkNotJsonNull(rule, "credits")){
-                JsonObject credits = rule.get("credits").getAsJsonObject();
-                minCredit = credits.get("min").getAsInt();
-                if (checkNotJsonNull(credits, "max")){
-                    maxCredit = credits.get("max").getAsInt();
-                } else {
-                    maxCredit = minCredit;
+            SubCompositeRule subCompositeRule = new SubCompositeRule(minRequire, maxRequire, description, allMandatory);
+
+            if (isCredits){
+                subCompositeRule.setMinCredit(minCredit);
+                subCompositeRule.setMaxCredit(maxCredit);
+            }
+
+            JsonArray subCoursesJSON = rule.get("rules").getAsJsonArray();
+            for (int j=0; j<subCoursesJSON.size(); j++){
+                JsonObject currObject = subCoursesJSON.get(j).getAsJsonObject();
+                String currObjectType = currObject.get("type").getAsString();
+                if (currObjectType.equals("CompositeRule" )|| currObjectType.equals("CreditsRule")){
+                    subCompositeRule.addSubComposite(JsonToCompositeRule(currObject));
+                } else if (currObjectType.equals( "CourseUnitRule")){
+                String courseUnitAPI = makeAPIFromJson(currObject);
+                JsonObject courseUnitJson = connectAPI(courseUnitAPI, "groupId");
+                CourseUnit courseUnit = JsonToCourseUnit(courseUnitJson);
+                subCompositeRule.addCourse(courseUnit);
+                } else if (currObjectType.equals("ModuleRule")){
+                    String newStudyModuleAPI = makeAPIFromJson(currObject);
+                    JsonObject newStudyModuleJson = connectAPI(newStudyModuleAPI, "groupId");
+                    StudyModule newStudyModule = JsonToStudyModule(newStudyModuleJson);
+                    subCompositeRule.addModule(newStudyModule);
+                } else if (currObjectType.equals("AnyCourseUnitRule")){
+                    subCompositeRule.addAnyRule(new AnyRule("AnyCourseUnitRule"));
+                } else if (currObjectType.equals("AnyModuleRule")){
+                    subCompositeRule.addAnyRule(new AnyRule("AnyModuleRule"));
                 }
             }
-            return new DegreeProgram(degreeName,
-            degreeJson.get("id").getAsString(),
-            degreeJson.get("groupId").getAsString(),
-            API,
-            minCredit,
-            maxCredit);
-
+            return subCompositeRule;
+        } else {
+            throw new AnException("JsonToCompositeRule: Unexpected Type: " + ruleType);
         }
-   }
+    }
+
+    /**
+     * Convert the given degree in Json to the class DegreeProgram and return it.
+     * @param degreeJson The given Json object of the degree.
+     * @return  The DegreeProgram class that is converted from degreeJson.
+     * @throws AnException Throw when the rule type is not CompositeRule or CreditsRule.
+     */
+    public DegreeProgram JsonToDegreeProgram(JsonObject degreeJson) throws AnException{
+
+        JsonObject rule = degreeJson.get("rule").getAsJsonObject();
+        String API = degreeDetailAPI + degreeJson.get("id").getAsString();
+        String degreeName;
+        if (checkNotJsonNull(degreeJson.get("name").getAsJsonObject(),"en")){
+            degreeName = degreeJson.get("name").getAsJsonObject().get("en").getAsString();
+        } else {
+            degreeName = degreeJson.get("name").getAsJsonObject().get("fi").getAsString();
+        }
+        SubCompositeRule compositeRule = JsonToCompositeRule(rule);
+        return new DegreeProgram(degreeName,
+                                degreeJson.get("id").getAsString(),
+                                degreeJson.get("groupId").getAsString(),
+                                API,
+                                compositeRule);
+
+    }
     
-    // Give in the studyModule in Json and return the StudyModule class
+    /**
+     * Convert the given study module in Json to the class StudyModule and return it.
+     * @param JsonStudyModule The given Json object of the study module.
+     * @return The StudyModule class converted from the JsonStudyModule.
+     */
     public StudyModule JsonToStudyModule(JsonObject JsonStudyModule){
-        JsonObject rule = JsonStudyModule.get("rule").getAsJsonObject();
         String API = studyModuleAPI + JsonStudyModule.get("groupId").getAsString() + identifierTUNI;
         String studyModuleName = null;
         if ( checkNotJsonNull(JsonStudyModule, "name")){
             studyModuleName = enOrFi(JsonStudyModule.get("name").getAsJsonObject());
         }
-        if (rule.get("type").getAsString().equals("CompositeRule")){
-            int maxRequire = -1;
-            int minRequire = -1;
-            String desString = null;   
-            Boolean allMandatory = false;        
-            if (checkNotJsonNull(rule, "require")){
-                    minRequire = rule.get("require").getAsJsonObject().get("min").getAsInt();
-                if (checkNotJsonNull(rule.get("require").getAsJsonObject(),"max")){
-                    maxRequire = rule.get("require").getAsJsonObject().get("max").getAsInt();
-                } else {
-                    maxRequire = rule.get("require").getAsJsonObject().get("min").getAsInt();
-                }
-            }
-    
-            if (checkNotJsonNull(rule, "outcomes")){
-                System.out.println(rule.get("outcomes"));
-                desString = enOrFi(rule.get("outcomes").getAsJsonObject());
-            }
 
-            if (checkNotJsonNull(rule, "allMandatory")){
-                allMandatory = rule.get("allMandatory").getAsBoolean();
-            }
-
-            return new StudyModule(studyModuleName,
-            JsonStudyModule.get("id").getAsString(),
-            JsonStudyModule.get("groupId").getAsString(),
-            API,
-            minRequire,
-            maxRequire,
-            desString,
-            allMandatory);
-
-        } else {
-            int minCredit = -1;
-            int maxCredit = -1;
-            if (checkNotJsonNull(rule, "credits")){
-                JsonObject credits = rule.get("credits").getAsJsonObject();
-                minCredit = credits.get("min").getAsInt();
-                if (checkNotJsonNull(credits, "max")){
-                    maxCredit = credits.get("max").getAsInt();
-                } else {
-                    maxCredit = minCredit;
-                }
-            }
-            return new StudyModule(studyModuleName,
-                JsonStudyModule.get("id").getAsString(),
-                JsonStudyModule.get("groupId").getAsString(),
-                API,
-                minCredit,
-                maxCredit);
-        }
-
+        StudyModule studyModule = new StudyModule(studyModuleName,
+                                                  JsonStudyModule.get("id").getAsString(),
+                                                  JsonStudyModule.get("groupId").getAsString(),
+                                                  API);
+        return studyModule;
     }
     
-    // Give in the CourseUnit in Json and return the CourseUnit class
+    /**
+     * Convert the given course unit in Json to the class CourseUnit and return it.
+     * @param courseUnitJson The given Json object of the course unit.
+     * @return The course unit class converted from the courseUnitJson.
+     */
     public CourseUnit JsonToCourseUnit(JsonObject courseUnitJson){
         String id = courseUnitJson.get("id").getAsString();
         // name have en or/and fi
         String name = null;
-        if (checkNotJsonNull(courseUnitJson, name)){
+        if (checkNotJsonNull(courseUnitJson, "name")){
             name = enOrFi(courseUnitJson.get("name").getAsJsonObject());
         }
         String groupID = courseUnitJson.get("groupId").getAsString();
-        int minCredit = courseUnitJson.get("credits").getAsJsonObject().get("min").getAsInt();
-        int maxCredit = courseUnitJson.get("credits").getAsJsonObject().get("max").getAsInt();
+        int minCredit = -1;
+        int maxCredit = -1;
+        JsonObject credits = courseUnitJson.get("credits").getAsJsonObject();
+        minCredit = credits.get("min").getAsInt();
+        if (checkNotJsonNull(credits, "max")){
+            maxCredit = credits.get("max").getAsInt();
+        } else {
+            maxCredit = minCredit;
+        }
         String API = courseUnitAPI + courseUnitJson.get("groupId").getAsString() + identifierTUNI;
         String content = null;
         if (checkNotJsonNull(courseUnitJson, "content")){
@@ -251,7 +321,7 @@ public class APIReader {
         }
         String additional = null;
         if (checkNotJsonNull(courseUnitJson, "additional")){
-            content = enOrFi(courseUnitJson.get("additional").getAsJsonObject());
+            additional = enOrFi(courseUnitJson.get("additional").getAsJsonObject());
         }
         JsonObject learningMaterial = new JsonObject();
         if (checkNotJsonNull(courseUnitJson, "learningMaterial")){
@@ -263,7 +333,7 @@ public class APIReader {
         String gradeScaleId = courseUnitJson.get("gradeScaleId").getAsString();
         String outcomes = null;
         if (checkNotJsonNull(courseUnitJson, "outcomes")){
-            content = enOrFi(courseUnitJson.get("outcomes").getAsJsonObject());
+            outcomes = enOrFi(courseUnitJson.get("outcomes").getAsJsonObject());
         }
         String prerequisites = null;
         if (checkNotJsonNull(courseUnitJson, "prerequisites")){
@@ -279,112 +349,58 @@ public class APIReader {
         if (checkNotJsonNull(courseUnitJson, "inclusionApplicationInstruction")){
             inclusionApplicationInstruction = enOrFi(courseUnitJson.get("inclusionApplicationInstruction").getAsJsonObject());
         }
-        return new CourseUnit(name, id, groupID, minCredit, maxCredit, API, content, additional, learningMaterial, substitutions, completionMethods, courseCode, gradeScaleId, outcomes, prerequisites, recommendedFormalPrerequisites, compulsoryFormalPrerequisites, studyFields, responsibilityInfos, possibleAttainmentLanguages, curriculumPeriodIds, inclusionApplicationInstruction);
+        return new CourseUnit(name, id, groupID, minCredit, maxCredit, API, content, 
+                additional, learningMaterial, substitutions, completionMethods, courseCode, 
+                gradeScaleId, outcomes, prerequisites, recommendedFormalPrerequisites,
+                compulsoryFormalPrerequisites, studyFields, responsibilityInfos, 
+                possibleAttainmentLanguages, curriculumPeriodIds, inclusionApplicationInstruction);
     }
-    
-        
-    // Prioritize fi version, check if the content has en or fi and return it
-    public String enOrFi(JsonObject content){
-        if (checkNotJsonNull(content, "fi")){
-            return content.get("fi").getAsString();
+
+    /**
+     * Because the StudyModule is a deeply nested object, in which it can have subModules and subCourses. And it keep going deep down. So this function is to take the next level detail information of the given studyModule object. For example: studyModule with API (https://sis-tuni.funidata.fi/kori/api/modules/by-group-id?groupId=otm-640dcf49-18b4-4392-8226-8cc18ea32dfb&universityId=tuni-university-root-id) will get the information of all the subModules that it's having. If not clicked yet, the created subModules is only in basic form (with name, id, groupId, API).
+     * @param studyModule The studyModule to take next level
+     * @throws AnException Throw when the studyModule rule type is not "CompositeRule" or "CreditsRule".
+     */
+    public void onClickStudyModule(StudyModule studyModule) throws AnException{
+        String studyModuleAPI = studyModule.getAPI();
+        JsonObject studyModuleJSON = connectAPI(studyModuleAPI, "groupId");
+        //System.out.println("Clicking");
+        JsonObject rule = studyModuleJSON.get("rule").getAsJsonObject();
+        String ruleType = rule.get("type").getAsString();
+        if (ruleType.equals("CompositeRule") || ruleType.equals("CreditsRule")){
+            SubCompositeRule subCompositeRule = JsonToCompositeRule(rule);
+            studyModule.setCompositeRule(subCompositeRule);
+
         } else {
-            return content.get("en").getAsString();
+            throw new AnException("onClickStudyModule: Unexpected Type: " + ruleType);
+
         }
     }
     
-    //object can be studyModule or courseUnit in a StudyModule rule.
-    public String makeAPIFromJson(JsonObject object){
-        String type = object.get("type").getAsString();
-        if (type.equals("ModuleRule")){
-            return studyModuleAPI + object.get("moduleGroupId").getAsString() + identifierTUNI;
-        } else if (type.equals("CousreUnitRule")){
-            return courseUnitAPI + object.get("courseUnitGroupId").getAsString() + identifierTUNI;
-        }
-        return "Any Rule";
-    }
-    
-    // Take in studyModule in Json form and studyModule class form to create the structure below it.
-    public void studyModuleRecursive(JsonObject studyModuleJson, StudyModule studyModule){
-        JsonArray rules = takeRules(studyModuleJson.get("rule").getAsJsonObject());
-        JsonArray modules = new JsonArray();
-        for (int i=0; i<rules.size(); i++){
-            JsonObject curr_obj = rules.get(i).getAsJsonObject();
-            String curr_obj_type = curr_obj.get("type").getAsString();
-            if (curr_obj_type.equals("ModuleRule")){
-                modules.add(curr_obj);
-            } else if (curr_obj_type.equals("CourseUnitRule")){
-                String courseUnitAPI = makeAPIFromJson(curr_obj);
-                JsonObject courseUnitJson = connectAPI(courseUnitAPI, "groupId");
-                CourseUnit courseUnit = JsonToCourseUnit(courseUnitJson);
-                studyModule.addSubCourse(courseUnit);
-            } else if (curr_obj_type.equals("AnyCourseUnitRule")){
-                studyModule.addAnyRule(new AnyRule("AnyCourseUnitRule"));
-            } else if (curr_obj_type.equals("AnyModuleRule")){
-                studyModule.addAnyRule(new AnyRule("AnyModuleRule"));
-            }
-        }
-        if (modules.size()!=0){
-            for (int i=0; i<modules.size(); i++){
-                String newStudyModuleAPI = makeAPIFromJson(modules.get(i).getAsJsonObject());
-                JsonObject newStudyModuleJson = connectAPI(newStudyModuleAPI, "groupId");
-                //System.out.println(newStudyModuleJson);
-                StudyModule newStudyModule = JsonToStudyModule(newStudyModuleJson);
-                studyModule.addSubModule(newStudyModule);
-                studyModuleRecursive(newStudyModuleJson, newStudyModule);
-            }
-        }
-    }
-    
-    // call API containing all degree and return JsonArray contains all degrees.
+    /**
+     * Return the JsonArray of all degrees (get all degrees from the allDegreesAPI)
+     * @return The array containing basic information of all degree in Json form.
+     */
     public JsonArray callAllDegrees(){
         return connectAPI(degreeListAPI, "id").get("searchResults").getAsJsonArray();
     }
     
-    public String getDegreeDetailAPI() {
-        return degreeDetailAPI;
-    }
-    public ArrayList<DegreeProgram> getDegrees() {
-        return degrees;
-    }
-    public String getStudyModuleAPI() {
-        return studyModuleAPI;
-    }
-    public String getIdentifierTUNI() {
-        return identifierTUNI;
-    }
-    // Example of a main function call
-    public void mainLookLike(){
-        //----------call API degree list -------------------------------------
-        JsonArray degreeArray = callAllDegrees();
-        // Take the first degree from the list
-        JsonObject degreeOverview = degreeArray.get(0).getAsJsonObject();
-        // create the API to call that specific degree
-        String currentDegreeAPI = degreeDetailAPI + degreeOverview.get("id").getAsString();
-
-        // -------------- and added to degrees array -----------------
-        
-
-        //System.out.println(degrees.size());
-        //---------------Call API 1 degree detail --------------------------------
-        JsonObject degreeDetail = connectAPI(currentDegreeAPI, "id");
-        // Make the degree class and add it to the degrees list up in the beginning of this file.
-        DegreeProgram degree = JsonToDegreeProgram(degreeDetail);
-        degrees.add(degree);
-        JsonArray degreeRules = takeRules(degreeDetail.get("rule").getAsJsonObject());
-        for (int i=0; i<degreeRules.size(); i++){
-            degree.addStudyModule(degreeRules.get(i).getAsJsonObject());
+    /**
+     * Return the list of subModules groupId.
+     * @param studyModuleGroupId The studyModule that need to get subModules from.
+     * @return The list of subModules groupId.
+     * @throws AnException
+     */
+    public ArrayList<String> getSubModulesGroupId(String studyModuleGroupId) throws AnException{
+        String link = studyModuleAPI + studyModuleGroupId + identifierTUNI;
+        JsonObject studyModuleJson = connectAPI(link, "groupId");
+        StudyModule studyModule = JsonToStudyModule(studyModuleJson);
+        onClickStudyModule(studyModule);
+        ArrayList<StudyModule> subModules = studyModule.getCompositeRule().getSubModules();
+        ArrayList<String> subModulesGroupId = new ArrayList<>();
+        for (int i=0; i<subModules.size(); i++){
+            subModulesGroupId.add( subModules.get(i).getGroupID());
         }
-
-        // ---------------- take submodules/courses from degree detail----------------
-
-        // call out 1 module (usually suppose to be only 1) ----------------------------
-        JsonObject studyModuleOverview = degreeRules.get(0).getAsJsonObject();
-        String currentStudyModuleAPI = studyModuleAPI + studyModuleOverview.get("moduleGroupId").getAsString() + identifierTUNI;
-        // contain: submodule or course
-        JsonObject studyModuleDetail = connectAPI(currentStudyModuleAPI, "groupId");
-        StudyModule firStudyModule = JsonToStudyModule(studyModuleDetail);
-        // create that StudyModule structure
-        studyModuleRecursive(studyModuleDetail, firStudyModule);
+        return subModulesGroupId;
     }
-
 }
