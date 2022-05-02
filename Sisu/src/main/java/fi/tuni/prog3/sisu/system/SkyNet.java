@@ -36,6 +36,8 @@ public class SkyNet {
     /**
      * Construct an initially empty SkyNet object and then
      * do {@link SkyNet#loadUsers() } and {@link SkyNet#loadUserStudyPlan() () }
+     * @param usersFilePath file path of JSON file containing user info
+     * @param studyPlanFilePath file path of JSON file containing study plan info
      */
     public SkyNet(String usersFilePath, String studyPlanFilePath){
         

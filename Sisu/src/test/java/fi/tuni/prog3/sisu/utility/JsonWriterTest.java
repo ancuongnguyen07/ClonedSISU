@@ -20,6 +20,9 @@ import java.util.List;
  */
 public class JsonWriterTest {
     
+    /**
+     *
+     */
     public JsonWriterTest() {
     }
 

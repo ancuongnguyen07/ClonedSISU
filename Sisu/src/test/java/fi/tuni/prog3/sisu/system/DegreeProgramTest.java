@@ -9,10 +9,16 @@ import org.junit.jupiter.api.Test;
  */
 public class DegreeProgramTest {
     
+    /**
+     *
+     */
     public DegreeProgramTest(){
 
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetCompositeRule(){
         System.out.println("Test getCompositeRule of degree");

@@ -11,41 +11,63 @@ import com.google.gson.JsonParser;
  * @author An Nguyen
  */
 public class APIReaderTest {
+
+    /**
+     *
+     */
     public APIReaderTest(){
 
     }
     private APIReader apiReader = new APIReader();
 
+    /**
+     *
+     */
     @Test
     public void testGetDegreeListAPI(){
         System.out.println("APIReader getDegreeListAPI()");
         assertEquals(apiReader.getDegreeListAPI(), "https://sis-tuni.funidata.fi/kori/api/module-search?curriculumPeriodId=uta-lvv-2021&universityId=tuni-university-root-id&moduleType=DegreeProgramme&limit=1000");
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetDegreeDetailAPI(){
         System.out.println("APIReader getDegreeDetailAPI()");
         assertEquals(apiReader.getDegreeDetailAPI(), "https://sis-tuni.funidata.fi/kori/api/modules/");
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetStudyModuleAPI(){
         System.out.println("APIReader getStudyModuleAPI()");
         assertEquals(apiReader.getStudyModuleAPI(), "https://sis-tuni.funidata.fi/kori/api/modules/by-group-id?groupId=");
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetCourseUnitAPI(){
         System.out.println("APIReader getCourseUnitAPI()");
         assertEquals(apiReader.getCourseUnitAPI(),"https://sis-tuni.funidata.fi/kori/api/course-units/by-group-id?groupId=");
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetIdentifierTUNI(){
         System.out.println("APIReader getIdentifierTUNI()");
         assertEquals(apiReader.getIdentifierTUNI(), "&universityId=tuni-university-root-id");
     }
 
+    /**
+     *
+     */
     @Test
     public void testConnectAPI(){
         System.out.println("APIReader connectAPI()");
@@ -67,6 +89,9 @@ public class APIReaderTest {
         assertNull(apiReader.connectAPI(validIdAPI, "no niin"));
     }
 
+    /**
+     *
+     */
     @Test
     public void testCallAllDegrees(){
         System.out.println("APIReader callAllDegrees()");
@@ -80,6 +105,10 @@ public class APIReaderTest {
         assertEquals("Bachelor's Programme in Science and Engineering", apiReader.callAllDegrees().get(8).getAsJsonObject().get("name").getAsString());
     }
 
+    /**
+     *
+     * @throws AnException
+     */
     @Test
     public void testGetSubModuleGroupId() throws AnException{
         System.out.println("APIReader getSubModulesGroupId()");
@@ -92,6 +121,10 @@ public class APIReaderTest {
         assertEquals(givenSubModulesId, apiReader.getSubModulesGroupId("uta-tohjelma-1705"));
     }
 
+    /**
+     *
+     * @throws AnException
+     */
     @Test
     public void testOnClickStudyModule() throws AnException{
         System.out.println("APIReader onClickStudyModule()");
@@ -113,6 +146,10 @@ public class APIReaderTest {
         assertEquals(true, actualRule.getAllMandatory());
     }
 
+    /**
+     *
+     * @throws AnException
+     */
     @Test
     public void testJsonToDegreeProgram() throws AnException{
         System.out.println("APIReader JsonToDegreeProgram()");
@@ -124,6 +161,10 @@ public class APIReaderTest {
         assertEquals("https://sis-tuni.funidata.fi/kori/api/modules/otm-1d25ee85-df98-4c03-b4ff-6cad7b09618b", testDegree.getAPI());
     }
 
+    /**
+     *
+     * @throws AnException
+     */
     @Test
     public void testJsonToStudyModule() throws AnException{
         System.out.println("APIReader JsonToStudyModule()");
@@ -147,6 +188,9 @@ public class APIReaderTest {
         assertEquals("uta-ok-ykoodi-41176", testStudyModule.getGroupID());
     }
 
+    /**
+     *
+     */
     @Test
     public void testJsonToCourseUnit(){
         System.out.println("APIReader JsonToCourseUnit()");

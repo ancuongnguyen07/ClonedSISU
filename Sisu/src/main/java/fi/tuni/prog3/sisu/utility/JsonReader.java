@@ -1,6 +1,5 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java to edit this template
+ * Handling data from stored JSON files
  */
 package fi.tuni.prog3.sisu.utility;
 
@@ -32,6 +31,7 @@ public class JsonReader {
     /**
      * Read user information in Json file into a List of {@link fi.tuni.prog3.sisu.system.User}
      * @param filePath the path of Json file containing user information
+     * @return 
      */
     public List<User> readUsers(String filePath){  
         GsonBuilder builder = new GsonBuilder();
@@ -72,6 +72,7 @@ public class JsonReader {
     /**
      * Read users study plan information in Json file into a List of {@link StudyPlanJSON}
      * @param filePath the path of Json file containing users study plan information 
+     * @return  
      */
     public List<StudyPlanJSON> readUserStudyPlan(String filePath){
         GsonBuilder builder = new GsonBuilder();

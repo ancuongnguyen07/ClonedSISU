@@ -17,6 +17,9 @@ public class UserJsonAdapter extends TypeAdapter<UserJson>{
 
     /**
      Override method of writing
+     * @param writer
+     * @param u
+     * @throws java.io.IOException
      */
     @Override
     public void write(JsonWriter writer, UserJson u) throws IOException {
@@ -36,6 +39,9 @@ public class UserJsonAdapter extends TypeAdapter<UserJson>{
 
     /**
      * Override method reading
+     * @param reader
+     * @return 
+     * @throws java.io.IOException 
      */
     @Override
     public UserJson read(com.google.gson.stream.JsonReader reader) throws IOException {

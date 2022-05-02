@@ -31,10 +31,17 @@ public class StudyModuleTest {
 
     StudyModule studyModule1 = new StudyModule(name1, id1, groupId1, API1);
     StudyModule studyModule2 = new StudyModule(name2, id2, groupId2, API2);
+
+    /**
+     *
+     */
     public void StudyModuleTest(){
 
     }
 
+    /**
+     *
+     */
     @Test
     public void testSetCompositeRule(){
         System.out.println("StudyModule setCompositeRule()");
@@ -44,6 +51,9 @@ public class StudyModuleTest {
         assertEquals(testComposite2, studyModule2.getCompositeRule());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetCompositeRule(){
         System.out.println("StudyModule getCompositeRule()");

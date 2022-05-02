@@ -8,10 +8,17 @@ import org.junit.jupiter.api.Test;
  * @author An Nguyen
  */
 public class AnyRuleTest {
+
+    /**
+     *
+     */
     public void AnyRuleTest(){
 
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetType(){
         System.out.println("AnyRule getType()");

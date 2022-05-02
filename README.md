@@ -2,6 +2,8 @@
 
 ### **This `README.md` also serves as a documentation for the project. Additional documentation are also provided [here](./documentation/).**
 
+[javadoc](./Sisu/target/site/apidocs)
+
 The project's goal is to create an implementation of the Sisu system, using Java, JavaFX library, and SceneBuilder. The program will have a working GUI, as well as functionalities that will be described briefly in this `README.md` and in more detailed in the [provided documentation]().
 
 Our team included:
@@ -72,15 +74,15 @@ The program will have the following **Class Tree**.
 
 And the program will also have these utility classes:
 
-- `JsonReader`
-- `JsonWriter`
+- `JsonReader` : reading user info from JSON files to create `User` objects
+- `JsonWriter` : writing info of `User` objects to JSON files
 - `APIFetcher`
 
 ### **Data Handling**
 
 The data for the application is handled primarily with 2 classes: `SkyNet` (it's a reference!) and `APIReader`. The data is read from JSON files that contains users' data, and the corresponding course data is fetched from the Sisu API.
 
-1. `SkyNet`
+1. `SkyNet` is for handling data stored in JSON files, updating user info, managing login/logout process
 2. `APIReader` is for API handling including calling to Kori API and converting that information into the suitable class (DegreeProgram, StudyModule or CourseUnit)
 
 </br>

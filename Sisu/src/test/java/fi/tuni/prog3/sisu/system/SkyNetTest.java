@@ -18,6 +18,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SkyNetTest {
     private final String userFilePath = "src/test/resources/jsons/usersTest.json";
     private final String studyPlanFilePath = "src/test/resources/jsons/studyPlanTest.json";
+
+    /**
+     *
+     */
     public SkyNetTest() {
     }
 

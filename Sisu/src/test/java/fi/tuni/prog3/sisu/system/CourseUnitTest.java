@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ *
+ * @author Cuong Nguyen
+ */
 public class CourseUnitTest {
     private APIReader apiReader = new APIReader();
     private JsonObject learningMaterial = apiReader.connectAPI("https://sis-tuni.funidata.fi/kori/api/course-units/by-group-id?groupId=uta-ykoodi-39231&universityId=tuni-university-root-id", "groupId");
@@ -33,6 +37,10 @@ public class CourseUnitTest {
     private int minCredit = 2;
     private int maxCredit = 6;
     private CourseUnit testCourseUnit = new CourseUnit(name, id, groupID, minCredit, maxCredit, API, content, additional, learningMaterial, substitutions, completionMethods, courseCode, gradeScaleId, outcomes, prerequisites, recommendedFormalPrerequisites, compulsoryFormalPrerequisites, studyFields, responsibilityInfos, possibleAttainmentLanguages, curriculumPeriodIds, inclusionApplicationInstruction);
+
+    /**
+     *
+     */
     public void CourseUnitTest(){
 
     }
@@ -45,132 +53,198 @@ public class CourseUnitTest {
         return returnArr;
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetName(){
         System.out.println("CourseUnit getName()");
         assertEquals(name, testCourseUnit.getName());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetId(){
         System.out.println("CourseUnit getId()");
         assertEquals(id, testCourseUnit.getId());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetGroupID(){
         System.out.println("CourseUnit getGroupID()");
         assertEquals(groupID, testCourseUnit.getGroupID());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetAPI(){
         System.out.println("CourseUnit getAPI()");
         assertEquals(API, testCourseUnit.getAPI());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetContent(){
         System.out.println("CourseUnit getContent()");
         assertEquals(content, testCourseUnit.getContent());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetAdditional(){
         System.out.println("CourseUnit getAdditional()");
         assertEquals(additional, testCourseUnit.getAdditional());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetLearningMaterial(){
         System.out.println("CourseUnit getLearningMaterial()");
         assertEquals(learningMaterial, testCourseUnit.getLearningMaterial());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetSubstitutions(){
         System.out.println("CourseUnit getSubstitutions()");
         assertEquals(substitutions, testCourseUnit.getSubstitutions());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetCompletionMethods(){
         System.out.println("CourseUnit getCompletionMethods()");
         assertEquals(completionMethods, testCourseUnit.getCompletionMethods());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetCourseCode(){
         System.out.println("CourseUnit getCourseCode()");
         assertEquals(courseCode, testCourseUnit.getCourseCode());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetGradeScaleId(){
         System.out.println("CourseUnit getGradeScaleId()");
         assertEquals(gradeScaleId, testCourseUnit.getGradeScaleId());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetOutcomes(){
         System.out.println("CourseUnit getOutcomes()");
         assertEquals(outcomes, testCourseUnit.getOutcomes());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetPrerequisites(){
         System.out.println("CourseUnit getPrerequisites()");
         assertEquals(prerequisites, testCourseUnit.getPrerequisites());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetRecommendedFormalPrerequisites(){
         System.out.println("CourseUnit getRecommendedFormalPrerequisites()");
         assertEquals(recommendedFormalPrerequisites, testCourseUnit.getRecommendedFormalPrerequisites());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetCompulsoryFormalPrerequisites(){
         System.out.println("CourseUnit getCompulsoryFormalPrerequisites()");
         assertEquals(compulsoryFormalPrerequisites, testCourseUnit.getCompulsoryFormalPrerequisites());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetStudyFields(){
         System.out.println("CourseUnit getStudyFields()");
         assertEquals(studyFields, testCourseUnit.getStudyFields());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetResponsibilityInfos(){
         System.out.println("CourseUnit getResponsibilityInfos()");
         assertEquals(responsibilityInfos, testCourseUnit.getResponsibilityInfos());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetPossibleAttainmentLanguages(){
         System.out.println("CourseUnit getPossibleAttainmentLanguages()");
         assertEquals(possibleAttainmentLanguages, testCourseUnit.getPossibleAttainmentLanguages());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetCurriculumPeriodIds(){
         System.out.println("CourseUnit getCurriculumPeriodIds()");
         assertEquals(curriculumPeriodIds, testCourseUnit.getCurriculumPeriodIds());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetInclusionApplicationInstruction(){
         System.out.println("CourseUnit getInclusionApplicationInstruction()");
         assertEquals(inclusionApplicationInstruction, testCourseUnit.getInclusionApplicationInstruction());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetMinCredit(){
         System.out.println("CourseUnit getMinCredit()");
         assertEquals(minCredit, testCourseUnit.getMinCredit());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetMaxCredit(){
         System.out.println("CourseUnit getMaxCredit()");

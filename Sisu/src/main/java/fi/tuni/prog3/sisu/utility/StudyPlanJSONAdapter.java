@@ -20,6 +20,9 @@ public class StudyPlanJSONAdapter extends TypeAdapter<StudyPlanJSON>{
 
     /**
      * Override method of writing which is unsupported in this case
+     * @param writer
+     * @param t
+     * @throws java.io.IOException
      */
     @Override
     public void write(JsonWriter writer, StudyPlanJSON t) throws IOException {
@@ -28,6 +31,9 @@ public class StudyPlanJSONAdapter extends TypeAdapter<StudyPlanJSON>{
 
     /**
      * Override method of reading JSON files
+     * @param reader
+     * @return 
+     * @throws java.io.IOException 
      */
     @Override
     public StudyPlanJSON read(JsonReader reader) throws IOException {
