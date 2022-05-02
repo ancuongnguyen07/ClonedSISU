@@ -1,8 +1,8 @@
 # Programming 3 Project: Sisu Unravel
 
-### **This `README.md` also serves as a documentation for the project. Additional documentation are also provided [here](./documentation/).**
+### **This `README.md` also serves as a documentation for the project. Additional documentation are provided [here](./documentation/). The links in this `README.md` lead to the corresponding files/folders that are mentioned. Because it's more interactive, we recommend you to read through this `README.md` first, and then the provided `PDF` documentation.**
 
-The project's goal is to create an implementation of the Sisu system, using Java, JavaFX library, and SceneBuilder. The program will have a working GUI, as well as functionalities that will be described briefly in this `README.md` and in more detailed in the [provided documentation]().
+The project's goal is to create an implementation of the Sisu system, using Java, JavaFX library, and SceneBuilder. The program will have a working GUI, as well as functionalities that will be described briefly in this `README.md` and in more detailed in the [provided documentation](./documentation/).
 
 Our team included:
 
@@ -51,37 +51,43 @@ Our program has the following functionalities based on the requirements from Plu
 
 ## 2. Program structure
 
-### **Classes**
+### **Main Classes**
 
 The program will have the following **Class Tree**.
 
-1. `AbstractModule` is the basic study module that contains all the courses and study modules for each specified student. This class includes:
+1. [AbstractModule](Sisu\src\main\java\fi\tuni\prog3\sisu\system\AbstractModule.java) is the basic study module that contains all the courses and study modules for each specified student. This class includes:
 
-   - `DegreeProgram` is the degree of a programme. This class contains information about sub study modules and courses of that degree. This class has the highest level in the class structure.
-   - `StudyModule` is the module of courses in the degree programme. Each study module can contain multiple courses, or sub study modules under it. This class is the middle level of the class structure.
-   - `CourseUnit` is the courses inside each study module of a program. This class has the lowest level in the class structure.
+   - [DegreeProgram](Sisu\src\main\java\fi\tuni\prog3\sisu\system\DegreeProgram.java) is the degree of a programme. This class contains information about sub study modules and courses of that degree. This class has the highest level in the class structure.
+   - [StudyModule](Sisu\src\main\java\fi\tuni\prog3\sisu\system\StudyModule.java) is the module of courses in the degree programme. Each study module can contain multiple courses, or sub study modules under it. This class is the middle level of the class structure.
+   - [CourseUnit](Sisu\src\main\java\fi\tuni\prog3\sisu\system\CourseUnit.java) is the courses inside each study module of a program. This class has the lowest level in the class structure.
 
-2. `User` is the user of the Sisu service. They can be students or teachers.
+2. [User](Sisu\src\main\java\fi\tuni\prog3\sisu\system\User.java) is the user of the Sisu service. They can be students or teachers.
 
-   - `Student` are the students that studying in the degree programs. Every student has:
+   - [Student](Sisu\src\main\java\fi\tuni\prog3\sisu\system\Student.java) are the students that studying in the degree programs. Every student has:
      - Degree program
      - And study modules with courses under that degree.
-   - `Teacher` are the teachers of the courses. Every teacher can **(Not implemented in this version)** :
+   - [Teacher](Sisu\src\main\java\fi\tuni\prog3\sisu\system\Teacher.java) are the teachers of the courses. Every teacher can **(Not implemented in this version)** :
      - Have access to the courses. They can modify the content of each course.
      - Grade the students.
-
-And the program will also have these utility classes:
-
-- `JsonReader`
-- `JsonWriter`
-- `APIFetcher`
 
 ### **Data Handling**
 
 The data for the application is handled primarily with 2 classes: `SkyNet` (it's a reference!) and `APIReader`. The data is read from JSON files that contains users' data, and the corresponding course data is fetched from the Sisu API.
 
-1. `SkyNet`
-2. `APIReader` is for API handling including calling to Kori API and converting that information into the suitable class (DegreeProgram, StudyModule or CourseUnit)
+1. [SkyNet](Sisu\src\main\java\fi\tuni\prog3\sisu\system\SkyNet.java)
+   is for handling data stored in JSON files, updating user info, managing login/logout process
+2. [APIReader](Sisu\src\main\java\fi\tuni\prog3\sisu\system\APIReader.java)
+   is for API handling including calling to Kori API and converting that information into the suitable class (`DegreeProgram`, `StudyModule`, or `CourseUnit`). The information of this class is provided in [this documentation](/documentation/An%20Nguyen%20documentation.pdf).
+3. Utility classes:
+
+- [JsonReader](Sisu\src\main\java\fi\tuni\prog3\sisu\utility\JsonReader.java)
+  that reads user info from JSON files to create User objects, using TypeAdapter to convert data in JSON files to Java objects
+- [JsonWriter](Sisu\src\main\java\fi\tuni\prog3\sisu\utility\JsonWriter.java)
+  that writes info of `User` objects to `JSON` files, , using `TypeAdapter` to convert data in `JSON` files to `Java Objects`.
+
+### **GUI Controller Classes**
+
+The GUI for the program has 3 classes: an `App` class and 2 controller classes: `LoginController` and `MainAppController`.
 
 </br>
 
@@ -169,7 +175,7 @@ The tests include the data handling tests, and UI tests. The data handling tests
      these tests mainly verify the getter functions for these classes. The tests created 1-2 test object(s) of the tested class and compare each entity that the object has to the caller function.
      </br>
 
-1. **TestFX Tests**: these tests simulate a real user's actions, and test all the functionalities of the GUI based on those actions. Please be mindful that, these GUI tests are far from perfect, but should cover the "intended" use case of the program. There are some inconsistency in the data fetched from Sisu's API, so some of the displayed data might be erroneous. Albeit, in most cases, the application should work fine. Following is a run down of the GUI test.
+1. **TestFX Tests**: in the [TestFX tests](Sisu\src\test\java\fi\tuni\prog3\sisu\AppTest.java), the tests simulate a real user's actions, and test all the functionalities of the GUI based on those actions. Please be mindful that, these GUI tests are far from perfect, but should cover the "intended" use case of the program. There are some inconsistency in the data fetched from Sisu's API, so some of the displayed data might be erroneous. Albeit, in most cases, the application should work fine. Following is a run down of the GUI test.
    - Test the login functionalities of the app. A user can log into the app with correct credentials. The app will also notifies the user if they enter an incorrect username/password.
    - Test the main application's interface. Which includes:
      - The **Homepage** tab: test that correct information of the active student is displayed. Also check that the degree program's structure of the student is also presented.
