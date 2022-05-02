@@ -100,13 +100,24 @@ and [MainAppController](Sisu\src\main\java\fi\tuni\prog3\sisu\MainAppController.
 
 ### **UML Class Diagram of the Program**
 
+Provided here is a simplified project class structure diagram that shows all the classes listed above, and their relationship with each other.
+</br>
+
+![Class Structure Diagram](documentation/class-structure.png)
+_Figure 1: Class structure diagram of the program_
+
 </br>
 
 ---
 
 ## 3. GUI
 
-The GUI of the program is controlled by the 3 GUI controller classes mentioned above: `App`, `LoginController`, and `MainAppController`. For the GUI, the program will have a `Login` screen that shows at the start. Within this window, the user can log into the system and identified them as student, or teacher (`Teacher` **role is not implemented in this version**). The user can also select the option _Forgot password?_ to reset their password (**this functionality is not implemented in this version**).
+The GUI of the program is controlled by the 3 GUI controller classes mentioned above: `App`, `LoginController`, and `MainAppController`. For the GUI, the program will have a `Login` screen that shows at the start.
+
+![Login Screen](documentation/login.png)
+_Figure 2: The login screen of the program_
+
+Within this window, the user can log into the system and identified them as student, or teacher (`Teacher` **role is not implemented in this version**). The user can also select the option _Forgot password?_ to reset their password (**this functionality is not implemented in this version**).
 
 Upon successfully logged in, the user will be directed to the `MainApp`.
 
@@ -211,7 +222,7 @@ This application is built using the [Maven](https://maven.apache.org/) project m
 The project can be compiled by:
 
 1. Opening the the folders as a NetBeans project, then compile and run in NetBeans.
-2. In the root directory of the project, run the following command
+2. In the `./Sisu/` directory of the project, run the following command
 
 ```
 $ mvn javafx:run
@@ -221,13 +232,21 @@ The project will then be compiled and run as a `JAR`-executable, and will automa
 
 ### **Testing the Project**
 
-The project can be tested by running the following command in the root directory of the project:
+The project can be tested by running the following command in the `./Sisu/` directory of the project:
 
 ```
 $ mvn test
 ```
 
 The result of the tests will be printed in the terminal, and the test results will be displayed by `Maven`'s testing framework.
+
+Be mindful that, since the GUI testing tests every functionalities of the program, so that the username and password of the last active user (in the tests, this would be the An Nguyen user) will be changed in the test. To revert this, just run this command in the `./Sisu/` directory:
+
+```
+$ git restore .\src\main\resources\jsons\users.json
+```
+
+and the users' credentials will be restore to original! The tests can then be run again.
 
 </br>
 
