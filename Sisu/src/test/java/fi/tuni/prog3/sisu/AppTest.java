@@ -189,11 +189,16 @@ public class AppTest extends ApplicationTest {
     System.out.println("Move on to help!");
 
     clickOn("#helpTab");
-    clickOn("#helpApiButton");
+    // clickOn("#helpApiButton");
 
-    // TODO: add log out test
+    System.out.println("Attemp to logout...");
+    clickOn("#logOutBtn");
+    
+    clickOn("#loginBtn");
+    Assertions.assertThat(alert).isVisible();
+    Assertions.assertThat(alert.getText()).isEqualTo("Wrong username/password!");
 
-    System.out.println("Finished testing the GUI!");
+    System.out.println("Finished testing the GUI! Everything works!");
     System.out.println("================================================================");
   }
 }
