@@ -52,6 +52,8 @@ import javafx.scene.control.TextField;
 /**
  * The controller for the MainApp window of the program. This class handles most of the GUI functionalities
  * happening on the program. 
+ * 
+ * @author Khoa Nguyen
  */
 public class MainAppController {
   // ===========================================================================

@@ -15,12 +15,15 @@ import fi.tuni.prog3.sisu.system.*;
 
 /**
  * Controller for the login scene of the app.
+ * 
+ * @author Khoa Nguyen
  */
 public class LoginController {
     private SkyNet sn;
 
     /**
      * Simple constructor that parses in the SkyNet to handle the data of this instance.
+     * 
      * @param sn the SkyNet object that will handle the data, including user login in this scene.
      */
     public LoginController(SkyNet sn) {

@@ -2,7 +2,7 @@
 
 ### **This `README.md` also serves as a documentation for the project. Additional documentation are provided [here](./documentation/). The links in this `README.md` lead to the corresponding files/folders that are mentioned. Because it's more interactive, we recommend you to read through this `README.md` first, and then the provided `PDF` documentation.**
 
-The project's goal is to create an implementation of the Sisu system, using Java, JavaFX library, and SceneBuilder. The program will have a working GUI, as well as functionalities that will be described briefly in this `README.md` and in more detailed in the [provided documentation](./documentation/).
+The project's goal is to create an implementation of the [Sisu](https://sis-tuni.funidata.fi/) system, using [Java](https://www.java.com/en/), [JavaFX](https://openjfx.io/) library, and [SceneBuilder](https://gluonhq.com/products/scene-builder/). The program will have a working GUI, as well as functionalities that will be described in this `README.md` and in more detailed in the [provided documentation](./documentation/).
 
 Our team included:
 
@@ -10,7 +10,7 @@ Our team included:
 - Khoa Nguyen, khoa.h.nguyen@tuni.fi, `050359141`. Handle the GUI part of the program, using the classes provided by An and Cuong.
 - An Nguyen, an.nguyen@tuni.fi, `050359099`. Handle the API data fetching with the `APIReader` class.
 
-Each of our team members are then document their our work and write the necessary tests for the parts that they worked on.
+Each of our team members are then document their our work and write the necessary tests for the parts that they worked on. Unfortunately, we could not find a way to make [JavaDoc works with external package](https://stackoverflow.com/questions/45075521/javadoc-package-does-not-exist-for-external-references-without-docs) so we don't have any `HTML` files for the `JavaDoc` documentation.
 
 </br>
 
@@ -29,7 +29,7 @@ Our program has the following functionalities based on the requirements from Plu
    - A final document that contains:
      - Class responsibilities.
      - Division of labour in the team.
-1. Intermediate requirements:
+2. Intermediate requirements:
    - A graphical user interface has been fully implemented by the team. The UI is:
      - Procedural - it gets updated based on the data parsed from user and fetched from Sisu's API.
      - Responsive - interactive objects e.g, buttons, has different states to indicate what is being selected.
@@ -39,11 +39,13 @@ Our program has the following functionalities based on the requirements from Plu
    - The program works i.e. the degree shown can be changes and the progress situation of the student’s degree is shown.
    - The program handles errors in file handling.
    - Unit tests have been implemented for the program, using `JUnit Test` for classes and `TestFX` for GUI.
-1. Top-grade requirements:
+3. Top-grade requirements:
    - Course view. On clicking the mouse cursor on a course card, information about that course is shown.
    - Student settings. Every student's data is stored in JSON files (more on this later). Logged in students can freely update their credentials in the program.
    - Showing the schedule of student progress in respect to the degree structure, i.e, completed credits, average grade, and total credits planned.
    - A dedicated **Help** tab that describes how the program can be used.
+
+One important thing to keep in mind, because our program fetches data from the Sisu API, so sometimes it will take a while to load. **Do not stop the program it seems to be freezing after you click a button!** That is completely normal, and sometimes it may take up to a minute to fetch all the data from the API. Just wait for a while and it should work again!
 
 </br>
 
@@ -121,6 +123,14 @@ _Figure 2: The login screen of the program_
 
 Within this window, the user can log into the system and identified them as student, or teacher (`Teacher` **role is not implemented in this version**). The user can also select the option _Forgot password?_ to reset their password (**this functionality is not implemented in this version**).
 
+For the time being, we currently have 3 `Student`, with their credentials being:
+
+- An Nguyen, username: `an`, password: `an`.
+- Cuong Nguyen, username: `cuong`, password: `cuong`.
+- Khoa Nguyen, username: `khoa`, password: `khoa`.
+
+You can use any of the provided usernames and passwords to log into the system. Be mindful that, after clicking the _Login_ button, **the program may take up to a minute to load, depends on your internet**. This is because, we fetch the data related to the user's study from Sisu's API, so it will take a while.
+
 Upon successfully logged in, the user will be directed to the `MainApp`.
 
 The `MainApp` is the main GUI of the app. On top of the view, user can see the **SISU** logo, their full name with role, and a _Log Out_ button - that obviously, _log you out_ of the system, and back to the `Login` screen. The `MainApp` also has the following main tabs (which can be switched between simply by clicking on them):
@@ -130,7 +140,7 @@ The `MainApp` is the main GUI of the app. On top of the view, user can see the *
 - Shows the _Full name_ and _Role_ of the active user.
 - Shows the study structure of the active user, i.e., the _degree program_, _study modules_, and _courses_. This structure is shown in a `TreeView` format (similar to the actual Sisu page). In the degree structure, users can see their passed courses that are colored green.
 
-![Homepage Screen](documentation/login.png)
+![Homepage Screen](documentation/homepage.png)
 
 _Figure 3: The Homepage screen of the program_
 
@@ -142,7 +152,7 @@ After pressing the _Show all courses_ button, the user can:
 - This tab also shows the progress of the current active user in the degree program: how many credits have they finished, what is their average grade, and how many total credits have they planned in the current program.
 - This part of the program can be expand further if needed: when clicked on the course card, every information on that course is fetched from the API. So, if needed, a _"Show course details"_ window can be implemented similar to the actual Sisu.
 
-![Courses Screen](documentation/login.png)
+![Courses Screen](documentation/courses.png)
 
 _Figure 4: The Courses screen of the program_
 
@@ -164,7 +174,9 @@ _Figure 5: The Update User Information screen of the program_
 - The user can view all 269 degree programs in the Sisu API by clicking the _Show all Degrees_ button.
 - They can click on any of the shown degrees, and the information from that degree will be fetched from the Sisu API and displayed in a `TreeView` similar to the **Homepage** tab. Again, if any of the courses in these degrees are passed, it will be colored green.
 
-![All Degrees Screen](documentation/login.png)
+  When a degree button is clicked, the application will fetch the data from Sisu's API on that degree. **The application will seem like it is freezing, but it is not!** Just wait for up to a minute, and you can view the data on that degree!
+
+![All Degrees Screen](documentation/all-degrees.png)
 
 _Figure 6: The All Degrees screen of the program_
 
@@ -274,6 +286,8 @@ The project can be tested by running the following command in the `./Sisu/` dire
 $ mvn test
 ```
 
+The GUI test will be run first. **DO NOT PROVIDE ANY INPUT AT THIS STAGE. DO NOT TOUCH YOUR MOUSE OR KEYBOARD.** Because the GUI test simulates a real user using the program, it will use the mouse pointer and computer input to test the program. And also, if the program seems to be freezing after the test clicks the _Login_ button, **that is normal too**. Just wait a bit and it should be doing the tests again.
+
 The result of the tests will be printed in the terminal, and the test results will be displayed by `Maven`'s testing framework.
 
 Be mindful that, since the GUI testing tests every functionalities of the program, so that the username and password of the last active user (in the tests, this would be the An Nguyen user) will be changed in the test. To revert this, just run this command in the `./Sisu/` directory:
@@ -299,4 +313,4 @@ This was a very challenging project for all of us. The project's scope is huge, 
 - Optimize the run time for the program, so that we don't have to wait a whole 40 seconds for it to log in.
 - The GUI display for the courses and study structure can be polished more.
 
-But overall, we are happy with what we did here.
+But overall, we are happy with what we did here, and we learned a lot!
