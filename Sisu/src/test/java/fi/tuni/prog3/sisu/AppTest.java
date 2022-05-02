@@ -26,7 +26,7 @@ import java.io.IOException;
 
 /**
  *
- * @author Cuong Nguyen
+ * @author Khoa Nguyen
  */
 public class AppTest extends ApplicationTest {
 
@@ -189,7 +189,6 @@ public class AppTest extends ApplicationTest {
     System.out.println("Move on to help!");
 
     clickOn("#helpTab");
-    // clickOn("#helpApiButton");
 
     System.out.println("Attemp to logout...");
     clickOn("#logOutBtn");

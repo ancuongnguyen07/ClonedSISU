@@ -104,6 +104,7 @@ Provided here is a simplified project class structure diagram that shows all the
 </br>
 
 ![Class Structure Diagram](documentation/class-structure.png)
+
 _Figure 1: Class structure diagram of the program_
 
 </br>
@@ -115,6 +116,7 @@ _Figure 1: Class structure diagram of the program_
 The GUI of the program is controlled by the 3 GUI controller classes mentioned above: `App`, `LoginController`, and `MainAppController`. For the GUI, the program will have a `Login` screen that shows at the start.
 
 ![Login Screen](documentation/login.png)
+
 _Figure 2: The login screen of the program_
 
 Within this window, the user can log into the system and identified them as student, or teacher (`Teacher` **role is not implemented in this version**). The user can also select the option _Forgot password?_ to reset their password (**this functionality is not implemented in this version**).
@@ -128,6 +130,10 @@ The `MainApp` is the main GUI of the app. On top of the view, user can see the *
 - Shows the _Full name_ and _Role_ of the active user.
 - Shows the study structure of the active user, i.e., the _degree program_, _study modules_, and _courses_. This structure is shown in a `TreeView` format (similar to the actual Sisu page). In the degree structure, users can see their passed courses that are colored green.
 
+![Homepage Screen](documentation/login.png)
+
+_Figure 3: The Homepage screen of the program_
+
 ### **Courses**
 
 After pressing the _Show all courses_ button, the user can:
@@ -135,6 +141,10 @@ After pressing the _Show all courses_ button, the user can:
 - View all of the courses in the degree program of that active user. They can view the information of a course by clicking on them. They can also see which courses they have finished because those are also colored green.
 - This tab also shows the progress of the current active user in the degree program: how many credits have they finished, what is their average grade, and how many total credits have they planned in the current program.
 - This part of the program can be expand further if needed: when clicked on the course card, every information on that course is fetched from the API. So, if needed, a _"Show course details"_ window can be implemented similar to the actual Sisu.
+
+![Courses Screen](documentation/login.png)
+
+_Figure 4: The Courses screen of the program_
 
 ### **Settings**
 
@@ -145,15 +155,26 @@ There are 2 sub-tabs in this tab: **Update User Information** and **All Degrees*
 - View the active user's information i.e., _Full Name_ and _Current Username_.
 - Change the credentials of the active users, i.e., changing username or password. The changes will be updated in the `JSON` data files.
 
-1. **All Degrees**
+![Update User Information Screen](documentation/update.png)
+
+_Figure 5: The Update User Information screen of the program_
+
+2. **All Degrees**
 
 - The user can view all 269 degree programs in the Sisu API by clicking the _Show all Degrees_ button.
 - They can click on any of the shown degrees, and the information from that degree will be fetched from the Sisu API and displayed in a `TreeView` similar to the **Homepage** tab. Again, if any of the courses in these degrees are passed, it will be colored green.
 
+![All Degrees Screen](documentation/login.png)
+
+_Figure 6: The All Degrees screen of the program_
+
 ### **Help**
 
-- Explain how one can use the program. Briefly go through the functionalities and elements in the GUI.
-- Viewing the documentation of the program by pressing the _View Documentation_ button.
+Explain how one can use the program. Briefly go through the functionalities and elements in the GUI.
+
+![Help Screen](documentation/help.png)
+
+_Figure 7: The Help screen of the program_
 
 </br>
 
@@ -161,7 +182,22 @@ There are 2 sub-tabs in this tab: **Update User Information** and **All Degrees*
 
 ## 4. Navigation
 
-The application has 2 windows: the `Login` window and the `MainApp` window. After running the application, user will land on the `Login` window. They can then
+The application has 2 windows: the `Login` window and the `MainApp` window. After running the application, user will land on the `Login` window. They can then login to the service using user credentials.
+
+After successfully login, user will be taken to the `MainApp` window. In this window, there will be a status bar on top, with the **SISU** logo, user information, and a _Log Out_ button. Under that status bar is a `TabPane` that acts as the navigation bar for the application. By clicking on the different tabs, the user can navigate to:
+
+- The **Homepage** tab.
+- The **Courses** tab.
+- The **Settings** tab. This tab will have another `TabPane`, with 2 tabs: **Update User Information** and **All Degrees** tab. Again, they can click on these tabs to go to the corresponding screen.
+- The **Help** tab.
+
+Because the navigation bar is always available to the user, they can easily switch between different scenes of the application with ease. They can also log out of the service at any time by clicking the _Log Out_ button.
+
+Provided bellow is a navigation diagram for the program.
+
+![Navigation Diagram of the program](documentation/navigation-diagram.png)
+
+_Figure 8: The navigation diagram of the program_
 
 </br>
 
@@ -206,7 +242,7 @@ The tests include the data handling tests, and UI tests. The data handling tests
      - The **Settings** tab: There are 2 sub-tabs in the **Settings** tab, of which will be tested independently.
        - The **Update User Information** tab: test that the user can view their information, including _Full Name_ and _Current Username_. Also test that the user can change their _username_ and _password_. The functionalities of these features are tested accordingly e.g., wrong password confirmation handling, empty fields handling, cancel change handling, update successful handling.
        - The **All Degrees** tab: test that the user can fetch all 269 different degree programs from the Sisu API with the _Show all Degrees_ button. Also test that, when the user clicks on any of the shown degree's button, the details of that degree will be displayed and the user can freely view those data.
-     - The **Help** tab: test that the user can press the _View Documentation_ button to view the documentation for the whole application.
+     - The **Help** tab: test that the user can press the tab to navigate to the **Help** session of the application.
    - Lastly, test the **Log Out** functionality of the program by pressing the _Log Out_ button on the top right corner.
 
 </br>
@@ -254,4 +290,13 @@ and the users' credentials will be restore to original! The tests can then be ru
 
 ## 7. Finalization
 
-This was a very challenging project for all of us. We managed to
+This was a very challenging project for all of us. The project's scope is huge, after all, and we need to deal with some tricky data structure. But thanks to that, we managed to learn a lot from this project. There are some things that can be improved in the future:
+
+- Implement the `Teacher` role into the program.
+- Course card can display even more information.
+- Add a register new user functionality.
+- Implement the `Forgot password?` functionality.
+- Optimize the run time for the program, so that we don't have to wait a whole 40 seconds for it to log in.
+- The GUI display for the courses and study structure can be polished more.
+
+But overall, we are happy with what we did here.
