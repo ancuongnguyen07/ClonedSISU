@@ -126,7 +126,7 @@ Within this window, the user can log into the system and identified them as stud
 For the time being, we currently have 3 `Student`, with their credentials being:
 
 - An Nguyen, username: `an`, password: `an`.
-- Cuong Nguyen, username: `cuong`, password: `cuong`.
+- Cuong Nguyen, username: `cuong`, password: `ninh`.
 - Khoa Nguyen, username: `khoa`, password: `khoa`.
 
 You can use any of the provided usernames and passwords to log into the system. Be mindful that, after clicking the _Login_ button, **the program may take up to a minute to load, depends on your internet**. This is because, we fetch the data related to the user's study from Sisu's API, so it will take a while.
