@@ -18,10 +18,17 @@ public class AbstractModuleTest {
     private String groupId2 = "aasdafq!!!";
     AbstractModule testModule1 = new AbstractModule(name1, id1, groupId1, API1);
     AbstractModule testModule2 = new AbstractModule(name2, id2, groupId2, API2);
+
+    /**
+     *
+     */
     public void AbstractModule(){
 
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetName(){
         System.out.println("AbstractModule getName()");
@@ -29,6 +36,9 @@ public class AbstractModuleTest {
         assertEquals(name2, testModule2.getName());
     }
 
+    /**
+     *
+     */
     @Test 
     public void testGetId(){
         System.out.println("AbstractModule getId()");
@@ -36,6 +46,9 @@ public class AbstractModuleTest {
         assertEquals(id2, testModule2.getId());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetGroupID(){
         System.out.println("AbstractModule getGroupID()");
@@ -43,6 +56,9 @@ public class AbstractModuleTest {
         assertEquals(groupId2, testModule2.getGroupID());
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetAPI(){
         System.out.println("AbstractModule getAPI()");

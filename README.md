@@ -51,9 +51,11 @@ Our program has the following functionalities based on the requirements from Plu
 
 ## 2. Program structure
 
-### **Main Classes**
+Our program follows the [MVC Design Pattern](https://www.geeksforgeeks.org/mvc-design-pattern/), that is, it has **Model Classes** that contain the data for the application, **Controller Classes** that handle events triggered by the user and manipulate the data in response to those events, and **View Classes** that display the data onto the GUI.
 
-The program will have the following **Class Tree**.
+### **Model Classes - Database**
+
+The program will have the following **Class Tree** for the database.
 
 1. [AbstractModule](Sisu\src\main\java\fi\tuni\prog3\sisu\system\AbstractModule.java) is the basic study module that contains all the courses and study modules for each specified student. This class includes:
 
@@ -64,18 +66,19 @@ The program will have the following **Class Tree**.
 2. [User](Sisu\src\main\java\fi\tuni\prog3\sisu\system\User.java) is the user of the Sisu service. They can be students or teachers.
 
    - [Student](Sisu\src\main\java\fi\tuni\prog3\sisu\system\Student.java) are the students that studying in the degree programs. Every student has:
-     - Degree program
-     - And study modules with courses under that degree.
+     - Their current `DegreeProgram`.
+     - The `StudyModule` under that degree.
+     - `CourseUnit` of courses that they have passed.
    - [Teacher](Sisu\src\main\java\fi\tuni\prog3\sisu\system\Teacher.java) are the teachers of the courses. Every teacher can **(Not implemented in this version)** :
      - Have access to the courses. They can modify the content of each course.
      - Grade the students.
 
-### **Data Handling**
+### **Controller Classes - Data Handling**
 
 The data for the application is handled primarily with 2 classes: `SkyNet` (it's a reference!) and `APIReader`. The data is read from JSON files that contains users' data, and the corresponding course data is fetched from the Sisu API.
 
 1. [SkyNet](Sisu\src\main\java\fi\tuni\prog3\sisu\system\SkyNet.java)
-   is for handling data stored in JSON files, updating user info, managing login/logout process
+   is for handling data stored in JSON files, updating user info, and managing login/logout process.
 2. [APIReader](Sisu\src\main\java\fi\tuni\prog3\sisu\system\APIReader.java)
    is for API handling including calling to Kori API and converting that information into the suitable class (`DegreeProgram`, `StudyModule`, or `CourseUnit`). The information of this class is provided in [this documentation](/documentation/An%20Nguyen%20documentation.pdf).
 3. Utility classes:
@@ -85,9 +88,17 @@ The data for the application is handled primarily with 2 classes: `SkyNet` (it's
 - [JsonWriter](Sisu\src\main\java\fi\tuni\prog3\sisu\utility\JsonWriter.java)
   that writes info of `User` objects to `JSON` files, , using `TypeAdapter` to convert data in `JSON` files to `Java Objects`.
 
-### **GUI Controller Classes**
+### **View Classes - GUI Controllers**
 
-The GUI for the program has 3 classes: an `App` class and 2 controller classes: `LoginController` and `MainAppController`.
+The GUI for the program has 3 classes: an [App](Sisu\src\main\java\fi\tuni\prog3\sisu\App.java)
+class, and 2 controller classes: [LoginController](Sisu\src\main\java\fi\tuni\prog3\sisu\LoginController.java)
+and [MainAppController](Sisu\src\main\java\fi\tuni\prog3\sisu\MainAppController.java). The 2 controller classes act as a bridge between the GUI and the Controller classes, and call different methods corresponding to the events triggered by the user on the GUI. These methods will then return the correct data, which can be displayed on the GUI view.
+
+1. The `App` class handles the program startup. It loads the necessary scene from the `FXML` files, and creates a new `SkyNet` object to handle data of that use instance.
+2. The `LoginController` controls the login scene of the app. It checks for correct user's credentials, alert any errors, and logs the user into the system.
+3. The `MainAppController` controls most of the functionalities of the GUI. This class handles the `MainApp` window, and will be explained in details in part **3. GUI** of this document.
+
+### **UML Class Diagram of the Program**
 
 </br>
 
@@ -95,7 +106,7 @@ The GUI for the program has 3 classes: an `App` class and 2 controller classes: 
 
 ## 3. GUI
 
-For the GUI, the program will have a `Login` screen that shows at the start. Within this window, the user can log into the system and identified them as student, or teacher (`Teacher` **role is not implemented in this version**). The user can also select the option _Forgot password?_ to reset their password (**this functionality is not implemented in this version**).
+The GUI of the program is controlled by the 3 GUI controller classes mentioned above: `App`, `LoginController`, and `MainAppController`. For the GUI, the program will have a `Login` screen that shows at the start. Within this window, the user can log into the system and identified them as student, or teacher (`Teacher` **role is not implemented in this version**). The user can also select the option _Forgot password?_ to reset their password (**this functionality is not implemented in this version**).
 
 Upon successfully logged in, the user will be directed to the `MainApp`.
 
@@ -112,6 +123,7 @@ After pressing the _Show all courses_ button, the user can:
 
 - View all of the courses in the degree program of that active user. They can view the information of a course by clicking on them. They can also see which courses they have finished because those are also colored green.
 - This tab also shows the progress of the current active user in the degree program: how many credits have they finished, what is their average grade, and how many total credits have they planned in the current program.
+- This part of the program can be expand further if needed: when clicked on the course card, every information on that course is fetched from the API. So, if needed, a _"Show course details"_ window can be implemented similar to the actual Sisu.
 
 ### **Settings**
 

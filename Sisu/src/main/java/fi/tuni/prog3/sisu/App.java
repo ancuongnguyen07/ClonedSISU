@@ -9,7 +9,9 @@ import java.io.IOException;
 import fi.tuni.prog3.sisu.system.*;
 
 /**
- * JavaFX App
+ * App class that initializes the program. It loads necessary scenes, and creates a new SkyNet object
+ * for data handle of this use instance.
+ * 
  * @author Khoa Nguyen
  */
 public class App extends Application {
@@ -18,6 +20,12 @@ public class App extends Application {
     private static LoginController loginController;
     private static MainAppController mainAppController;
 
+    /**
+     * Start the app. Select the correct scenes from FXML files to load. Also create a new
+     * SkyNet object for data handle of this use instance.
+     * 
+     * @param stage the Stage to be loaded.
+     */
     @Override
     public void start(Stage stage) throws IOException {
         SkyNet sn = new SkyNet("src/main/resources/jsons/users.json",
@@ -30,6 +38,11 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
+    /**
+     * Call the updateActiveUser() method in the MainAppController to update the GUI accordingly
+     * to the active user. Name, role, and study degree data.
+     */
     public static void UpdateMainApp() {
         mainAppController.updateActiveUser();
     }
@@ -48,6 +61,10 @@ public class App extends Application {
         return loader.load();
     }
 
+    /**
+     * Good old main.
+     * @param args arguments to pass in.
+     */
     public static void main(String[] args) {
         launch();
     }

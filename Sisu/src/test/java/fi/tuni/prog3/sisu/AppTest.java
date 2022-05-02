@@ -24,14 +24,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 
+/**
+ *
+ * @author Cuong Nguyen
+ */
 public class AppTest extends ApplicationTest {
 
-  @Override
+    /**
+     *
+     * @param stage
+     * @throws IOException
+     */
+    @Override
   public void start(Stage stage) throws IOException {
     new App().start(stage);
   }
 
-  @Test
+    /**
+     *
+     * @throws IOException
+     */
+    @Test
   public void appUseTest() throws IOException {
     System.out.println("================================================================");
     System.out.println("Attempt to login with wrong credentials...");

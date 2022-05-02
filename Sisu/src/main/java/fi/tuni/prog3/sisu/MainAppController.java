@@ -49,6 +49,10 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+/**
+ * The controller for the MainApp window of the program. This class handles most of the GUI functionalities
+ * happening on the program. 
+ */
 public class MainAppController {
   // ===========================================================================
   // --------------------------- API STUFFS FOR SISU ---------------------------
@@ -99,7 +103,8 @@ public class MainAppController {
   @FXML private TreeView studyStructureTreeView;
 
   /**
-   * Simple constructor for MainAppController class.
+   * Simple constructor for MainAppController class. Parses in a SkyNet object to handle data of this use instance.
+   * Also creates a new APIReader object to fetch data from the API so they can be displayed on screen.
    * @param sn reference to the SkyNet object that is used for this login instance
    */
   public MainAppController(SkyNet sn) {
@@ -118,8 +123,11 @@ public class MainAppController {
   // =======================================================================================
   // --------------------------- UPDATE GUI BASED ON ACTIVE USER ---------------------------
   // =======================================================================================
+
   /**
-   * Update the information in the GUI based on the information of the current logged-in user
+   * Update the information in the GUI based on the information of the current logged-in user.
+   * This includes all user-related data, such as full name, role, average grade, courses, degree programs,
+   * total credits, credits passed, etc.
    */
   public void updateActiveUser() {
     // Get current active user
@@ -135,14 +143,10 @@ public class MainAppController {
       showStudyStructure(this.activeStudentDegree, studyStructureTreeView, true);
       updateCredits();
     }
-
-    // getAllDegreeProgram();
-
     // Get role and full name of the active user
     String fullName = activeUser.getFullName();
     String role = activeUser.getRole();
     String displayString = fullName + " - " + role;
-    // displayString = WordUtils.capitalize(displayString);
 
     // Update in homepage
     activeUserStatus.setText(displayString);
@@ -158,7 +162,11 @@ public class MainAppController {
   }
 
   // ===========================================================================================
-  // --------------------------- UPDATE USER CREDENTIALS IN SETTINGS ---------------------------
+  // =-------------------------- UPDATE USER CREDENTIALS IN SETTINGS --------------------------=
+  // =-----------------------------------------------------------------------------------------=
+  // =- This part of the controller handle the Update User Information tab on the GUI. This ---=
+  // =- includes update the username and passwords of the active user, checkers, and cancel ---=
+  // =- those changes. ------------------------------------------------------------------------=
   // ===========================================================================================
   @FXML
   private void SaveNewUsername() {
@@ -228,9 +236,13 @@ public class MainAppController {
     userUpdatedNoti.setText("");
   }
   
-  // ============================================================================================
-  // --------------------------- API CALLS FOR DISPLAYING ALL DEGREES ---------------------------
-  // ============================================================================================
+  // ===========================================================================================
+  // =-------------------------- API CALLS FOR DISPLAYING ALL DEGREES -------------------------=
+  // =-----------------------------------------------------------------------------------------=
+  // =- This part of the controller handle the All Degrees tab of the GUI. This includes ------=
+  // =- fetching all 269 degrees from the API, and when the user click on one degree, fetches -=
+  // =- and display the data from that degree on the screen. ----------------------------------=
+  // ===========================================================================================
   @FXML private TreeView degreeSelectionTreeView;
   @FXML private TreeView degreeOverviewTreeView;
   @FXML
@@ -274,9 +286,6 @@ public class MainAppController {
       String name = degreeOverview.get("name").getAsString();
       if (degreeName.equals(name)) {
         dp = sn.getDegreeByID(degreeOverview.get("id").getAsString());
-        // System.out.println("==============================");
-        // System.out.println(dp.getAPI());
-        // System.out.println("==============================");
         sn.loadCompositeRuleRec(dp.getCompositeRule());
         showStudyStructure(dp, degreeOverviewTreeView, false);
         break;
@@ -308,7 +317,12 @@ public class MainAppController {
   }
 
   // ==============================================================================================
-  // --------------------------- DISPLAY STUDY DETAILS FOR ACTIVE USER  ---------------------------
+  // =-------------------------- DISPLAY STUDY DETAILS FOR ACTIVE USER  --------------------------=
+  // =--------------------------------------------------------------------------------------------=
+  // =- This part of the controller handle the study degree view in the Homepage tab of the GUI. -=
+  // =- This includes fetching all the data from the degree specified in the user's JSON file, ---=
+  // =- match the data with the study modules of the user, and display those modules and their ---=
+  // =- course units only. Everything is showed in a TreeView in a nice format. ------------------=
   // ==============================================================================================
   @FXML
   private void showActiveStudentStudies() {
@@ -382,7 +396,12 @@ public class MainAppController {
   }
 
   // ===============================================================================================
-  // --------------------------- DISPLAY ALL COURSES OF CURRENT STUDENT  ---------------------------
+  // =-------------------------- DISPLAY ALL COURSES OF CURRENT STUDENT  --------------------------=
+  // =---------------------------------------------------------------------------------------------=
+  // =- This part of the controller handles the Courses tab in the GUI. It updates the progress of =
+  // =- the student: showing average grade, completed credits, and total credits planned. It also -=
+  // =- shows all of the student's courses, and can display information on those courses when -----=
+  // =- any of the courses are clicked on. --------------------------------------------------------=
   // ===============================================================================================
   @FXML private GridPane allCoursesGrid;
   @FXML

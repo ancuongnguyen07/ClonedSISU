@@ -74,7 +74,7 @@ public class Student extends User {
     /**
      * set a new a HashMap (key is course group_id/value is its grade) of 
      * courses which a student enroll
-     * @param a new a HashMap (key is course group_id/value is its grade) of 
+     * @param courses a new a HashMap (key is course group_id/value is its grade) of 
      * courses which a student enroll
      */
     public void setCourses(HashMap<String, Integer> courses) {
