@@ -25,26 +25,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
 
 /**
- *
- * @author Cuong Nguyen
+ * Tests for the GUI of the program
+ * 
+ * @author Khoa Nguyen
  */
 public class AppTest extends ApplicationTest {
 
-    /**
-     *
-     * @param stage
-     * @throws IOException
-     */
-    @Override
+  /**
+   * Starting a new App() instance for testing
+   * 
+   * @param stage The stage to display
+   * @throws IOException
+   */
+  @Override
   public void start(Stage stage) throws IOException {
     new App().start(stage);
   }
 
-    /**
-     *
-     * @throws IOException
-     */
-    @Test
+  /**
+   * Simulate an "intended" use instance of the user. Test all GUI functionalities of the app
+   * 
+   * @throws IOException
+   */
+  @Test
   public void appUseTest() throws IOException {
     System.out.println("================================================================");
     System.out.println("Attempt to login with wrong credentials...");
@@ -189,11 +192,15 @@ public class AppTest extends ApplicationTest {
     System.out.println("Move on to help!");
 
     clickOn("#helpTab");
-    clickOn("#helpApiButton");
 
-    // TODO: add log out test
+    System.out.println("Attemp to logout...");
+    clickOn("#logOutBtn");
+    
+    clickOn("#loginBtn");
+    Assertions.assertThat(alert).isVisible();
+    Assertions.assertThat(alert.getText()).isEqualTo("Wrong username/password!");
 
-    System.out.println("Finished testing the GUI!");
+    System.out.println("Finished testing the GUI! Everything works!");
     System.out.println("================================================================");
   }
 }

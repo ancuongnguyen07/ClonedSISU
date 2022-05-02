@@ -49,6 +49,12 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+/**
+ * The controller for the MainApp window of the program. This class handles most of the GUI functionalities
+ * happening on the program. 
+ * 
+ * @author Khoa Nguyen
+ */
 public class MainAppController {
   // ===========================================================================
   // --------------------------- API STUFFS FOR SISU ---------------------------
@@ -70,8 +76,6 @@ public class MainAppController {
   // ==================================================================
   // --------------------------- GUI STUFFS ---------------------------
   // ==================================================================
-  
-
   private Teacher activeTeacher;
   private APIReader api;
 
@@ -99,7 +103,8 @@ public class MainAppController {
   @FXML private TreeView studyStructureTreeView;
 
   /**
-   * Simple constructor for MainAppController class.
+   * Simple constructor for MainAppController class. Parses in a SkyNet object to handle data of this use instance.
+   * Also creates a new APIReader object to fetch data from the API so they can be displayed on screen.
    * @param sn reference to the SkyNet object that is used for this login instance
    */
   public MainAppController(SkyNet sn) {
@@ -107,6 +112,9 @@ public class MainAppController {
     this.api = new APIReader();
   }
   
+  /**
+   * Switch to the login scene
+   */
   @FXML
   private void SwitchToLogin() {
       try {
@@ -118,8 +126,11 @@ public class MainAppController {
   // =======================================================================================
   // --------------------------- UPDATE GUI BASED ON ACTIVE USER ---------------------------
   // =======================================================================================
+
   /**
-   * Update the information in the GUI based on the information of the current logged-in user
+   * Update the information in the GUI based on the information of the current logged-in user.
+   * This includes all user-related data, such as full name, role, average grade, courses, degree programs,
+   * total credits, credits passed, etc.
    */
   public void updateActiveUser() {
     // Get current active user
@@ -135,14 +146,10 @@ public class MainAppController {
       showStudyStructure(this.activeStudentDegree, studyStructureTreeView, true);
       updateCredits();
     }
-
-    // getAllDegreeProgram();
-
     // Get role and full name of the active user
     String fullName = activeUser.getFullName();
     String role = activeUser.getRole();
     String displayString = fullName + " - " + role;
-    // displayString = WordUtils.capitalize(displayString);
 
     // Update in homepage
     activeUserStatus.setText(displayString);
@@ -158,8 +165,15 @@ public class MainAppController {
   }
 
   // ===========================================================================================
-  // --------------------------- UPDATE USER CREDENTIALS IN SETTINGS ---------------------------
+  // =-------------------------- UPDATE USER CREDENTIALS IN SETTINGS --------------------------=
+  // =-----------------------------------------------------------------------------------------=
+  // =- This part of the controller handle the Update User Information tab on the GUI. This ---=
+  // =- includes update the username and passwords of the active user, checkers, and cancel ---=
+  // =- those changes. ------------------------------------------------------------------------=
   // ===========================================================================================
+  /**
+   * Check, and save new username when user update their username in settings
+   */
   @FXML
   private void SaveNewUsername() {
     String newUserName = newUserNameSettings.getText();
@@ -186,6 +200,9 @@ public class MainAppController {
     }
   }
 
+  /**
+   * Check, and save new password when user update their password in settings
+   */
   @FXML 
   private void SaveNewPassword() {
     String newPwd = newPasswordSettings.getText();
@@ -214,6 +231,9 @@ public class MainAppController {
     }
   }
 
+  /**
+   * Cancel username change
+   */
   @FXML 
   private void cancelUsernameChange() {
     newUserNameSettings.setText("");
@@ -221,6 +241,9 @@ public class MainAppController {
     confirmNewUsernameSettings.setText("");
   }
 
+  /**
+   * Cancel password change
+   */
   @FXML
   private void cancelPasswordChange() {
     newPasswordSettings.setText("");
@@ -228,11 +251,18 @@ public class MainAppController {
     userUpdatedNoti.setText("");
   }
   
-  // ============================================================================================
-  // --------------------------- API CALLS FOR DISPLAYING ALL DEGREES ---------------------------
-  // ============================================================================================
+  // ===========================================================================================
+  // =-------------------------- API CALLS FOR DISPLAYING ALL DEGREES -------------------------=
+  // =-----------------------------------------------------------------------------------------=
+  // =- This part of the controller handle the All Degrees tab of the GUI. This includes ------=
+  // =- fetching all 269 degrees from the API, and when the user click on one degree, fetches -=
+  // =- and display the data from that degree on the screen. ----------------------------------=
+  // ===========================================================================================
   @FXML private TreeView degreeSelectionTreeView;
   @FXML private TreeView degreeOverviewTreeView;
+  /**
+   * Get all 269 degree programs available from the Sisu API, and display them on screen
+   */
   @FXML
   private void getAllDegreeProgram() {
     TreeItem root = new TreeItem();
@@ -250,6 +280,12 @@ public class MainAppController {
     degreeSelectionTreeView.setShowRoot(false);
   }
 
+  /**
+   * Create the heading buttons for a degree program
+   * @param name Name of the degree
+   * @param parent The parent to put the newly created heading in
+   * @return The created heading
+   */
   private TreeItem createDegreeHeading(String name, TreeItem parent) {
     Button btn = new Button(name);
     btn.setOnAction(event -> {
@@ -266,6 +302,10 @@ public class MainAppController {
     return item;
   }
 
+  /**
+   * Showing the data of the given degree, including sub modules and courses
+   * @param degreeName Name of the degree to show
+   */
   private void showDegreeData(String degreeName) {
     JsonArray degreeArray = this.api.callAllDegrees();
     DegreeProgram dp;
@@ -274,9 +314,6 @@ public class MainAppController {
       String name = degreeOverview.get("name").getAsString();
       if (degreeName.equals(name)) {
         dp = sn.getDegreeByID(degreeOverview.get("id").getAsString());
-        // System.out.println("==============================");
-        // System.out.println(dp.getAPI());
-        // System.out.println("==============================");
         sn.loadCompositeRuleRec(dp.getCompositeRule());
         showStudyStructure(dp, degreeOverviewTreeView, false);
         break;
@@ -284,6 +321,12 @@ public class MainAppController {
     }
   }
 
+  /**
+   * Show composite rule for everything under that rule, regardless if those are included
+   * in the study structure of the active user or not
+   * @param rule The sub composite rule to show
+   * @param parentItem The parent to display the data in
+   */
   private void showCompositeRuleForAll(SubCompositeRule rule, TreeItem parentItem) {
     for (StudyModule sm : rule.getSubModules()) {
       showCompositeRuleForAll(sm.getCompositeRule(), createStudyPlanHeading(sm.getName(), parentItem));
@@ -308,13 +351,28 @@ public class MainAppController {
   }
 
   // ==============================================================================================
-  // --------------------------- DISPLAY STUDY DETAILS FOR ACTIVE USER  ---------------------------
+  // =-------------------------- DISPLAY STUDY DETAILS FOR ACTIVE USER  --------------------------=
+  // =--------------------------------------------------------------------------------------------=
+  // =- This part of the controller handle the study degree view in the Homepage tab of the GUI. -=
+  // =- This includes fetching all the data from the degree specified in the user's JSON file, ---=
+  // =- match the data with the study modules of the user, and display those modules and their ---=
+  // =- course units only. Everything is showed in a TreeView in a nice format. ------------------=
   // ==============================================================================================
+  /**
+   * Show the study structure of the current active student
+   */
   @FXML
   private void showActiveStudentStudies() {
     showStudyStructure(this.activeStudentDegree, studyStructureTreeView, true);
   }
 
+  /**
+   * Show the study structure of the given degree program. Can choose to match it with the active user 
+   * or not e.g., only show submodules that exist in the student's study plan.
+   * @param deg The degree program to show
+   * @param treeView  The parent to put the data in
+   * @param matchWithUser Match data with the user's structure or not
+   */
   private void showStudyStructure(DegreeProgram deg, TreeView treeView, Boolean matchWithUser) {
     Button degreeButton = new Button(deg.getName());
     degreeButton.getStyleClass().add("module-heading");
@@ -329,6 +387,12 @@ public class MainAppController {
     }
   }
 
+  /**
+   * Show data from a composite rule i.e., show the sub courses, sub modules, and sub
+   * composite rules in the given rule.
+   * @param rule The rule to show
+   * @param parentItem The parent TreeItem to put the data in
+   */
   private void showCompositeRule(SubCompositeRule rule, TreeItem parentItem) {
     for (StudyModule sm : rule.getSubModules()) {
       if (this.activeStudentModuleIDs.contains(sm.getId())) {
@@ -355,6 +419,12 @@ public class MainAppController {
     }
   }
   
+  /**
+   * Create a heading for the given study plan
+   * @param name Name of the study plan
+   * @param parentItem The parent TreeItem to put the created heading in
+   * @return The created TreeItem heading
+   */
   private TreeItem createStudyPlanHeading(String name, TreeItem parentItem) {
     Button btn = new Button(name);
     btn.setMaxWidth(1000);
@@ -365,6 +435,12 @@ public class MainAppController {
     return item;
   }
   
+  /**
+   * Create a course card for the given course
+   * @param course The course to create the course card for
+   * @param index The index of that course card in its container i.e., a grid
+   * @param grid The GridPane to put the created course card in
+   */
   private void addCourseCard(CourseUnit course, int index, GridPane grid) {
     Button btn;
     btn = new Button(course.getName());
@@ -382,9 +458,18 @@ public class MainAppController {
   }
 
   // ===============================================================================================
-  // --------------------------- DISPLAY ALL COURSES OF CURRENT STUDENT  ---------------------------
+  // =-------------------------- DISPLAY ALL COURSES OF CURRENT STUDENT  --------------------------=
+  // =---------------------------------------------------------------------------------------------=
+  // =- This part of the controller handles the Courses tab in the GUI. It updates the progress of =
+  // =- the student: showing average grade, completed credits, and total credits planned. It also -=
+  // =- shows all of the student's courses, and can display information on those courses when -----=
+  // =- any of the courses are clicked on. --------------------------------------------------------=
   // ===============================================================================================
   @FXML private GridPane allCoursesGrid;
+
+  /**
+   * Show all courses in the study structure of the active user
+   */
   @FXML
   private void showAllCourses() {
     for (int i = 0; i < activeStudentAllCourses.size(); i++) {
@@ -418,6 +503,11 @@ public class MainAppController {
   @FXML private Label courseGradeLabel;
   @FXML private Label courseCreditLabel;
 
+  /**
+   * Display additional information for the selected course when clicked on the course card
+   * of that course
+   * @param courseName The name of the course to show information
+   */
   private void displaySelectedCourseInfo(String courseName) {
     for (CourseUnit c : activeStudentAllCourses) {
       if (c.getName().equals(courseName)) {
@@ -453,6 +543,10 @@ public class MainAppController {
   @FXML private Label totalCreditsLabel;
   @FXML private Label studentAverageGradeLabel;
 
+  /**
+   * Update study progress of active student i.e., average grades, finished credits,
+   * and total credits planned
+   */
   private void updateCredits() {
     int completed = 0;
     int totalMin = 0;
